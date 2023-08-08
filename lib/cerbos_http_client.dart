@@ -14,12 +14,14 @@ const _checkResources = '/check/resources';
 
 class CerbosHttpClient {
   CerbosHttpClient(this.url) {
-    _dio = Dio(BaseOptions(baseUrl: url))
-      ..options = BaseOptions(
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: url,
         headers: {
           HttpHeaders.userAgentHeader: _defaultUserAgent,
         },
-      )
+      ),
+    )
       ..interceptors.add(LogInterceptor(requestBody: true))
       ..httpClientAdapter = HttpClientAdapter();
   }
