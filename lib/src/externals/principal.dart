@@ -20,10 +20,10 @@ class Principal {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'roles': roles,
-      'attributes': attributes,
-      'policyVersion': policyVersion,
-      'scope': scope,
+      if (roles.isNotEmpty) 'roles': roles,
+      if (attributes.isNotEmpty) 'attr': attributes,
+      if (policyVersion != null) 'policyVersion': policyVersion,
+      if (scope != null) 'scope': scope,
     };
   }
 }

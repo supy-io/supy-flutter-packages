@@ -4,7 +4,7 @@ class Resource {
     required this.id,
     this.attributes = const {},
     this.policyVersion,
-    this.scope = "",
+    this.scope,
   });
 
   final String kind;
@@ -21,9 +21,9 @@ class Resource {
     return {
       'kind': kind,
       'id': id,
-      'attr': attributes,
-      'policyVersion': policyVersion,
-      'scope': scope,
+      if (attributes.isNotEmpty) 'attr': attributes,
+      if (policyVersion != null) 'policyVersion': policyVersion,
+      if (scope != null) 'scope': scope,
     };
   }
 

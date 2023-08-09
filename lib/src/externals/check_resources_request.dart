@@ -17,7 +17,7 @@ class CheckResourcesRequest {
     required this.principal,
     this.resources = const [],
     this.auxData,
-    this.includeMetadata = false,
+    this.includeMetadata,
     this.requestId,
   });
 
@@ -25,7 +25,7 @@ class CheckResourcesRequest {
 
   final List<ResourceCheck> resources;
 
-  final bool includeMetadata;
+  final bool? includeMetadata;
 
   final String? requestId;
 
@@ -33,10 +33,10 @@ class CheckResourcesRequest {
 
   Map<String, dynamic> toMap() {
     return {
+      if (requestId != null) 'requestId': requestId,
       'principal': principal.toMap(),
       'resources': resources.map((e) => e.toMap()).toList(),
-      'includeMetadata': includeMetadata,
-      if (requestId != null) 'requestId': requestId,
+      if (includeMetadata != null) 'includeMeta': includeMetadata,
       if (auxData != null) 'auxData': auxData!.toMap(),
     };
   }
