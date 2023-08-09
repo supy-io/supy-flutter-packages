@@ -1,7 +1,7 @@
 name: cerbos_http_client
 description: A starting point for Dart libraries or applications.
 version: 0.0.1
-repository: https://github.com/my_org/my_repo
+repository: https://github.com/supy-io/supy-flutter-packages
 
 environment:
   sdk: ^3.0.6
