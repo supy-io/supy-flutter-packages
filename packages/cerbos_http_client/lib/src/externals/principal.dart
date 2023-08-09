@@ -1,11 +1,11 @@
 class Principal {
   Principal({
     required this.id,
-    this.roles = const [],
+    required this.roles,
     this.attributes = const {},
     this.policyVersion,
     this.scope,
-  });
+  }) : assert(roles.isNotEmpty);
 
   final String id;
 
@@ -20,7 +20,7 @@ class Principal {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      if (roles.isNotEmpty) 'roles': roles,
+      'roles': roles,
       if (attributes.isNotEmpty) 'attr': attributes,
       if (policyVersion != null) 'policyVersion': policyVersion,
       if (scope != null) 'scope': scope,
