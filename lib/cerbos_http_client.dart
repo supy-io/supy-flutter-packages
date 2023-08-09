@@ -10,7 +10,7 @@ import 'src/externals.dart';
 
 export 'src/externals.dart';
 
-const _defaultUserAgent = 'cerbos-sdk-dart-http/1.0.0';
+const _defaultUserAgent = 'cerbos-sdk-dart-http/0.0.1';
 
 const _checkResources = '/check/resources';
 
