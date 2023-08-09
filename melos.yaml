@@ -1,0 +1,4 @@
+name: supy_flutter_packages
+
+packages:
+  - packages/*

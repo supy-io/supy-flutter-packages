@@ -1,14 +1,7 @@
-name: cerbos_http_client
-description: A starting point for Dart libraries or applications.
-version: 0.0.1
-repository: https://github.com/my_org/my_repo
+name: supy_flutter_packages
 
 environment:
-  sdk: ^3.0.6
-
-dependencies:
-  dio: ^5.3.2
+  sdk: '>=2.18.0 <3.0.0'
 
 dev_dependencies:
-  lints: ^2.1.1
-  test: ^1.24.5
+  melos: ^3.1.1
