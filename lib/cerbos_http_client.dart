@@ -1,7 +1,9 @@
 library cerbos_http_client;
 
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cerbos_http_client/src/interceptor.dart';
 import 'package:dio/dio.dart';
 
 import 'src/externals.dart';
@@ -22,7 +24,8 @@ class CerbosHttpClient {
         },
       ),
     )
-      ..interceptors.add(LogInterceptor(requestBody: true))
+      ..interceptors
+          .add(CustomLogInterceptor(requestBody: true, responseBody: true))
       ..httpClientAdapter = HttpClientAdapter();
   }
 
