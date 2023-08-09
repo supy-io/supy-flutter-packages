@@ -1,6 +1,5 @@
 library cerbos_http_client;
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cerbos_http_client/src/interceptor.dart';
