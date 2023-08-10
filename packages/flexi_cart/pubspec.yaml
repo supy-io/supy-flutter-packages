@@ -1,0 +1,25 @@
+name: flexi_cart
+description: A simple cart package for flutter.
+
+version: 0.0.1
+repository: https://github.com/supy-io/supy-flutter-packages
+
+environment:
+  sdk: ^3.0.6
+
+
+# Add regular dependencies here.
+dependencies:
+  provider: ^6.0.3
+  flutter:
+    sdk: flutter
+  very_good_analysis: ^5.0.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints: ^2.0.0
+  test: ^1.21.0
+  mocktail: ^0.3.0
+
+flutter:
