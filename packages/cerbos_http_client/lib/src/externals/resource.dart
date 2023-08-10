@@ -31,9 +31,9 @@ class Resource {
     return Resource(
       kind: map['kind'] as String,
       id: map['id'] as String,
-      attributes: map['attributes'] as Map<String, dynamic>,
-      policyVersion: map['policyVersion'] as String,
-      scope: map['scope'] as String,
+      attributes: map['attr'] ?? {},
+      policyVersion: map['policyVersion'],
+      scope: map['scope'],
     );
   }
 
