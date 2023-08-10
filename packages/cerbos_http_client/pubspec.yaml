@@ -1,6 +1,6 @@
 name: cerbos_http_client
 description: Simple HTTP client to interact with Cerbos.
-version: 0.0.2
+version: 0.0.2+1
 repository: https://github.com/supy-io/supy-flutter-packages
 
 environment:

@@ -1,3 +1,7 @@
+## 0.0.2+1
+
+ - **FIX**: effect mapper.
+
 ## 0.0.2
 
  - **FIX**: attributes jsonKey in Resource.fromMap.

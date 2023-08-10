@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`cerbos_http_client` - `v0.0.2+1`](#cerbos_http_client---v0021)
+
+---
+
+#### `cerbos_http_client` - `v0.0.2+1`
+
+ - **FIX**: effect mapper.
+
+
+## 2023-08-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`cerbos_http_client` - `v0.0.2`](#cerbos_http_client---v002)
 
 ---
