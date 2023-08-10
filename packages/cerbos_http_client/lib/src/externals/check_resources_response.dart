@@ -1,17 +1,13 @@
 import 'resource.dart';
 
+const _effectMapper = {
+  'EFFECT_ALLOW': Effect.allow,
+  'EFFECT_DENY': Effect.deny,
+};
+
 enum Effect {
   allow,
-  deny;
-
-  String get name {
-    switch (this) {
-      case Effect.allow:
-        return 'EFFECT_ALLOW';
-      case Effect.deny:
-        return 'EFFECT_DENY';
-    }
-  }
+  deny,
 }
 
 class CheckResourcesResponse {
@@ -112,7 +108,7 @@ class Action {
   factory Action._fromEntry(MapEntry<String, dynamic> entry) {
     return Action(
       name: entry.key,
-      effect: Effect.values.asNameMap()[entry.value]!,
+      effect: _effectMapper[entry.value]!,
     );
   }
 }
