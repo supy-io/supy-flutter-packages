@@ -44,9 +44,21 @@ class Resource {
           runtimeType == other.runtimeType &&
           kind == other.kind &&
           id == other.id &&
-          attributes == other.attributes &&
+          _attrEquality(other) &&
           policyVersion == other.policyVersion &&
           scope == other.scope;
+
+  bool _attrEquality(Resource other) {
+    if (attributes.isEmpty && other.attributes.isEmpty) return true;
+
+    if (attributes.length != other.attributes.length) return false;
+
+    for (final entry in attributes.entries) {
+      if (other.attributes[entry.key] != entry.value) return false;
+    }
+
+    return true;
+  }
 
   @override
   int get hashCode =>
