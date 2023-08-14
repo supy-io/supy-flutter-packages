@@ -1,3 +1,7 @@
+## 0.0.3
+
+ - **FIX**: Resource attributes equality.
+
 ## 0.0.2+1
 
  - **FIX**: effect mapper.
