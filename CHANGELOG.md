@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-08-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cerbos_http_client` - `v0.0.4`](#cerbos_http_client---v004)
+
+---
+
+#### `cerbos_http_client` - `v0.0.4`
+
+
 ## 2023-08-14
 
 ### Changes

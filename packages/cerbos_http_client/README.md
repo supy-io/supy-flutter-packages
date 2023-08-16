@@ -10,7 +10,7 @@ Add this to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  cerbos_dart: ^0.0.2+1  # Use the latest version
+  cerbos_dart: ^0.0.4  # Use the latest version
 ```
 
 ## Contributing
