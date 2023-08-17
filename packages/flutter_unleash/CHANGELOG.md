@@ -1,3 +1,6 @@
+## [0.4.5]
+
+* Provide Features interface class
 ## [0.4.4]
 
 * Provide ToggleBackupStore interface
