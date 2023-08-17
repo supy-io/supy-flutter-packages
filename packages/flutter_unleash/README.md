@@ -13,7 +13,7 @@
   <a href="https://pub.dev/packages/unleash/score"><img src="https://badges.bar/unleash/pub%20points" alt="pub points"></a>
   -->
 </p>
-This library is a fork of the [unleash](https://pub.dev/packages/unleash) package available on pub.dev.
+This library is a fork of the [unleash](https://pub.dev/packages/unleash/) package available on pub.dev.
 
 My fork of the "unleash" package aims to provide additional features and improvements to the original package. I've built upon the foundation provided by the "unleash" package to create a version that meets my specific needs while also contributing back to the open-source community.
 
