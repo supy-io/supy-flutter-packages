@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
-import 'package:flutter_unleash/src/features.dart';
-import 'package:flutter_unleash/src/strategies.dart';
-import 'package:flutter_unleash/src/strategy.dart';
-import 'package:flutter_unleash/src/unleash_client.dart';
-import 'package:flutter_unleash/src/unleash_settings.dart';
+import 'package:unleash_client/src/features.dart';
+import 'package:unleash_client/src/strategies.dart';
+import 'package:unleash_client/src/strategy.dart';
+import 'package:unleash_client/src/unleash_client.dart';
+import 'package:unleash_client/src/unleash_settings.dart';
 
 import 'context.dart';
 import 'toggle_backup/_web_toggle_backup.dart';

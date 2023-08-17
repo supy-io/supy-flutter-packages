@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart';
-import 'package:flutter_unleash/src/features.dart';
-import 'package:flutter_unleash/src/register.dart';
-import 'package:flutter_unleash/flutter_unleash.dart';
+import 'package:unleash_client/src/register.dart';
+import 'package:unleash_client/unleash_client.dart';
 
 /// Responsible for the communication with Unleash Server
 class UnleashClient {

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_unleash/flutter_unleash.dart';
+import 'package:unleash_client/unleash_client.dart';
 
 class MyStrategy implements ActivationStrategy {
   @override

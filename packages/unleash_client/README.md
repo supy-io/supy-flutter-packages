@@ -2,17 +2,6 @@
   <img src="https://raw.githubusercontent.com/ueman/unleash/master/img/unleash.png" max-height="80" alt="Unleash" />
 </p>
 
-<p align="center">
-  <a href="https://pub.dev/packages/unleash"><img src="https://img.shields.io/pub/v/unleash.svg" alt="pub.dev"></a>
-  <img src="https://github.com/ueman/unleash/workflows/unleash/badge.svg?branch=master" alt="GitHub Workflow Status">
-  <a href="https://codecov.io/gh/ueman/unleash"><img src="https://codecov.io/gh/ueman/unleash/branch/master/graph/badge.svg" alt="Code Coverage"></a>
-  <a href="https://github.com/ueman#sponsor-me"><img src="https://img.shields.io/github/sponsors/ueman" alt="Sponsoring"></a>
-  <!-- 
-  <a href="https://pub.dev/packages/unleash/score"><img src="https://badges.bar/unleash/likes" alt="likes"></a>
-  <a href="https://pub.dev/packages/unleash/score"><img src="https://badges.bar/unleash/popularity" alt="popularity"></a>
-  <a href="https://pub.dev/packages/unleash/score"><img src="https://badges.bar/unleash/pub%20points" alt="pub points"></a>
-  -->
-</p>
 This library is a fork of the [unleash](https://pub.dev/packages/unleash/) package available on pub.dev.
 
 My fork of the "unleash" package aims to provide additional features and improvements to the original package. I've built upon the foundation provided by the "unleash" package to create a version that meets my specific needs while also contributing back to the open-source community.
@@ -31,7 +20,7 @@ First, you will need to add `unleash` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  unleash: x.y.z 
+  unleash_client: x.y.z 
   # use the latest version found on pub.dev
 ```
 

@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:flutter_unleash/src/unleash_settings.dart';
+import 'package:unleash_client/src/unleash_settings.dart';
 
 void main() {
   test('UnleashSettings.toHeader', () {

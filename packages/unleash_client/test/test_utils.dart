@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter_unleash/src/features.dart';
-import 'package:flutter_unleash/src/strategy.dart';
-import 'package:flutter_unleash/src/unleash_client.dart';
+import 'package:unleash_client/src/features.dart';
+import 'package:unleash_client/src/strategy.dart';
+import 'package:unleash_client/src/unleash_client.dart';
 
-late final testFeatures = Features.fromJson(
+final testFeatures = Features.fromJson(
     jsonDecode(testFeatureToggleJson) as Map<String, dynamic>);
 
 // language=json

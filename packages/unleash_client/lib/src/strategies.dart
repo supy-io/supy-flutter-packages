@@ -1,5 +1,5 @@
-import 'package:flutter_unleash/src/context.dart';
-import 'package:flutter_unleash/src/strategy.dart';
+import 'package:unleash_client/src/context.dart';
+import 'package:unleash_client/src/strategy.dart';
 
 // See https://docs.getunleash.io/user_guide/activation_strategy
 

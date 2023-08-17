@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_unleash/flutter_unleash.dart';
+import 'package:unleash_client/unleash_client.dart';
 
 Future<void> main() async {
   final unleash = await Unleash.init(

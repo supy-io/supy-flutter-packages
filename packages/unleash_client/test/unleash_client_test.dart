@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:flutter_unleash/src/register.dart';
-import 'package:flutter_unleash/src/unleash_client.dart';
-import 'package:flutter_unleash/flutter_unleash.dart';
+import 'package:unleash_client/src/register.dart';
+import 'package:unleash_client/src/unleash_client.dart';
+import 'package:unleash_client/unleash_client.dart';
 
 void main() {
   late Fixture fixture;

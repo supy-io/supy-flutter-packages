@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:flutter_unleash/src/context.dart';
+import 'package:unleash_client/src/context.dart';
 
 void main() {
   test('$Context', () {

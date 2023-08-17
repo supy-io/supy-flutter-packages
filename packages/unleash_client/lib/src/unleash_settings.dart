@@ -1,5 +1,5 @@
 import 'package:path/path.dart';
-import 'package:flutter_unleash/flutter_unleash.dart';
+import 'package:unleash_client/unleash_client.dart';
 
 class UnleashSettings {
   const UnleashSettings({

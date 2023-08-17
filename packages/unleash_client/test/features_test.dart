@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:flutter_unleash/src/features.dart';
+import 'package:unleash_client/src/features.dart';
 
 void main() {
   group('Features', () {

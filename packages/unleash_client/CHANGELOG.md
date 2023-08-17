@@ -1,3 +1,6 @@
+## [0.4.6]
+
+* Make Analayzer happy
 ## [0.4.5]
 
 * Provide Features interface class

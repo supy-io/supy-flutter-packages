@@ -1,4 +1,4 @@
-name: flutter_unleash
+name: unleash_client
 description: A Server Side Dart SDK for Unleash. Unleash is an open-source feature flag service.
 version: 0.4.5
 repository: https://github.com/supy-io/supy-flutter-packages

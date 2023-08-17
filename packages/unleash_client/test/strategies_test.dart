@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:flutter_unleash/src/context.dart';
-import 'package:flutter_unleash/src/strategies.dart';
+import 'package:unleash_client/src/context.dart';
+import 'package:unleash_client/src/strategies.dart';
 
 void main() {
   test('$DefaultStrategy', () {

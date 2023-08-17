@@ -1,4 +1,4 @@
-import 'package:flutter_unleash/src/features.dart';
+import 'package:unleash_client/src/features.dart';
 import '_io_toggle_backup.dart' if (dart.library.html) '_web_toggle_backup.dart'
     as toggle_backup;
 

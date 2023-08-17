@@ -8,8 +8,8 @@ environment:
   sdk: ^3.0.6
 
 dependencies:
-  flutter_unleash:
-    path: ../../flutter_unleash
+  unleash_client:
+    path: ../../unleash_client
 
 dev_dependencies:
   lints: ^1.0.0

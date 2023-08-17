@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:flutter_unleash/src/version.dart';
+import 'package:unleash_client/src/version.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 void main() {

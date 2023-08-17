@@ -1,4 +1,4 @@
-import 'package:flutter_unleash/src/version.dart' as version;
+import 'package:unleash_client/src/version.dart' as version;
 
 /// See https://unleash.github.io/docs/api/client/register
 class Register {
