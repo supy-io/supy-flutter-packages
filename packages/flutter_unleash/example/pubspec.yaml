@@ -1,0 +1,15 @@
+name: example
+description: A new example project.
+publish_to: none
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.0.6
+
+dependencies:
+  flutter_unleash:
+    path: ../../flutter_unleash
+
+dev_dependencies:
+  lints: ^1.0.0
