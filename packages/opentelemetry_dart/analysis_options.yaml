@@ -1,0 +1,4 @@
+include: package:workiva_analysis_options/v1.recommended.yaml
+analyzer:
+  exclude:
+    - lib/src/sdk/proto
