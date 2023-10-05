@@ -1,5 +1,8 @@
 # OpenTelemetry for Dart
 
+Forked from
+[OpenTelemetry](https://pub.dev/packages/opentelemetry) to add JSON reporter.
+
 This repo is intended to be the Dart implementation of the OpenTelemetry project, with a
 long-term goal of being open sourced.
 
