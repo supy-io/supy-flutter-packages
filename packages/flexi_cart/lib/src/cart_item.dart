@@ -7,6 +7,7 @@ abstract class ICartItem {
     required this.price,
     this.groupName = defaultGroup,
     this.image,
+    this.orderable = true,
     this.unit = '',
     this.currency = '',
     this.quantity = 0,
@@ -21,6 +22,8 @@ abstract class ICartItem {
   final String? image;
   final String id;
   final bool selected;
+  final bool orderable;
+
   final Map<String, dynamic> extras;
   double? quantity;
   double price;
