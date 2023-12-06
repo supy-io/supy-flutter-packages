@@ -1,6 +1,3 @@
-<div align="center">
-  <img src="your-logo.png" alt="Your Project Logo" width="150">
-</div>
 
 # Cart Management Module for Flutter
 
@@ -10,10 +7,7 @@ The Flexi Cart module provides a versatile and robust solution for handling shop
 
 - [Features](#features)
 - [Getting Started](#getting-started)
-- [Usage](#usage)
-- [API Reference](#api-reference)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Features
 
