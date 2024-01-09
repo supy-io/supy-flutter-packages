@@ -29,6 +29,22 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier {
 
   String? get note => _note;
 
+  void setNote(String? note, {bool shouldNotifyListeners = false}) {
+    _note = note;
+    if (shouldNotifyListeners) {
+      notifyListeners();
+    }
+  }
+
+  void setDeliveredAt(DateTime? deliveredAt,
+      {bool shouldNotifyListeners = false}) {
+    _deliveredAt = deliveredAt;
+    if (shouldNotifyListeners) {
+      notifyListeners();
+    }
+  }
+
+  @Deprecated("You use [setNote] instead of it ")
   set note(String? note) {
     _note = note;
     notifyListeners();
@@ -40,6 +56,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier {
 
   bool addZeroQuantity = false;
 
+  @Deprecated("You use [setDeliveredAt] instead of it ")
   set deliveredAt(DateTime? deliveredAt) {
     _deliveredAt = deliveredAt;
     notifyListeners();

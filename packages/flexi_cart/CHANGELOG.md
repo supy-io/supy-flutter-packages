@@ -4,3 +4,5 @@
 - Update Readme file.
 ## 0.0.3
 - Added Ordable property
+## 0.0.4
+- Added SetNote & SetDeliveryData as function instead of set , with allowing to disable notifier on assigning 
