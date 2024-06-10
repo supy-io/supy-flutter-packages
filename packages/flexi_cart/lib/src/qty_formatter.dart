@@ -22,28 +22,27 @@ class QuantityInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) return newValue;
-    if (newValue.text == '.') return oldValue;
+    if (newValue.text == ',' || newValue.text == '.') return oldValue;
 
-    final arabicNumbersRegx = RegExp(r'[٠١٢٣٤٥٦٧٨٩]');
-    final dotRegx = RegExp(r'[.]');
+    final arabicNumbersRegx = RegExp(r'[٠-٩]');
+    final dotOrCommaRegx = RegExp(r'[.,]');
 
-    newValue = TextEditingValue(
-      text: newValue.text.splitMapJoin(
-        arabicNumbersRegx,
-        onMatch: (m) => _arabicNumbersMap[m.group(0)!]!,
-        onNonMatch: (n) => n,
-      ),
-      selection: newValue.selection,
-    );
+    // Replace Arabic numbers and commas
+    String newText = newValue.text.replaceAllMapped(arabicNumbersRegx, (match) {
+      return _arabicNumbersMap[match.group(0)!]!;
+    }).replaceAll(',', '.');
 
-    final dots = dotRegx.allMatches(newValue.text).length;
+    // Check if there are multiple dots or commas
+    if (dotOrCommaRegx.allMatches(newText).length > 1) return oldValue;
 
-    if (dots > 1) return oldValue;
-
-    final quantity = double.tryParse(newValue.text.replaceAll('.', ''));
+    // Parse quantity
+    final quantity = double.tryParse(newText.replaceAll('.', ''));
 
     if (quantity == null || quantity > maxQuantity) return oldValue;
 
-    return newValue;
+    return TextEditingValue(
+      text: newText,
+      selection: newValue.selection,
+    );
   }
 }

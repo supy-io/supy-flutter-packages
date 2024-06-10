@@ -16,6 +16,8 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
     this.onChanged,
     this.decimalDigits = 2,
     this.maxQuantity = 999999,
+    this.textAlign = TextAlign.center,
+
   }) : super(key: key);
 
   final ICartItem item;
@@ -25,6 +27,7 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
   final ValueChanged<T>? onChanged;
   final int decimalDigits;
   final int maxQuantity;
+  final TextAlign textAlign;
 
   @override
   State<CartInput> createState() => _CartInputState();
@@ -101,20 +104,20 @@ class _CartInputState extends State<CartInput> {
             keyboardType: TextInputType.numberWithOptions(
               decimal: widget.decimalDigits > 0,
             ),
+
             inputFormatters: <TextInputFormatter>[
               //white space is not allowed
               FilteringTextInputFormatter.deny(RegExp(r'\s')),
-              //signed is not allowed
+              // //signed is not allowed
               FilteringTextInputFormatter.deny(RegExp(r'-')),
-              // , is not allowed
-              FilteringTextInputFormatter.deny(RegExp(r',')),
+
               QuantityInputFormatter(widget.maxQuantity),
             ],
             onChanged: _onTextChanged,
             style: _quantity != null && _quantity! > 0
                 ? textStyle?.copyWith(color: themeData.primaryColor)
                 : textStyle,
-            textAlign: TextAlign.center,
+            textAlign: widget.textAlign,
             decoration: inputDecoration,
           ),
         ),
