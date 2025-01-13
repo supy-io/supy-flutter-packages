@@ -25,6 +25,10 @@ class CartItemsGroup<T extends ICartItem> {
     items.remove(item.key);
   }
 
+  void clear() {
+    items.clear();
+  }
+
   CartItemsGroup<G> cast<G extends ICartItem>() {
     return CartItemsGroup<G>(
       id: id,

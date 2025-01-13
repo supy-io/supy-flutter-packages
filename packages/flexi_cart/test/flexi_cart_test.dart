@@ -254,7 +254,7 @@ void main() {
       setUp(
         () {
           cart = FlexiCart();
-          cart.addListener(mockCallback);
+          cart.addListener(mockCallback.call);
           reset(mockCallback);
         },
       );
@@ -646,7 +646,7 @@ void main() {
         'Add delivered at',
         () {
           expect(cart.deliveredAt, isNull);
-          cart.deliveredAt = DateTime.now();
+          cart.setDeliveredAt(DateTime.now());
 
           expect(cart.deliveredAt, isNotNull);
           verify(() => mockCallback()).called(1);
@@ -657,7 +657,7 @@ void main() {
         'Add note',
         () {
           expect(cart.note, isNull);
-          cart.note = 'note';
+          cart.setNote('note');
 
           expect(cart.note, equals('note'));
           verify(() => mockCallback()).called(1);
@@ -712,8 +712,9 @@ void main() {
           when(() => item.totalPrice()).thenReturn(10.0);
           when(() => item.notNullQty()).thenReturn(1.0);
 
-          cart.deliveredAt = DateTime.now();
-          cart.note = 'note';
+          cart.setDeliveredAt(DateTime.now());
+          cart.setNote('note');
+
           cart.addZeroQuantity = true;
           cart.removeItemCondition = (item) => false;
 
@@ -753,8 +754,8 @@ void main() {
           when(() => item.notNullQty()).thenReturn(1.0);
 
           cart.addZeroQuantity = true;
-          cart.deliveredAt = DateTime.now();
-          cart.note = 'note';
+          cart.setDeliveredAt(DateTime.now());
+          cart.setNote('note');
           cart.removeItemCondition = (item) => true;
 
           cart.add(item);
@@ -771,8 +772,8 @@ void main() {
           expect(cart.removeItemCondition, isNull);
 
           cart.addZeroQuantity = true;
-          cart.deliveredAt = DateTime.now();
-          cart.note = 'note';
+          cart.setDeliveredAt(DateTime.now());
+          cart.setNote('note');
           cart.removeItemCondition = (item) => true;
 
           cart.add(item);
@@ -844,8 +845,8 @@ void main() {
           when(() => item.notNullQty()).thenReturn(1.0);
 
           cart.addZeroQuantity = true;
-          cart.deliveredAt = DateTime.now();
-          cart.note = 'note';
+          cart.setDeliveredAt(DateTime.now());
+          cart.setNote('note');
           cart.removeItemCondition = (item) => false;
 
           cart.add(item);

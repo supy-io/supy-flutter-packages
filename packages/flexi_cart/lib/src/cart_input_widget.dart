@@ -8,7 +8,7 @@ import 'cart_item.dart';
 
 class CartInput<T extends ICartItem> extends StatefulWidget {
   const CartInput({
-    Key? key,
+    super.key,
     required this.item,
     this.hideButtons = false,
     this.showZeroQty = false,
@@ -17,8 +17,7 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
     this.decimalDigits = 2,
     this.maxQuantity = 999999,
     this.textAlign = TextAlign.center,
-
-  }) : super(key: key);
+  });
 
   final ICartItem item;
   final bool hideButtons;
@@ -104,7 +103,6 @@ class _CartInputState extends State<CartInput> {
             keyboardType: TextInputType.numberWithOptions(
               decimal: widget.decimalDigits > 0,
             ),
-
             inputFormatters: <TextInputFormatter>[
               //white space is not allowed
               FilteringTextInputFormatter.deny(RegExp(r'\s')),

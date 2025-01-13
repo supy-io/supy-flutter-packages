@@ -1,11 +1,12 @@
 abstract class ICartItem {
-  static const defaultGroup = 'All';
+  static const String defaultGroup = 'All';
 
   ICartItem({
     required this.id,
     required this.name,
     required this.price,
     this.groupName = defaultGroup,
+    this.group = defaultGroup,
     this.image,
     this.orderable = true,
     this.unit = '',
@@ -19,6 +20,7 @@ abstract class ICartItem {
   final String unit;
   final String currency;
   final String groupName;
+  final String group;
   final String? image;
   final String id;
   final bool selected;
@@ -33,8 +35,6 @@ abstract class ICartItem {
   double totalPrice() => price * notNullQty();
 
   String get key => id;
-
-  String get group => defaultGroup;
 
   void increment({double inc = 1}) {
     quantity = notNullQty() + inc;

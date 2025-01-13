@@ -194,6 +194,29 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier {
     }
   }
 
+  void clearItemsGroup(String groupId, {bool shouldNotifyListeners = true}) {
+    groups.remove(groupId);
+    items.removeWhere(
+      (key, value) => value.group == groupId,
+    );
+    if (shouldNotifyListeners) {
+      notifyListeners();
+    }
+  }
+
+  bool isItemsGroupEmpty(String groupId) {
+    return getItemsGroup(groupId).isEmpty;
+  }
+
+  bool isNotItemsGroupEmpty(String groupId) {
+    return getItemsGroup(groupId).isNotEmpty;
+  }
+
+  List<T> getItemsGroup(String groupId) =>
+      groups[groupId]?.items.values.toList() ?? [];
+
+  int getItemsGroupLength(String groupId) => getItemsGroup(groupId).length;
+
   FlexiCart<T> clone() {
     return FlexiCart<T>(
       items: Map.from(items),
