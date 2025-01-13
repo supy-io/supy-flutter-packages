@@ -10,3 +10,5 @@
 - Allowed ',' in cartInput widget
 - ## 0.0.5
 - Added Group methods in cart
+- - ## 0.0.7
+- Added removeNullQuantity option

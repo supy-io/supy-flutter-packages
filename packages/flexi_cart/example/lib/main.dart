@@ -102,7 +102,7 @@ class _ExampleState extends State<Example> {
     );
   }
 
-  _generateItem() {
+  CartItem _generateItem() {
     var randomNames = RandomNames(Zone.us);
     final random = Random();
     final price = random.nextInt(10) * 10.0;

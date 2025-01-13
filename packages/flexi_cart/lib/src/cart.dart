@@ -55,6 +55,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier {
   DateTime? get deliveredAt => _deliveredAt;
 
   bool addZeroQuantity = false;
+  bool removeNullQuantity = true;
 
   @Deprecated("You use [setDeliveredAt] instead of it ")
   set deliveredAt(DateTime? deliveredAt) {
@@ -87,13 +88,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier {
   void _add(item, bool increment) {
     final shouldDeleteZeroQty = (!addZeroQuantity && item.quantity == 0);
     final shouldRemoveItem = removeItemCondition?.call(item) ?? false;
-
-    if (shouldRemoveItem) {
-      _delete(item);
-      return;
-    }
-
-    if (item.quantity == null || shouldDeleteZeroQty) {
+    if (removeNullQuantity || shouldDeleteZeroQty||shouldRemoveItem) {
       _delete(item);
       return;
     }

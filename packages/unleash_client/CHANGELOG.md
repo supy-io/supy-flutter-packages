@@ -1,4 +1,7 @@
-## [0.4.6]
+## [0.4.7]
+
+* Update Packages && Dependencies
+* ## [0.4.6]
 
 * Make Analayzer happy
 ## [0.4.5]
