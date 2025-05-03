@@ -8,7 +8,9 @@
 - Added SetNote & SetDeliveryData as function instead of set , with allowing to disable notifier on assigning 
 ## 0.0.5
 - Allowed ',' in cartInput widget
-- ## 0.0.5
+ ## 0.0.5
 - Added Group methods in cart
-- - ## 0.0.7
+## 0.0.7
 - Added removeNullQuantity option
+## 0.0.8
+- removed removeNullQuantity option & fix the cart
