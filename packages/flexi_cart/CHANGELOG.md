@@ -14,3 +14,6 @@
 - Added removeNullQuantity option
 ## 0.0.8
 - removed removeNullQuantity option & fix the cart
+## 0.0.9
+- Added `ChangeNotifierDisposeMixin` to prevent calling `notifyListeners()` after dispose.
+- Updated test cases to include `shouldNotifyListeners` option and assert `DateTime` type.

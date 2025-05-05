@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'cart_item.dart';
 import 'cart_items_group.dart';
+import 'mixins.dart';
 
 typedef RemoveCallBack<T> = bool Function(T item);
 
-class FlexiCart<T extends ICartItem> extends ChangeNotifier {
+class FlexiCart<T extends ICartItem> extends ChangeNotifier with ChangeNotifierDisposeMixin {
   FlexiCart({
     Map<String, T>? items,
     Map<String, CartItemsGroup<T>>? groups,

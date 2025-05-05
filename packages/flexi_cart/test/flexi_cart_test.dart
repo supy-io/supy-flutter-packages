@@ -646,9 +646,10 @@ void main() {
         'Add delivered at',
         () {
           expect(cart.deliveredAt, isNull);
-          cart.setDeliveredAt(DateTime.now());
-
+          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
           expect(cart.deliveredAt, isNotNull);
+          expect(cart.deliveredAt, isA<DateTime>());
+
           verify(() => mockCallback()).called(1);
         },
       );
@@ -657,7 +658,7 @@ void main() {
         'Add note',
         () {
           expect(cart.note, isNull);
-          cart.setNote('note');
+          cart.setNote('note',shouldNotifyListeners: true);
 
           expect(cart.note, equals('note'));
           verify(() => mockCallback()).called(1);
@@ -712,8 +713,8 @@ void main() {
           when(() => item.totalPrice()).thenReturn(10.0);
           when(() => item.notNullQty()).thenReturn(1.0);
 
-          cart.setDeliveredAt(DateTime.now());
-          cart.setNote('note');
+          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
+          cart.setNote('note',shouldNotifyListeners: true);
 
           cart.addZeroQuantity = true;
           cart.removeItemCondition = (item) => false;
@@ -754,8 +755,8 @@ void main() {
           when(() => item.notNullQty()).thenReturn(1.0);
 
           cart.addZeroQuantity = true;
-          cart.setDeliveredAt(DateTime.now());
-          cart.setNote('note');
+          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
+          cart.setNote('note',shouldNotifyListeners: true);
           cart.removeItemCondition = (item) => true;
 
           cart.add(item);
@@ -772,8 +773,8 @@ void main() {
           expect(cart.removeItemCondition, isNull);
 
           cart.addZeroQuantity = true;
-          cart.setDeliveredAt(DateTime.now());
-          cart.setNote('note');
+          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
+          cart.setNote('note',shouldNotifyListeners: true);
           cart.removeItemCondition = (item) => true;
 
           cart.add(item);
