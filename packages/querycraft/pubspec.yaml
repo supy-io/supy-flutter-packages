@@ -1,0 +1,16 @@
+name: querycraft
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/querycraft
+issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
+homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/querycraft
+topics: [api-query, query-params, query-builder,structured-params]
+
+
+environment:
+  sdk: ^3.7.2
+
+
+dev_dependencies:
+  lints: ^5.1.1
+  test: ^1.25.15

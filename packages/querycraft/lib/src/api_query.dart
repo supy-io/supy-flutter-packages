@@ -1,0 +1,147 @@
+import 'dart:convert';
+
+import 'package:querycraft/querycraft.dart';
+
+import 'interfaces/interfaces.dart';
+
+/// Interface defining the structure of an API query.
+///
+/// This interface outlines the components of an API query, including
+/// filtering, ordering, and paging details. It provides methods to clone
+/// the query, create a modified copy, and convert the query to a map.
+abstract interface class IApiQuery<T>
+    implements ICloneable<IApiQuery<T>>, IMap<dynamic> {
+  /// Gets the filtering details of the API query.
+  IApiQueryFilteringGroup<T>? get filtering;
+
+  /// Gets the list of ordering details in the API query.
+  List<IApiQueryOrdering<T>>? get ordering;
+
+  /// Gets the paging details of the API query.
+  IApiQueryPaging? get paging;
+
+  ///
+  IApiQuerySelection? get selection;
+
+  /// Creates a new instance of [IApiQuery] with specified modifications.
+  ///
+  /// This method returns a modified copy of the original [IApiQuery] instance
+  /// with the provided changes. It allows for creating a new query based on
+  /// the original query while modifying specific components.
+  IApiQuery<T> copyWith({
+    IApiQueryFilteringGroup<T>? filtering,
+    List<IApiQueryOrdering<T>>? ordering,
+    IApiQueryPaging? paging,
+    IApiQuerySelection? selection,
+  });
+}
+
+/// Class representing a complete API query.
+///
+/// This class implements the [IApiQuery] interface and represents a complete
+/// API query with filtering, ordering, and paging details. It allows for
+/// creating, modifying, and converting API queries to a map.
+class ApiQuery<T> implements IApiQuery<T> {
+  /// Creates a new instance of [ApiQuery] with specified details.
+  ///
+  /// The constructor takes the [filtering], [ordering], and [paging] details
+  /// for the API query. It creates an immutable instance representing a
+  /// complete API query.
+  const ApiQuery({
+    this.filtering,
+    this.ordering,
+    this.paging,
+    this.selection,
+  });
+
+  /// Creates an API query instance with default values.
+  ///
+  /// This private constructor is used to create an instance of [ApiQuery]
+  /// with default values when no query is provided.
+  ApiQuery._({IApiQuery<T>? query})
+      : filtering = query?.filtering ??
+            ApiQueryFilteringGroup<T>(
+              condition: FilterConditionType.and,
+              filtering: [],
+              groups: [],
+            ),
+        ordering = query?.ordering ?? [],
+        paging = query?.paging ?? ApiQueryPaging.noLimit(),
+        selection = null;
+
+  @override
+  final IApiQueryFilteringGroup<T>? filtering;
+
+  @override
+  final List<IApiQueryOrdering<T>>? ordering;
+
+  @override
+  final IApiQueryPaging? paging;
+  @override
+  final IApiQuerySelection? selection;
+
+  /// Casts an API query instance to a specific type.
+  ///
+  /// This static method is used to cast an [IApiQuery] instance to [ApiQuery]
+  /// with a specific data type [T].
+  static ApiQuery<T> cast<T>(IApiQuery<T> query) {
+    return ApiQuery<T>._(query: query);
+  }
+
+  /// Creates an API query instance from another query instance.
+  ///
+  /// This static method is used to create an [ApiQuery] instance from an
+  /// existing [IApiQuery] instance.
+  static ApiQuery<T> from<T>(IApiQuery<T> query) {
+    return ApiQuery<T>._(query: query);
+  }
+
+  /// Creates a modified copy of the API query with specified changes.
+  ///
+  /// This method returns a new instance of [ApiQuery] with the specified
+  /// modifications, allowing for easy creation of updated queries.
+  @override
+  ApiQuery<T> copyWith({
+    IApiQueryFilteringGroup<T>? filtering,
+    List<IApiQueryOrdering<T>>? ordering,
+    IApiQueryPaging? paging,
+    IApiQuerySelection? selection,
+  }) {
+    return ApiQuery<T>(
+      filtering: filtering ?? this.filtering,
+      ordering: ordering ?? this.ordering,
+      paging: paging ?? this.paging,
+      selection: selection ?? this.selection,
+    );
+  }
+
+  /// Creates a clone of the API query instance.
+  ///
+  /// This method returns a clone of the original [ApiQuery] instance,
+  /// producing an identical but separate instance.
+  @override
+  ApiQuery<T> clone() {
+    return ApiQuery<T>._(query: this);
+  }
+
+  /// Converts the API query instance to a map representation.
+  ///
+  /// This method converts the API query details into a map that can be easily
+  /// serialized to JSON or used in HTTP requests.
+  @override
+  Map<String, dynamic> toMap({bool encode = true}) {
+    final filteringMap = filtering?.toMap(encode: encode);
+    final pagingMap = paging?.toMap(encode: encode);
+    final orderingList = ordering?.map((e) => e.toMap(encode: encode)).toList();
+    final selectionMap = selection?.toMap(encode: encode);
+    return {
+      if (filteringMap != null) ...filteringMap,
+      if (pagingMap != null)
+        'paging': encode ? jsonEncode(pagingMap) : pagingMap,
+      if (ordering != null)
+        'ordering': encode ? jsonEncode(orderingList) : orderingList,
+      if (selection != null)
+        'selection': encode ? jsonEncode(selectionMap) : selectionMap,
+    };
+  }
+}
