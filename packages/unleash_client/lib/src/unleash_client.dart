@@ -19,11 +19,11 @@ class UnleashClient {
   /// Loads feature toggles from Unleash server
   Future<Features?> getFeatureToggles() async {
     try {
-      final reponse = await _client.get(
+      final response = await _client.get(
         _settings.featureUrl,
         headers: _settings.toHeaders(),
       );
-      final stringResponse = utf8.decode(reponse.bodyBytes);
+      final stringResponse = utf8.decode(response.bodyBytes);
 
       return Features.fromJson(
           json.decode(stringResponse) as Map<String, dynamic>);

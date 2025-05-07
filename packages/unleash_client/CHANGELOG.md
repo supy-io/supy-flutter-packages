@@ -1,3 +1,10 @@
+## [0.4.8]
+- Updated version to 0.4.8 in pubspec.yaml and version.dart.
+- Updated http dependency to ^1.4.0.
+- Updated coverage dependency to ^1.13.1
+- Updated test dependency to ^1.25.15.
+- Fixed typo in `getFeatureToggles` function from reponse to response.
+
 ## [0.4.7]
 
 * Update Packages && Dependencies
