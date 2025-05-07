@@ -1,10 +1,9 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockCallbackFunction extends Mock {
-  call();
+  void call();
 }
 
 class MockCartItem extends Mock implements ICartItem {}
@@ -13,13 +12,13 @@ class MockCartItem2 extends MockCartItem {}
 
 class CartItem extends ICartItem {
   CartItem({
-    super.groupName,
-    super.image,
-    super.unit = '',
     required super.price,
     required super.id,
     required super.name,
     required super.currency,
+    super.groupName,
+    super.image,
+    super.unit = '',
     super.quantity = 0,
   });
 }
@@ -35,12 +34,11 @@ void main() {
           cartItem = CartItem(
             id: 'id',
             name: 'name',
-            price: 10.0,
+            price: 10,
             groupName: 'groupName',
             image: 'image',
             unit: 'unit',
             currency: 'currency',
-            quantity: 0,
           );
         },
       );
@@ -91,8 +89,8 @@ void main() {
       test(
         'Decrement',
         () {
-          cartItem.quantity = 1;
-          cartItem.decrement();
+          cartItem..quantity = 1
+          ..decrement();
           expect(cartItem.quantity, equals(0.0));
           cartItem.decrement();
           expect(cartItem.quantity, equals(0.0));
@@ -109,10 +107,10 @@ void main() {
         () {
           final item1 = MockCartItem();
           final item2 = MockCartItem();
-          when(() => item1.totalPrice()).thenReturn(10.0);
-          when(() => item2.totalPrice()).thenReturn(10.0);
-          when(() => item1.notNullQty()).thenReturn(0.0);
-          when(() => item2.notNullQty()).thenReturn(0.0);
+          when(item1.totalPrice).thenReturn(10);
+          when(item2.totalPrice).thenReturn(10);
+          when(item1.notNullQty).thenReturn(0);
+          when(item2.notNullQty).thenReturn(0);
           items = [item1, item2];
         },
       );
@@ -128,9 +126,9 @@ void main() {
         'Total quantity',
         () {
           expect(items.totalQty(), equals(0.0));
-          when(() => items[0].notNullQty()).thenReturn(1.0);
+          when(() => items[0].notNullQty()).thenReturn(1);
           expect(items.totalQty(), equals(1.0));
-          when(() => items[1].notNullQty()).thenReturn(2.0);
+          when(() => items[1].notNullQty()).thenReturn(2);
           expect(items.totalQty(), equals(3.0));
         },
       );
@@ -155,8 +153,8 @@ void main() {
         'Add item to group',
         () {
           final item = MockCartItem();
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
 
@@ -174,17 +172,18 @@ void main() {
           final item = MockCartItem();
           final item2 = MockCartItem();
 
-          when(() => item.totalPrice()).thenReturn(20.0);
-          when(() => item.notNullQty()).thenReturn(2.0);
+          when(item.totalPrice).thenReturn(20);
+          when(item.notNullQty).thenReturn(2);
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
-          when(() => item2.totalPrice()).thenReturn(10.0);
-          when(() => item2.notNullQty()).thenReturn(1.0);
+          when(item2.totalPrice).thenReturn(10);
+          when(item2.notNullQty).thenReturn(1);
           when(() => item2.key).thenReturn('key');
           when(() => item2.group).thenReturn('group');
 
-          group.add(item);
-          group.add(item2, replace: false);
+          group
+            ..add(item)
+            ..add(item2, replace: false);
           expect(group.items, contains(item.key));
           expect(group.items[item.key]!.notNullQty(), equals(2));
           expect(group.totalPrice(), equals(20.0));
@@ -196,12 +195,13 @@ void main() {
         'Remove item from group',
         () {
           final item = MockCartItem();
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
-          group.add(item);
-          group.remove(item);
+          group
+            ..add(item)
+            ..remove(item);
           expect(group.items, isNot(contains(item.key)));
           expect(group.totalPrice(), equals(0.0));
           expect(group.totalQty(), equals(0));
@@ -211,17 +211,17 @@ void main() {
       test('Add multiple items to group', () {
         final item1 = MockCartItem();
         final item2 = MockCartItem();
-        when(() => item1.totalPrice()).thenReturn(10.0);
-        when(() => item2.totalPrice()).thenReturn(10.0);
-        when(() => item1.notNullQty()).thenReturn(1.0);
-        when(() => item2.notNullQty()).thenReturn(1.0);
+        when(item1.totalPrice).thenReturn(10);
+        when(item2.totalPrice).thenReturn(10);
+        when(item1.notNullQty).thenReturn(1);
+        when(item2.notNullQty).thenReturn(1);
         when(() => item1.key).thenReturn('key1');
         when(() => item2.key).thenReturn('key2');
         when(() => item1.group).thenReturn('group');
         when(() => item2.group).thenReturn('group');
 
-        group.add(item1);
-        group.add(item2);
+        group..add(item1)
+        ..add(item2);
         expect(group.items, contains(item1.key));
         expect(group.items, contains(item2.key));
         expect(group.totalPrice(), equals(20.0));
@@ -233,8 +233,8 @@ void main() {
         () {
           expect(group.totalPrice(), equals(0.0));
           final item = MockCartItem();
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           group.add(item);
@@ -253,8 +253,8 @@ void main() {
 
       setUp(
         () {
-          cart = FlexiCart();
-          cart.addListener(mockCallback.call);
+          cart = FlexiCart()
+          ..addListener(mockCallback.call);
           reset(mockCallback);
         },
       );
@@ -266,13 +266,13 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
 
           cart.add(item);
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
 
           expect(cart.isNotEmpty(), isTrue);
           expect(cart.isEmpty(), isFalse);
@@ -293,16 +293,16 @@ void main() {
           final item = CartItem(
             groupName: 'groupName',
             currency: 'currency',
-            price: 10.0,
+            price: 10,
             quantity: 1,
             id: 'id',
             name: 'name',
           );
 
-          cart.add(item);
-          cart.add(item, increment: true);
+          cart..add(item)
+          ..add(item, increment: true);
 
-          verify(() => mockCallback()).called(2);
+          verify(mockCallback.call).called(2);
 
           expect(cart.items[item.key]!.quantity, equals(2));
           expect(cart.groups[item.group]!.items.length, equals(1));
@@ -320,14 +320,14 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(0);
-          when(() => item.totalPrice()).thenReturn(0.0);
-          when(() => item.notNullQty()).thenReturn(0.0);
+          when(item.totalPrice).thenReturn(0);
+          when(item.notNullQty).thenReturn(0);
 
           cart.add(item);
 
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
           expect(cart.items, isNot(contains(item.key)));
           expect(cart.groups, isNot(contains(item.group)));
           expect(cart.totalPrice(), equals(0.0));
@@ -342,13 +342,13 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(0);
 
-          cart.addZeroQuantity = true;
-          cart.add(item);
+          cart..addZeroQuantity = true
+          ..add(item);
 
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
           expect(cart.items, contains(item.key));
           expect(cart.groups, contains(item.group));
         },
@@ -359,13 +359,13 @@ void main() {
         when(() => item.key).thenReturn('key');
         when(() => item.group).thenReturn('group');
         when(() => item.groupName).thenReturn('groupName');
-        when(() => item.price).thenReturn(10.0);
+        when(() => item.price).thenReturn(10);
         when(() => item.quantity).thenReturn(null);
-        when(() => item.notNullQty()).thenReturn(0.0);
+        when(item.notNullQty).thenReturn(0);
 
         cart.add(item);
 
-        verify(() => mockCallback()).called(1);
+        verify(mockCallback.call).called(1);
         expect(cart.items, isNot(contains(item.key)));
         expect(cart.groups, isNot(contains(item.group)));
       });
@@ -375,16 +375,16 @@ void main() {
         when(() => item.key).thenReturn('key');
         when(() => item.group).thenReturn('group');
         when(() => item.groupName).thenReturn('groupName');
-        when(() => item.price).thenReturn(9.0);
+        when(() => item.price).thenReturn(9);
         when(() => item.quantity).thenReturn(1);
 
-        cart.removeItemCondition = (item) {
+        cart..removeItemCondition = (item) {
           return item.price < 10.0;
-        };
+        }
 
-        cart.add(item);
+        ..add(item);
 
-        verify(() => mockCallback()).called(1);
+        verify(mockCallback.call).called(1);
         expect(cart.items, isNot(contains(item.key)));
         expect(cart.groups, isNot(contains(item.group)));
       });
@@ -396,23 +396,23 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           final item2 = MockCartItem();
           when(() => item2.key).thenReturn('key2');
           when(() => item2.group).thenReturn('group2');
           when(() => item2.groupName).thenReturn('groupName2');
-          when(() => item2.price).thenReturn(10.0);
+          when(() => item2.price).thenReturn(10);
           when(() => item2.quantity).thenReturn(1);
-          when(() => item2.totalPrice()).thenReturn(10.0);
-          when(() => item2.notNullQty()).thenReturn(1.0);
+          when(item2.totalPrice).thenReturn(10);
+          when(item2.notNullQty).thenReturn(1);
 
-          cart.add(item);
-          cart.add(item2);
+          cart..add(item)
+          ..add(item2);
 
-          verify(() => mockCallback()).called(2);
+          verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
           expect(cart.items, contains(item2.key));
           expect(cart.groups, contains(item.group));
@@ -435,22 +435,22 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           final item2 = MockCartItem();
           when(() => item2.key).thenReturn('key2');
           when(() => item2.group).thenReturn('group2');
           when(() => item2.groupName).thenReturn('groupName2');
-          when(() => item2.price).thenReturn(10.0);
+          when(() => item2.price).thenReturn(10);
           when(() => item2.quantity).thenReturn(1);
-          when(() => item2.totalPrice()).thenReturn(10.0);
-          when(() => item2.notNullQty()).thenReturn(1.0);
+          when(item2.totalPrice).thenReturn(10);
+          when(item2.notNullQty).thenReturn(1);
 
           cart.addItems([item, item2], skipIfExist: true);
 
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
           expect(cart.items.length, equals(2));
           expect(cart.items, contains(item.key));
           expect(cart.items, contains(item2.key));
@@ -472,23 +472,23 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           final item2 = MockCartItem();
           when(() => item2.key).thenReturn('key');
           when(() => item2.group).thenReturn('group');
           when(() => item2.groupName).thenReturn('groupName');
           when(() => item2.price).thenReturn(20);
           when(() => item2.quantity).thenReturn(10);
-          when(() => item2.totalPrice()).thenReturn(10.0);
-          when(() => item2.notNullQty()).thenReturn(1.0);
+          when(item2.totalPrice).thenReturn(10);
+          when(item2.notNullQty).thenReturn(1);
 
-          cart.addItems([item]);
-          cart.addItems([item2], skipIfExist: true);
+          cart..addItems([item])
+          ..addItems([item2], skipIfExist: true);
 
-          verify(() => mockCallback()).called(2);
+          verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
           expect(cart.items.length, equals(1));
           expect(cart.items[item.key]!.price, equals(10.0));
@@ -507,23 +507,23 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           final item2 = MockCartItem();
           when(() => item2.key).thenReturn('key');
           when(() => item2.group).thenReturn('group');
           when(() => item2.groupName).thenReturn('groupName');
           when(() => item2.price).thenReturn(20);
           when(() => item2.quantity).thenReturn(20);
-          when(() => item2.totalPrice()).thenReturn(200);
-          when(() => item2.notNullQty()).thenReturn(20);
+          when(item2.totalPrice).thenReturn(200);
+          when(item2.notNullQty).thenReturn(20);
 
-          cart.addItems([item]);
-          cart.addItems([item2], skipIfExist: false);
+          cart..addItems([item])
+          ..addItems([item2], skipIfExist: false);
 
-          verify(() => mockCallback()).called(2);
+          verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
           expect(cart.items.length, equals(1));
           expect(cart.items[item.key]!.price, equals(20));
@@ -540,15 +540,15 @@ void main() {
         when(() => item.key).thenReturn('key');
         when(() => item.group).thenReturn('group');
         when(() => item.groupName).thenReturn('groupName');
-        when(() => item.price).thenReturn(10.0);
+        when(() => item.price).thenReturn(10);
         when(() => item.quantity).thenReturn(1);
-        when(() => item.totalPrice()).thenReturn(10.0);
-        when(() => item.notNullQty()).thenReturn(1.0);
+        when(item.totalPrice).thenReturn(10);
+        when(item.notNullQty).thenReturn(1);
 
         cart.add(item);
         cart.delete(item);
 
-        verify(() => mockCallback()).called(2);
+        verify(mockCallback.call).called(2);
         expect(cart.items, isNot(contains(item.key)));
         expect(cart.groups, isNot(contains(item.group)));
       });
@@ -558,17 +558,17 @@ void main() {
         when(() => item.key).thenReturn('key');
         when(() => item.group).thenReturn('group');
         when(() => item.groupName).thenReturn('groupName');
-        when(() => item.price).thenReturn(10.0);
+        when(() => item.price).thenReturn(10);
         when(() => item.quantity).thenReturn(1);
-        when(() => item.totalPrice()).thenReturn(10.0);
-        when(() => item.notNullQty()).thenReturn(1.0);
+        when(item.totalPrice).thenReturn(10);
+        when(item.notNullQty).thenReturn(1);
 
         cart.add(item);
         when(() => item.quantity).thenReturn(null);
-        when(() => item.notNullQty()).thenReturn(0);
+        when(item.notNullQty).thenReturn(0);
         cart.add(item);
 
-        verify(() => mockCallback()).called(2);
+        verify(mockCallback.call).called(2);
         expect(cart.items, isNot(contains(item.key)));
         expect(cart.groups, isNot(contains(item.group)));
       });
@@ -580,18 +580,18 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           final item2 = MockCartItem();
           when(() => item2.key).thenReturn('key2');
           when(() => item2.group).thenReturn('group2');
           when(() => item2.groupName).thenReturn('groupName2');
           when(() => item2.price).thenReturn(20);
           when(() => item2.quantity).thenReturn(20);
-          when(() => item2.totalPrice()).thenReturn(200);
-          when(() => item2.notNullQty()).thenReturn(20);
+          when(item2.totalPrice).thenReturn(200);
+          when(item2.notNullQty).thenReturn(20);
 
           cart.addItems([item, item2]);
           expect(cart.groups.length, equals(2));
@@ -604,7 +604,7 @@ void main() {
           expect(cart.groups[item2.group], isNull);
           expect(cart.groups.length, equals(0));
 
-          verify(() => mockCallback()).called(3);
+          verify(mockCallback.call).called(3);
         },
       );
 
@@ -615,23 +615,23 @@ void main() {
           when(() => item.key).thenReturn('key');
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
-          when(() => item.price).thenReturn(10.0);
+          when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
           final item2 = MockCartItem();
           when(() => item2.key).thenReturn('key2');
           when(() => item2.group).thenReturn('group2');
           when(() => item2.groupName).thenReturn('groupName2');
-          when(() => item2.price).thenReturn(10.0);
+          when(() => item2.price).thenReturn(10);
           when(() => item2.quantity).thenReturn(1);
-          when(() => item2.totalPrice()).thenReturn(10.0);
-          when(() => item2.notNullQty()).thenReturn(1.0);
+          when(item2.totalPrice).thenReturn(10);
+          when(item2.notNullQty).thenReturn(1);
 
           cart.addItems([item2, item]);
           cart.removeItemsNotInList([item]);
 
-          verify(() => mockCallback()).called(2);
+          verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
           expect(cart.items, isNot(contains(item2.key)));
           expect(cart.groups, contains(item.group));
@@ -646,11 +646,11 @@ void main() {
         'Add delivered at',
         () {
           expect(cart.deliveredAt, isNull);
-          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
+          cart.setDeliveredAt(DateTime.now(), shouldNotifyListeners: true);
           expect(cart.deliveredAt, isNotNull);
           expect(cart.deliveredAt, isA<DateTime>());
 
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
         },
       );
 
@@ -658,10 +658,10 @@ void main() {
         'Add note',
         () {
           expect(cart.note, isNull);
-          cart.setNote('note',shouldNotifyListeners: true);
+          cart.setNote('note', shouldNotifyListeners: true);
 
           expect(cart.note, equals('note'));
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
         },
       );
 
@@ -673,14 +673,14 @@ void main() {
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
 
           cart.add(item);
 
           expect(cart.checkForLargeValue, isFalse);
 
-          when(() => item.notNullQty()).thenReturn(100);
+          when(item.notNullQty).thenReturn(100);
           cart.add(item);
 
           expect(cart.checkForLargeValue, isTrue);
@@ -710,19 +710,19 @@ void main() {
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
 
-          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
-          cart.setNote('note',shouldNotifyListeners: true);
+          cart..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
+          ..setNote('note', shouldNotifyListeners: true);
 
           cart.addZeroQuantity = true;
           cart.removeItemCondition = (item) => false;
 
-          cart.add(item);
-          cart.resetItems(shouldNotifyListeners: true);
+          cart..add(item)
+          ..resetItems();
 
-          verify(() => mockCallback()).called(4);
+          verify(mockCallback.call).called(4);
           expect(cart.items, isEmpty);
           expect(cart.groups, isEmpty);
           expect(cart.deliveredAt, isNotNull);
@@ -733,7 +733,7 @@ void main() {
           cart.add(item);
           cart.resetItems(shouldNotifyListeners: false);
 
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
           expect(cart.items, isEmpty);
           expect(cart.groups, isEmpty);
           expect(cart.deliveredAt, isNotNull);
@@ -751,18 +751,18 @@ void main() {
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
 
-          cart.addZeroQuantity = true;
-          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
-          cart.setNote('note',shouldNotifyListeners: true);
-          cart.removeItemCondition = (item) => true;
+          cart..addZeroQuantity = true
+          ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
+          ..setNote('note', shouldNotifyListeners: true)
+          ..removeItemCondition = (item) => true;
 
           cart.add(item);
           cart.reset();
 
-          verify(() => mockCallback()).called(4);
+          verify(mockCallback.call).called(4);
           expect(cart.items, isEmpty);
           expect(cart.groups, isEmpty);
           expect(cart.totalPrice(), equals(0.0));
@@ -773,14 +773,14 @@ void main() {
           expect(cart.removeItemCondition, isNull);
 
           cart.addZeroQuantity = true;
-          cart.setDeliveredAt(DateTime.now(),shouldNotifyListeners: true);
-          cart.setNote('note',shouldNotifyListeners: true);
-          cart.removeItemCondition = (item) => true;
+          cart.setDeliveredAt(DateTime.now(), shouldNotifyListeners: true);
+          cart..setNote('note', shouldNotifyListeners: true)
+          ..removeItemCondition = (item) => true;
 
           cart.add(item);
           cart.reset(shouldNotifyListeners: false);
 
-          verify(() => mockCallback()).called(3);
+          verify(mockCallback.call).called(3);
           expect(cart.items, isEmpty);
           expect(cart.groups, isEmpty);
           expect(cart.totalPrice(), equals(0.0));
@@ -842,8 +842,8 @@ void main() {
           when(() => item.group).thenReturn('group');
           when(() => item.groupName).thenReturn('groupName');
           when(() => item.quantity).thenReturn(1);
-          when(() => item.totalPrice()).thenReturn(10.0);
-          when(() => item.notNullQty()).thenReturn(1.0);
+          when(item.totalPrice).thenReturn(10);
+          when(item.notNullQty).thenReturn(1);
 
           cart.addZeroQuantity = true;
           cart.setDeliveredAt(DateTime.now());
@@ -868,104 +868,12 @@ void main() {
       test(
         'Dispose callback',
         () {
-          cart = FlexiCart(onDisposed: () {
-            mockCallback();
-          });
+          cart = FlexiCart(onDisposed: mockCallback.call)..dispose();
 
-          cart.dispose();
-
-          verify(() => mockCallback()).called(1);
+          verify(mockCallback.call).called(1);
         },
       );
     },
   );
 
-  group(
-    'Qty formatter',
-    () {
-      test(
-        'Should format Arabic numbers to English numbers',
-        () {
-          final formatter = QuantityInputFormatter(99999999999);
-          const newValue = TextEditingValue(
-            text: '١٢٣٤٥٦٧٨٩٠',
-          );
-          const oldValue = TextEditingValue(
-            text: '50',
-          );
-          const expectedValue = TextEditingValue(
-            text: '1234567890',
-          );
-
-          expect(formatter.formatEditUpdate(oldValue, newValue), expectedValue);
-        },
-      );
-
-      test(
-        'Should reject values greater than max quantity',
-        () {
-          final formatter = QuantityInputFormatter(100);
-          const oldValue = TextEditingValue(
-            text: '50',
-          );
-          const newValue = TextEditingValue(
-            text: '101',
-          );
-
-          expect(formatter.formatEditUpdate(oldValue, newValue), oldValue);
-        },
-      );
-
-      test(
-        'Should reject values with more than one decimal point',
-        () {
-          final formatter = QuantityInputFormatter(100);
-          const oldValue = TextEditingValue(
-            text: '50.00',
-          );
-          const newValue1 = TextEditingValue(
-            text: '50..',
-          );
-          const newValue2 = TextEditingValue(
-            text: '50.0.0',
-          );
-
-          expect(formatter.formatEditUpdate(oldValue, newValue1), oldValue);
-          expect(formatter.formatEditUpdate(oldValue, newValue2), oldValue);
-        },
-      );
-
-      test(
-        'Should reject values with only a decimal point',
-        () {
-          final formatter = QuantityInputFormatter(100);
-          const oldValue = TextEditingValue(
-            text: '50.00',
-          );
-          const newValue = TextEditingValue(
-            text: '.',
-          );
-
-          expect(formatter.formatEditUpdate(oldValue, newValue), oldValue);
-        },
-      );
-
-      test(
-        'Should allow valid values',
-        () {
-          final formatter = QuantityInputFormatter(100);
-          const oldValue = TextEditingValue(
-            text: '50.00',
-            selection: TextSelection.collapsed(offset: 5),
-          );
-          const newValue = TextEditingValue(
-            text: '75',
-            selection: TextSelection.collapsed(offset: 2),
-          );
-
-          expect(formatter.formatEditUpdate(oldValue, newValue), newValue);
-        },
-      );
-    },
-  );
 }

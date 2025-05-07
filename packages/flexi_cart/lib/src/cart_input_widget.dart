@@ -1,82 +1,205 @@
-import 'package:flexi_cart/src/qty_formatter.dart';
+import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'cart.dart';
-import 'cart_item.dart';
-
+/// A generic quantity input widget for cart items implementing [ICartItem].
+///
+/// This widget displays a numeric input field (with optional increment/decrement buttons)
+/// and allows users to modify the quantity of a cart item.
+/// It also integrates with
+/// [FlexiCart] for automatic cart state updates and supports both
+/// integer and fractional quantities.
+///
+/// The widget is highly customizable with support for:
+/// - maximum quantity limits,
+/// - decimal digit control,
+/// - optional zero display,
+/// - input formatting (e.g., Arabic numerals),
+/// - input enable/disable states,
+/// - external state management via [ValueChanged].
+///
+/// Example usage:
+/// ```dart
+/// CartInput<MyCartItem>(
+///   item: item,
+///   decimalDigits: 2,
+///   maxQuantity: 1000,
+///   onChanged: (updatedItem) {
+///     print("New quantity: ${updatedItem.quantity}");
+///   },
+/// )
+/// ```
 class CartInput<T extends ICartItem> extends StatefulWidget {
+  /// CartInput Constructor
   const CartInput({
-    super.key,
     required this.item,
+    super.key,
+    this.onChanged,
     this.hideButtons = false,
     this.showZeroQty = false,
-    this.inputDecoration,
-    this.onChanged,
     this.decimalDigits = 2,
     this.maxQuantity = 999999,
+    this.inputDecoration,
     this.textAlign = TextAlign.center,
+    this.enabled = true,
+    this.inputFormatter,
+    this.initialValue,
   });
 
-  final ICartItem item;
-  final bool hideButtons;
-  final bool showZeroQty;
-  final InputDecoration? inputDecoration;
+  /// The cart item to be displayed and updated.
+  final T item;
+
+  /// Initial quantity value to override cart value.
+  final double? initialValue;
+
+  /// Callback triggered when the quantity changes.
   final ValueChanged<T>? onChanged;
+
+  /// If true, hides the "+" and "−" buttons.
+  final bool hideButtons;
+
+  /// If true, shows "0" instead of clearing the input when quantity is 0.
+  final bool showZeroQty;
+
+  /// Number of decimal digits allowed in the quantity.
   final int decimalDigits;
+
+  /// Maximum quantity that can be input by the user.
   final int maxQuantity;
+
+  /// Decoration applied to the quantity input field.
+  final InputDecoration? inputDecoration;
+
+  /// Text alignment inside the input field.
   final TextAlign textAlign;
 
+  /// Whether the input field and buttons are enabled for interaction.
+  final bool enabled;
+
+  /// Optional custom input formatter. If null, defaults to
+  /// [CartQuantityInputFormatter].
+  final TextInputFormatter? inputFormatter;
+
   @override
-  State<CartInput> createState() => _CartInputState();
+  State<CartInput<T>> createState() => _CartInputState<T>();
 }
 
-class _CartInputState extends State<CartInput> {
+class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
   late final FlexiCart _cart;
-
-  final _quantityValueNotifier = ValueNotifier<double?>(null);
-
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller;
+  late final ValueNotifier<double?> _quantityNotifier;
 
   @override
   void initState() {
     super.initState();
     _cart = context.read<FlexiCart>();
-    _init();
+    _controller = TextEditingController();
+    _quantityNotifier = ValueNotifier<double?>(widget.initialValue);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeQuantity();
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.watch<FlexiCart>();
-    final inCartQuantity = _cart.items[widget.item.key]?.quantity;
+    final inCartQuantity =
+        context.watch<FlexiCart>().items[widget.item.key]?.quantity;
     if (inCartQuantity != _quantity) {
-      _init();
+      _initializeQuantity();
     }
   }
 
-  void _init() {
-    final key = widget.item.key;
+  /// Initializes quantity value from cart or external input.
+  void _initializeQuantity() {
+    final quantity =
+        widget.initialValue ?? _cart.items[widget.item.key]?.quantity;
 
-    final quantity = _cart.items[key]?.quantity;
-
-    _quantityValueNotifier.removeListener(_onChanged);
-
-    _quantityValueNotifier.value = quantity;
-
+    _quantityNotifier
+      ..removeListener(_onChanged)
+      ..value = quantity;
     _updateText();
+    _quantityNotifier.addListener(_onChanged);
 
-    _quantityValueNotifier.addListener(_onChanged);
+    if (widget.initialValue != null &&
+        _cart.items[widget.item.key]?.quantity == null) {
+      _cart.add(widget.item..quantity = widget.initialValue);
+    }
+  }
+
+  /// The current quantity value (nullable).
+  double? get _quantity => _quantityNotifier.value;
+
+  /// A guaranteed non-null quantity (returns 0 if null).
+  double get _notNullQuantity => _quantity ?? 0;
+
+  /// Updates the internal quantity notifier.
+  set _quantity(double? value) => _quantityNotifier.value = value;
+
+  /// Triggered when quantity changes, updates the cart and calls
+  /// [_onChanged].
+  void _onChanged() {
+    final updatedItem = widget.item..quantity = _quantity;
+    widget.onChanged?.call(updatedItem);
+    _cart.add(updatedItem);
+  }
+
+  /// Triggered when input text is edited manually.
+  void _onTextChanged(String value) {
+    _quantity = value.isNotEmpty ? double.tryParse(value) : null;
+
+    if(widget.showZeroQty && _quantity==null){
+      _updateText();
+    }
+  }
+
+  /// Decreases the quantity by 1 or a small fraction if under 1.
+  void _onDecreased() {
+    final newQty = _notNullQuantity <= 1
+        ? _underOneQuantity(inc: false)
+        : _notNullQuantity - 1;
+    _quantity = newQty;
+    _updateText();
+  }
+
+  /// Increases the quantity by 1 or a small fraction if under 1.
+  void _onIncreased() {
+    final newQty = _notNullQuantity.betweenZeroAndOne
+        ? _underOneQuantity()
+        : _notNullQuantity + 1;
+    _quantity = newQty;
+    _updateText();
+  }
+
+  /// Adjusts values smaller than 1 by 0.05 (±50/1000).
+  double _underOneQuantity({bool inc = true}) {
+    final adjustment = inc ? 50 : -50;
+    return ((_notNullQuantity * 1000) + adjustment) / 1000;
+  }
+
+  /// Updates the text in the input field based on current quantity.
+  void _updateText() {
+    if (_notNullQuantity == 0 && widget.showZeroQty || _notNullQuantity > 0) {
+      _controller.text = _notNullQuantity.toStringAsFixed(widget.decimalDigits);
+    } else {
+      _controller.clear();
+    }
+  }
+
+  /// Wraps a widget with a [ValueListenableBuilder]
+  /// to rebuild on quantity change.
+  Widget _quantityNotifierBuilder(Widget child) {
+    return ValueListenableBuilder<double?>(
+      valueListenable: _quantityNotifier,
+      builder: (_, __, ___) => child,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final key = widget.item.key;
-    final themeData = Theme.of(context);
-    final textTheme = themeData.textTheme;
-    final textStyle = textTheme.bodyMedium;
-    final inputDecoration = widget.inputDecoration ??
+    final theme = Theme.of(context);
+    final decoration = widget.inputDecoration ??
         const InputDecoration(
           contentPadding: EdgeInsets.all(8),
           isDense: true,
@@ -89,104 +212,61 @@ class _CartInputState extends State<CartInput> {
         if (!widget.hideButtons)
           _quantityNotifierBuilder(
             IconButton(
-              onPressed: _onIncreased,
+              onPressed: widget.enabled ? _onIncreased : null,
               icon: const Icon(Icons.add_circle_outline_outlined),
             ),
           ),
         const SizedBox(width: 8),
         Expanded(
           child: TextField(
-            clipBehavior: Clip.antiAlias,
-            key: ValueKey(key),
+            key: ValueKey(widget.item.key),
             controller: _controller,
-            textAlignVertical: TextAlignVertical.center,
+            enabled: widget.enabled,
             keyboardType: TextInputType.numberWithOptions(
               decimal: widget.decimalDigits > 0,
             ),
-            inputFormatters: <TextInputFormatter>[
-              //white space is not allowed
+            inputFormatters: [
               FilteringTextInputFormatter.deny(RegExp(r'\s')),
-              // //signed is not allowed
-              FilteringTextInputFormatter.deny(RegExp(r'-')),
-
-              QuantityInputFormatter(widget.maxQuantity),
+              FilteringTextInputFormatter.deny(RegExp('-')),
+              widget.inputFormatter ??
+                  CartQuantityInputFormatter(
+                    max: widget.maxQuantity,
+                    fractionCount: widget.decimalDigits,
+                  ),
             ],
             onChanged: _onTextChanged,
             style: _quantity != null && _quantity! > 0
-                ? textStyle?.copyWith(color: themeData.primaryColor)
-                : textStyle,
+                ? theme.textTheme.bodyMedium
+                    ?.copyWith(color: theme.primaryColor)
+                : theme.textTheme.bodyMedium,
             textAlign: widget.textAlign,
-            decoration: inputDecoration,
+            textAlignVertical: TextAlignVertical.center,
+            decoration: decoration,
           ),
         ),
         const SizedBox(width: 8),
         if (!widget.hideButtons)
           _quantityNotifierBuilder(
             IconButton(
-              onPressed: _onDecreased,
+              onPressed: widget.enabled ? _onDecreased : null,
               icon: const Icon(Icons.remove_circle_outline_outlined),
             ),
-          )
+          ),
       ],
     );
   }
 
-  double? get _quantity => _quantityValueNotifier.value;
 
-  double get _notNullQuantity => _quantityValueNotifier.value ?? 0;
-
-  set _quantity(double? value) => _quantityValueNotifier.value = value;
-
-  void _onChanged() {
-    var item = widget.item..quantity = _quantity;
-    widget.onChanged?.call(item);
-    context.read<FlexiCart>().add(item);
-  }
-
-  void _onDecreased() {
-    final newQuantity = _notNullQuantity.underOrEqualOne
-        ? _underOneQuantity(inc: false)
-        : _notNullQuantity - 1;
-    _quantity = newQuantity;
-    _updateText();
-  }
-
-  void _onIncreased() {
-    final newQuantity = _notNullQuantity.betweenZeroAndOne
-        ? _underOneQuantity()
-        : _notNullQuantity + 1;
-    _quantity = newQuantity;
-    _updateText();
-  }
-
-  double _underOneQuantity({inc = true}) {
-    final value = inc ? 50 : -50;
-    return ((_notNullQuantity * 1000) + value) / 1000;
-  }
-
-  void _updateText() {
-    if (_quantity == 0 && widget.showZeroQty || _notNullQuantity > 0) {
-      _controller.text = _notNullQuantity.toStringAsFixed(widget.decimalDigits);
-      return;
-    }
-
-    _controller.clear();
-  }
-
-  void _onTextChanged(String value) {
-    _quantity = value.isNotEmpty ? double.parse(value) : null;
-  }
-
-  Widget _quantityNotifierBuilder(Widget child) {
-    return ValueListenableBuilder(
-      valueListenable: _quantityValueNotifier,
-      builder: (context, value, _) => child,
-    );
+  @override
+  void dispose() {
+    _quantityNotifier.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 }
 
+/// Extension methods for numeric logic.
 extension on double {
-  bool get betweenZeroAndOne => toInt() == 0 && this > 0;
-
-  bool get underOrEqualOne => this <= 1 && this > 0;
+  /// Returns true if value is between 0 and 1 (exclusive).
+  bool get betweenZeroAndOne => this > 0 && this < 1;
 }

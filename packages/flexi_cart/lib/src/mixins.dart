@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-mixin ChangeNotifierDisposeMixin on ChangeNotifier {
+///
+mixin CartChangeNotifierDisposeMixin on ChangeNotifier {
+  /// Whether this object has been disposed.
   bool disposed = false;
 
   @override
