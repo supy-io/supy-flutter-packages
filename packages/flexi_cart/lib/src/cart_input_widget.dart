@@ -149,7 +149,7 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
   void _onTextChanged(String value) {
     _quantity = value.isNotEmpty ? double.tryParse(value) : null;
 
-    if(widget.showZeroQty && _quantity==null){
+    if (widget.showZeroQty && _quantity == null) {
       _updateText();
     }
   }
@@ -255,7 +255,6 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
       ],
     );
   }
-
 
   @override
   void dispose() {

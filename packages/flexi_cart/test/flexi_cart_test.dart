@@ -89,8 +89,9 @@ void main() {
       test(
         'Decrement',
         () {
-          cartItem..quantity = 1
-          ..decrement();
+          cartItem
+            ..quantity = 1
+            ..decrement();
           expect(cartItem.quantity, equals(0.0));
           cartItem.decrement();
           expect(cartItem.quantity, equals(0.0));
@@ -220,8 +221,9 @@ void main() {
         when(() => item1.group).thenReturn('group');
         when(() => item2.group).thenReturn('group');
 
-        group..add(item1)
-        ..add(item2);
+        group
+          ..add(item1)
+          ..add(item2);
         expect(group.items, contains(item1.key));
         expect(group.items, contains(item2.key));
         expect(group.totalPrice(), equals(20.0));
@@ -253,8 +255,7 @@ void main() {
 
       setUp(
         () {
-          cart = FlexiCart()
-          ..addListener(mockCallback.call);
+          cart = FlexiCart()..addListener(mockCallback.call);
           reset(mockCallback);
         },
       );
@@ -299,8 +300,9 @@ void main() {
             name: 'name',
           );
 
-          cart..add(item)
-          ..add(item, increment: true);
+          cart
+            ..add(item)
+            ..add(item, increment: true);
 
           verify(mockCallback.call).called(2);
 
@@ -345,8 +347,9 @@ void main() {
           when(() => item.price).thenReturn(10);
           when(() => item.quantity).thenReturn(0);
 
-          cart..addZeroQuantity = true
-          ..add(item);
+          cart
+            ..addZeroQuantity = true
+            ..add(item);
 
           verify(mockCallback.call).called(1);
           expect(cart.items, contains(item.key));
@@ -378,11 +381,11 @@ void main() {
         when(() => item.price).thenReturn(9);
         when(() => item.quantity).thenReturn(1);
 
-        cart..removeItemCondition = (item) {
-          return item.price < 10.0;
-        }
-
-        ..add(item);
+        cart
+          ..removeItemCondition = (item) {
+            return item.price < 10.0;
+          }
+          ..add(item);
 
         verify(mockCallback.call).called(1);
         expect(cart.items, isNot(contains(item.key)));
@@ -409,8 +412,9 @@ void main() {
           when(item2.totalPrice).thenReturn(10);
           when(item2.notNullQty).thenReturn(1);
 
-          cart..add(item)
-          ..add(item2);
+          cart
+            ..add(item)
+            ..add(item2);
 
           verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
@@ -485,8 +489,9 @@ void main() {
           when(item2.totalPrice).thenReturn(10);
           when(item2.notNullQty).thenReturn(1);
 
-          cart..addItems([item])
-          ..addItems([item2], skipIfExist: true);
+          cart
+            ..addItems([item])
+            ..addItems([item2], skipIfExist: true);
 
           verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
@@ -520,8 +525,9 @@ void main() {
           when(item2.totalPrice).thenReturn(200);
           when(item2.notNullQty).thenReturn(20);
 
-          cart..addItems([item])
-          ..addItems([item2], skipIfExist: false);
+          cart
+            ..addItems([item])
+            ..addItems([item2], skipIfExist: false);
 
           verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));
@@ -713,14 +719,16 @@ void main() {
           when(item.totalPrice).thenReturn(10);
           when(item.notNullQty).thenReturn(1);
 
-          cart..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
-          ..setNote('note', shouldNotifyListeners: true);
+          cart
+            ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
+            ..setNote('note', shouldNotifyListeners: true);
 
           cart.addZeroQuantity = true;
           cart.removeItemCondition = (item) => false;
 
-          cart..add(item)
-          ..resetItems();
+          cart
+            ..add(item)
+            ..resetItems();
 
           verify(mockCallback.call).called(4);
           expect(cart.items, isEmpty);
@@ -754,10 +762,11 @@ void main() {
           when(item.totalPrice).thenReturn(10);
           when(item.notNullQty).thenReturn(1);
 
-          cart..addZeroQuantity = true
-          ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
-          ..setNote('note', shouldNotifyListeners: true)
-          ..removeItemCondition = (item) => true;
+          cart
+            ..addZeroQuantity = true
+            ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
+            ..setNote('note', shouldNotifyListeners: true)
+            ..removeItemCondition = (item) => true;
 
           cart.add(item);
           cart.reset();
@@ -774,8 +783,9 @@ void main() {
 
           cart.addZeroQuantity = true;
           cart.setDeliveredAt(DateTime.now(), shouldNotifyListeners: true);
-          cart..setNote('note', shouldNotifyListeners: true)
-          ..removeItemCondition = (item) => true;
+          cart
+            ..setNote('note', shouldNotifyListeners: true)
+            ..removeItemCondition = (item) => true;
 
           cart.add(item);
           cart.reset(shouldNotifyListeners: false);
@@ -875,5 +885,4 @@ void main() {
       );
     },
   );
-
 }

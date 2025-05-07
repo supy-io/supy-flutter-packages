@@ -140,7 +140,7 @@ void main() {
   testWidgets('calls onChanged callback', (tester) async {
     double? captured;
     await tester.pumpWidget(createWidget(
-      CartInput(
+      CartInput<ICartItem>(
         item: item,
         onChanged: (updated) => captured = updated.quantity,
       ),
@@ -233,7 +233,10 @@ void main() {
 
   testWidgets('text aligns as specified', (tester) async {
     await tester.pumpWidget(
-        createWidget(CartInput(item: item, textAlign: TextAlign.right)));
+      createWidget(
+        CartInput(item: item, textAlign: TextAlign.right),
+      ),
+    );
     final field = tester.widget<TextField>(find.byType(TextField));
     expect(field.textAlign, TextAlign.right);
   });

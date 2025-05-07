@@ -64,9 +64,9 @@ class CartInputNumberFormatter extends TextInputFormatter {
   /// - Reject values over [max].
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (newValue.text.isEmpty) return newValue;
 
     final arabicNumbersRegx = RegExp('[٠-٩]');
@@ -118,7 +118,9 @@ class QuantityInputFormatter extends TextInputFormatter {
   /// - Removes decimals before parsing and comparing to [maxQuantity].
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue,) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (newValue.text.isEmpty) return newValue;
     if (newValue.text == ',' || newValue.text == '.') return oldValue;
 

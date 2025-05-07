@@ -1,14 +1,13 @@
 name: flexi_cart
-description: The Flexi Cart module provides a versatile and robust solution for
-  handling shopping carts and item collections within Flutter applications. This
-  module extends the capabilities of the ChangeNotifier class, enabling seamless
-  integration with Flutter's reactive framework.
-
-version: 0.1.0
-repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/flexi_cart
+description: A versatile and reactive cart solution for Flutter apps, supporting grouping, notes, delivery, quantity control, and custom logic.
+version: 0.1.1
+repository: https://github.com/supy-io/supy-flutter-packages/packages/flexi_cart
+issue_tracker: https://github.com/supy-io/supy-flutter-packages/packages/flexi_cart/issues
+homepage: https://github.com/supy-io/supy-flutter-packages/packages/flexi_cart
+topics: [shopping-cart, cart]
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=2.17.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -22,3 +21,4 @@ dev_dependencies:
   mocktail: ^1.0.4
   test: ^1.25.15
   very_good_analysis: ^7.0.0
+
