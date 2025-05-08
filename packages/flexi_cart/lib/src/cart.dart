@@ -135,8 +135,10 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }
 
   /// Sets the delivery timestamp.
-  void setDeliveredAt(DateTime? deliveredAt,
-      {bool shouldNotifyListeners = false}) {
+  void setDeliveredAt(
+    DateTime? deliveredAt, {
+    bool shouldNotifyListeners = false,
+  }) {
     _deliveredAt = deliveredAt;
     if (shouldNotifyListeners) notifyListeners();
   }

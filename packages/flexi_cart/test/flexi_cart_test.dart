@@ -692,8 +692,9 @@ void main() {
           when(item2.totalPrice).thenReturn(10);
           when(item2.notNullQty).thenReturn(1);
 
-          cart.addItems([item2, item]);
-          cart.removeItemsNotInList([item]);
+          cart
+            ..addItems([item2, item])
+            ..removeItemsNotInList([item]);
 
           verify(mockCallback.call).called(2);
           expect(cart.items, contains(item.key));

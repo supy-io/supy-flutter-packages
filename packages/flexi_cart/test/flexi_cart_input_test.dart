@@ -139,12 +139,14 @@ void main() {
 
   testWidgets('calls onChanged callback', (tester) async {
     double? captured;
-    await tester.pumpWidget(createWidget(
-      CartInput<ICartItem>(
-        item: item,
-        onChanged: (updated) => captured = updated.quantity,
+    await tester.pumpWidget(
+      createWidget(
+        CartInput<ICartItem>(
+          item: item,
+          onChanged: (updated) => captured = updated.quantity,
+        ),
       ),
-    ));
+    );
     await tester.enterText(find.byType(TextField), '2');
     await tester.pump();
     expect(captured, 2);
@@ -223,7 +225,10 @@ void main() {
   testWidgets('custom input formatter works', (tester) async {
     final formatter = FilteringTextInputFormatter.allow(RegExp('[0-9]'));
     await tester.pumpWidget(
-        createWidget(CartInput(item: item, inputFormatter: formatter)));
+      createWidget(
+        CartInput(item: item, inputFormatter: formatter),
+      ),
+    );
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byType(TextField), '1.23');
