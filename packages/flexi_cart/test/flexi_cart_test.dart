@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -6,9 +8,64 @@ class MockCallbackFunction extends Mock {
   void call();
 }
 
+class MockItem extends ICartItem {
+  MockItem({
+    required super.id,
+    required super.name,
+    required super.price,
+    this.quantityVal = 1,
+    this.groupId = 'default',
+    this.groupNameVal = 'Default Group',
+  }) : super();
+  double quantityVal;
+  final String groupId;
+  final String groupNameVal;
+
+  @override
+  String get key => id;
+
+  @override
+  double? get quantity => quantityVal;
+
+  @override
+  set quantity(double? value) => quantityVal = value ?? 0;
+
+  @override
+  String get group => groupId;
+
+  @override
+  String get groupName => groupNameVal;
+
+  @override
+  double totalPrice() => quantityVal * 10;
+
+  @override
+  double notNullQty() => quantityVal;
+
+  @override
+  bool operator ==(Object other) =>
+      other is MockItem &&
+      other.id == id &&
+      other.name == name &&
+      other.price == price &&
+      other.quantity == quantity;
+
+  @override
+  int get hashCode => Object.hash(id, name, price, quantity);
+}
+
 class MockCartItem extends Mock implements ICartItem {}
 
 class MockCartItem2 extends MockCartItem {}
+
+class TestPlugin<T extends ICartItem> implements ICartPlugin<T> {
+  bool called = false;
+
+  @override
+  void onCartChanged(FlexiCart<T> cart) {
+    called = true;
+  }
+}
 
 class CartItem extends ICartItem {
   CartItem({
@@ -551,8 +608,9 @@ void main() {
         when(item.totalPrice).thenReturn(10);
         when(item.notNullQty).thenReturn(1);
 
-        cart.add(item);
-        cart.delete(item);
+        cart
+          ..add(item)
+          ..delete(item);
 
         verify(mockCallback.call).called(2);
         expect(cart.items, isNot(contains(item.key)));
@@ -738,8 +796,9 @@ void main() {
           expect(cart.addZeroQuantity, isTrue);
           expect(cart.removeItemCondition, isNotNull);
 
-          cart.add(item);
-          cart.resetItems(shouldNotifyListeners: false);
+          cart
+            ..add(item)
+            ..resetItems(shouldNotifyListeners: false);
 
           verify(mockCallback.call).called(1);
           expect(cart.items, isEmpty);
@@ -885,4 +944,56 @@ void main() {
       );
     },
   );
+  test('logs messages on item add/remove', () {
+    final cart = FlexiCart<MockItem>();
+    final item = MockItem(id: '1', name: 'item-name', price: 10);
+
+    cart
+      ..add(item)
+      ..delete(item);
+
+    expect(cart.logs.length, 2);
+    expect(cart.logs[0], contains('Item added: 1'));
+    expect(cart.logs[1], contains('Item removed: 1'));
+  });
+
+  test('cart expiration check works', () {
+    final cart = FlexiCart<MockItem>()
+      ..setExpiration(const Duration(milliseconds: 100));
+    expect(cart.isExpired, isFalse);
+
+    // Delay long enough to trigger expiration
+    Future.delayed(const Duration(milliseconds: 150), () {
+      expect(cart.isExpired, isTrue);
+    });
+  });
+
+  test('plugin is notified on cart change', () {
+    final cart = FlexiCart<MockItem>();
+    final plugin = TestPlugin<MockItem>();
+    final item = MockItem(id: '1', name: 'item-name', price: 10);
+    cart
+      ..registerPlugin(plugin)
+      ..add(item);
+
+    expect(plugin.called, isTrue);
+  });
+
+  test('cart lock prevents modification', () {
+    final cart = FlexiCart<MockItem>();
+    final item = MockItem(id: '1', name: 'item-name', price: 10);
+
+    cart.lock();
+    expect(cart.isLocked, isTrue);
+
+    expect(() => cart.add(item), throwsStateError);
+    expect(() => cart.delete(item), throwsStateError);
+
+    cart.unlock();
+    expect(cart.isLocked, isFalse);
+
+    // Should work after unlock
+    cart.add(item);
+    expect(cart.items.length, 1);
+  });
 }

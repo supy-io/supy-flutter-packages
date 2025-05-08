@@ -1,3 +1,14 @@
+## 0.1.3
+- Adds support for locking and unlocking the cart to prevent accidental modifications.
+- Implements cart expiration with a set duration.
+- Introduces internal logging for debugging cart changes.
+- Implements Stream for state emission.
+- Adds a plugin architecture for extending cart functionality.
+- Includes a new `CartDiff` class to track differences between cart states.
+- Adds `setExpiration`, `lock`, `unlock`, `registerPlugin` and `logs` options.
+- Enhances the README.md file with new usage examples.
+- Adds unit tests for the new functionalities.
+
 ## 0.1.2
 - **Update Links** update package metadata
 
