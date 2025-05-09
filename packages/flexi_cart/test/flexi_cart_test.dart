@@ -72,11 +72,6 @@ class TestPlugin<T extends ICartItem> implements ICartPlugin<T> {
   }
 
   @override
-  void onCartChanged(FlexiCart<T> cart) {
-    calledMap['onCartChanged'] = true;
-  }
-
-  @override
   void onClose(FlexiCart<T> cart) {
     calledMap['onClose'] = true;
   }

@@ -135,9 +135,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void _notifyOnChangedPlugins() {
     for (final plugin in _plugins) {
       plugin.onChange(this);
-
-      /// should be removed soon
-      plugin.onCartChanged(this);
     }
   }
 
@@ -479,12 +476,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
 /// Interface for plugins that want to be notified when the cart changes.
 abstract class ICartPlugin<T extends ICartItem> {
-  /// Called when the cart is updated.
-  @protected
-  @mustCallSuper
-  @Deprecated('Use [onChanged] instead')
-  void onCartChanged(FlexiCart<T> cart) {}
-
   /// Called whenever a [onChange] occurs in any [cart]
   /// A [onChange] occurs when a new value is emitted.
   /// [onChange] is called before a cart's state has been updated.

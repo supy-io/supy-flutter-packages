@@ -61,19 +61,19 @@ context.read<FlexiCart<ProductItem>>().add(product);
 
 // Use in UI
 CartInput<ProductItem>(
-item: product,
-decimalDigits: 2,
-maxQuantity: 100,
-onChanged: (updatedItem) {
-print("Quantity updated: ${updatedItem.quantity}");
-},
+  item: product,
+  decimalDigits: 2,
+  maxQuantity: 100,
+  onChanged: (updatedItem) {
+  print("Quantity updated: ${updatedItem.quantity}");
+  },
 );
 
 ```
 #### Basic Operations
 - Initalize a cart item object and add it to cart
 ```dart
-final product = Product(
+final product = ProductItem(
    id: '123',
    name: 'Widget Pro',
    price: 29.99,
@@ -95,16 +95,16 @@ int itemCount = cart.totalQuantity();
 - Stream: Listen to cart changes reactively
 ```dart
 cart.stream.listen((updatedCart) {
-print('Cart updated: ${updatedCart.items.length} items');
+  print('Cart updated: ${updatedCart.items.length} items');
 });
 ```
 - Lock the cart to prevent changes
 ```dart
 cart.lock();
 try {
-cart.add(MockItem(id: '1', name: 'Apple', price: 2.0));
+  cart.add(MockItem(id: '1', name: 'Apple', price: 2.0));
 } catch (e) {
-print('Error: $e'); // Cart is locked.
+  print('Error: $e'); // Cart is locked.
 }
 cart.unlock(); // Now it's safe to mutate
 ```
@@ -122,10 +122,10 @@ print(cart.logs); // View history of cart changes
 cart.registerPlugin(PrintPlugin());
 
 class PrintPlugin extends ICartPlugin<MockItem> {
-@override
-void onCartChanged(FlexiCart<MockItem> cart) {
-print('Cart changed via plugin: ${cart.totalQuantity()} items');
-}
+  @override
+  void onCartChanged(FlexiCart<MockItem> cart) {
+  print('Cart changed via plugin: ${cart.totalQuantity()} items');
+  }
 }
 ```
 - CartDiff To track item changes between states:

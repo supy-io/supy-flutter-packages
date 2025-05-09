@@ -1,8 +1,13 @@
+## 0.1.6
+- Update the README to reflect current usage examples.
+- Remove the deprecated `onCartChanged` method from `ICartPlugin`.
+- Clean up internal calls to the removed method.
+
 ## 0.1.5
 - Introduced new callbacks in the `ICartPlugin` interface: `onChange`, `onError`, and `onClose`. These provide plugins with more granular notifications about the cart's lifecycle and state changes.
- -- `onChange`: Called whenever a change occurs in the cart.
- -- `onError`: Called when an error is thrown within the cart.
- -- `onClose`: Called just before the cart is disposed.
+ - `onChange`: Called whenever a change occurs in the cart.
+ - `onError`: Called when an error is thrown within the cart.
+ - `onClose`: Called just before the cart is disposed.
 - The deprecated `onCartChanged` method will be removed soon.
 - Updated logging to include whether a listener was notified for cart actions.
 - Added tests to verify plugin notifications for the new callbacks.
