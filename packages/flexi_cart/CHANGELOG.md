@@ -1,3 +1,6 @@
+## 0.1.4
+- Removed the `tax` and `discount` fields from the `CartItem` class in `cart_item.dart`.
+
 ## 0.1.3
 - Adds support for locking and unlocking the cart to prevent accidental modifications.
 - Implements cart expiration with a set duration.

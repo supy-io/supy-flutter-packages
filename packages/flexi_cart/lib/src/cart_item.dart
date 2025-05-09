@@ -35,8 +35,6 @@ abstract class ICartItem {
     this.quantity = 0,
     this.selected = false,
     this.extras = const {},
-    this.tax = 0,
-    this.discount = 0,
     this.metadata = const {},
   });
 
@@ -85,19 +83,12 @@ abstract class ICartItem {
   /// Metadata for extensibility (e.g., internal IDs, tags, flags).
   final Map<String, dynamic> metadata;
 
-  /// Tax applied per item unit (flat value, not percent).
-  final double tax;
-
-  /// Discount applied per item unit (flat value, not percent).
-  final double discount;
-
   /// Ensures quantity is treated as non-null (default is 0).
   double notNullQty() => quantity ?? 0.000;
 
   /// Total price after tax and discount.
   double totalPrice() {
-    final effectivePrice = price + tax - discount;
-    return effectivePrice * notNullQty();
+    return price * notNullQty();
   }
 
   /// A unique key identifier used by cart systems (default: `id`).
