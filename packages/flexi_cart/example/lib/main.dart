@@ -24,6 +24,7 @@ void main() {
       ),
       home: ChangeNotifierProvider(
         create: (BuildContext context) => FlexiCart()
+          ..registerPlugin(CartPrintPlugin())
           ..add(CartItem(
             id: '1',
             name: 'Name',
@@ -45,6 +46,7 @@ class Example extends StatefulWidget {
 
 class _ExampleState extends State<Example> {
   late final FlexiCart readCart;
+
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<FlexiCart>();
@@ -443,5 +445,25 @@ class _ExampleState extends State<Example> {
   void _delete(ICartItem item) {
     final cart = context.read<FlexiCart>();
     cart.delete(item);
+  }
+}
+
+final class CartPrintPlugin extends ICartPlugin {
+  @override
+  void onChange(FlexiCart<ICartItem> cart) {
+    debugPrint('Cart logs: ${cart.logs}');
+    super.onChange(cart);
+  }
+
+  @override
+  void onClose(FlexiCart<ICartItem> cart) {
+    debugPrint('Cart closed: ${cart.logs}');
+    super.onClose(cart);
+  }
+
+  @override
+  void onError(FlexiCart<ICartItem> cart, Object error, StackTrace stackTrace) {
+    super.onError(cart, error, stackTrace);
+    debugPrint('Cart error: $error');
   }
 }

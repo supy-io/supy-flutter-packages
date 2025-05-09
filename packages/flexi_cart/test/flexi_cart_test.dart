@@ -59,11 +59,31 @@ class MockCartItem extends Mock implements ICartItem {}
 class MockCartItem2 extends MockCartItem {}
 
 class TestPlugin<T extends ICartItem> implements ICartPlugin<T> {
-  bool called = false;
+  Map<String, bool> calledMap = {
+    'onChange': false,
+    'onCartChanged': false,
+    'onClose': false,
+    'onError': false,
+  };
+
+  @override
+  void onChange(FlexiCart<T> cart) {
+    calledMap['onChange'] = true;
+  }
 
   @override
   void onCartChanged(FlexiCart<T> cart) {
-    called = true;
+    calledMap['onCartChanged'] = true;
+  }
+
+  @override
+  void onClose(FlexiCart<T> cart) {
+    calledMap['onClose'] = true;
+  }
+
+  @override
+  void onError(FlexiCart<T> cart, Object error, StackTrace stackTrace) {
+    calledMap['onError'] = true;
   }
 }
 
@@ -952,10 +972,38 @@ void main() {
     cart
       ..add(item)
       ..delete(item);
-
     expect(cart.logs.length, 2);
+    expect(
+      cart.logs[0],
+      contains('Item added: 1 - {notified: true}'),
+    );
+    expect(
+      cart.logs[1],
+      contains(
+        'Item has been removed: 1 - {notified: true}',
+      ),
+    );
+  });
+  test('logs messages on reset/reset items', () {
+    final cart = FlexiCart<MockItem>();
+    final item = MockItem(id: '1', name: 'item-name', price: 10);
+
+    cart
+      ..add(item)
+      ..resetItems()
+      ..reset();
+
+    expect(cart.logs.length, 3);
     expect(cart.logs[0], contains('Item added: 1'));
-    expect(cart.logs[1], contains('Item removed: 1'));
+    expect(cart.logs[1], contains('Items have been reset: [$item]'));
+    expect(
+      cart.logs[2],
+      contains('Cart has been reset:\n'
+          '- groups: {}\n'
+          '- items: {}\n'
+          '- deliveredAt: null\n'
+          '- expiresAt: null - {notified: true}'),
+    );
   });
 
   test('cart expiration check works', () {
@@ -977,7 +1025,38 @@ void main() {
       ..registerPlugin(plugin)
       ..add(item);
 
-    expect(plugin.called, isTrue);
+    expect(plugin.calledMap['onChange'], isTrue);
+  });
+  test('plugin is notified on cart onCartChanged', () {
+    final cart = FlexiCart<MockItem>();
+    final plugin = TestPlugin<MockItem>();
+    final item = MockItem(id: '1', name: 'item-name', price: 10);
+    cart
+      ..registerPlugin(plugin)
+      ..add(item);
+
+    expect(plugin.calledMap['onCartChanged'], isTrue);
+  });
+  test('plugin is notified on cart onClose', () {
+    final cart = FlexiCart<MockItem>();
+    final plugin = TestPlugin<MockItem>();
+    cart
+      ..registerPlugin(plugin)
+      ..dispose();
+
+    expect(plugin.calledMap['onClose'], isTrue);
+  });
+  test('plugin is notified on cart onError', () {
+    final cart = FlexiCart<MockItem>();
+    final plugin = TestPlugin<MockItem>();
+    final item = MockItem(id: '1', name: 'item-name', price: 10);
+
+    cart
+      ..registerPlugin(plugin)
+      ..dispose()
+      ..add(item);
+
+    expect(plugin.calledMap['onError'], isTrue);
   });
 
   test('cart lock prevents modification', () {

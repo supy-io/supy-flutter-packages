@@ -1,3 +1,13 @@
+## 0.1.5
+- Introduced new callbacks in the `ICartPlugin` interface: `onChange`, `onError`, and `onClose`. These provide plugins with more granular notifications about the cart's lifecycle and state changes.
+ -- `onChange`: Called whenever a change occurs in the cart.
+ -- `onError`: Called when an error is thrown within the cart.
+ -- `onClose`: Called just before the cart is disposed.
+- The deprecated `onCartChanged` method will be removed soon.
+- Updated logging to include whether a listener was notified for cart actions.
+- Added tests to verify plugin notifications for the new callbacks.
+- Modified example to use the new plugin callbacks for printing cart logs, errors, and close events.
+
 ## 0.1.4
 - Removed the `tax` and `discount` fields from the `CartItem` class in `cart_item.dart`.
 

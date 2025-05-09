@@ -91,39 +91,74 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   List<String> get logs => List.unmodifiable(_logs);
 
   /// Sets the cart to expire after the given duration from now.
-  void setExpiration(Duration duration) {
+  void setExpiration(Duration duration, {bool shouldNotifyListeners = false}) {
     _expiresAt = DateTime.now().add(duration);
+    _log(
+      'Cart has been set to expire at: $_expiresAt',
+      notified: shouldNotifyListeners,
+    );
+    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Locks the cart from being edited.
-  void lock() => _isLocked = true;
+  void lock({bool shouldNotifyListeners = false}) {
+    _isLocked = true;
+    _log('Cart has been locked', notified: shouldNotifyListeners);
+    if (shouldNotifyListeners) notifyListeners();
+  }
 
   /// Unlocks the cart, allowing edits.
-  void unlock() => _isLocked = false;
+  void unlock({bool shouldNotifyListeners = false}) {
+    _isLocked = false;
+    _log('Cart has been locked', notified: shouldNotifyListeners);
+    if (shouldNotifyListeners) notifyListeners();
+  }
 
   /// Throws an exception if the cart is locked.
   void _checkLock() {
-    if (_isLocked) throw StateError('Cart is locked.');
+    if (_isLocked) {
+      final error = StateError('Cart is locked.');
+      _notifyOnErrorPlugins(error, StackTrace.current);
+      throw error;
+    }
   }
 
   /// Logs a message with a timestamp.
-  void _log(String message) {
-    _logs.add('${DateTime.now().toIso8601String()} - $message');
+  void _log(String message, {bool notified = false}) {
+    _logs.add('$message - {notified: $notified}');
   }
 
   /// Registers a plugin to be notified on cart changes.
   void registerPlugin(ICartPlugin<T> plugin) => _plugins.add(plugin);
 
   /// Notifies all registered plugins about a cart change.
-  void _notifyPlugins() {
+  void _notifyOnChangedPlugins() {
     for (final plugin in _plugins) {
+      plugin.onChange(this);
+
+      /// should be removed soon
       plugin.onCartChanged(this);
+    }
+  }
+
+  /// Notifies all registered plugins about a cart error.
+  void _notifyOnErrorPlugins(Object error, StackTrace stackTrace) {
+    for (final plugin in _plugins) {
+      plugin.onError(this, error, stackTrace);
+    }
+  }
+
+  /// Notifies all registered plugins about a cart close.
+  void _notifyOnClosePlugins() {
+    for (final plugin in _plugins) {
+      plugin.onClose(this);
     }
   }
 
   /// Sets a note for the cart.
   void setNote(String? note, {bool shouldNotifyListeners = false}) {
     _note = note;
+    _log('Set Note with: $note', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
   }
 
@@ -131,6 +166,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   @Deprecated('Use setNote() instead')
   set note(String? note) {
     _note = note;
+    _log('Set Note with: $note', notified: true);
     notifyListeners();
   }
 
@@ -140,6 +176,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool shouldNotifyListeners = false,
   }) {
     _deliveredAt = deliveredAt;
+    _log('Set Delivered at: $deliveredAt', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
   }
 
@@ -147,6 +184,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   @Deprecated('Use setDeliveredAt() instead')
   set deliveredAt(DateTime? deliveredAt) {
     _deliveredAt = deliveredAt;
+
+    _log('Set Delivered at: $deliveredAt', notified: true);
     notifyListeners();
   }
 
@@ -170,11 +209,25 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Adds a single item to the cart.
   ///
   /// If [increment] is true and the item already exists, quantity is added.
-  void add(T item, {bool increment = false}) {
+  void add(
+    T item, {
+    bool increment = false,
+    bool shouldNotifyListeners = true,
+  }) {
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot add new item after calling close'),
+        StackTrace.current,
+      );
+    }
     _checkLock();
     _add(item, increment);
     emit(this);
-    notifyListeners();
+    _log(
+      'Item added: ${item.key}',
+      notified: shouldNotifyListeners,
+    );
+    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Adds multiple items to the cart.
@@ -182,41 +235,86 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// - [increment] adds quantities if item already exists.
   /// - [skipIfExist] skips items already in the cart.
   /// - [shouldNotifyListeners] determines if [notifyListeners] is called.
-  void addItems(List<T> items,
-      {bool increment = false,
-      bool skipIfExist = false,
-      bool shouldNotifyListeners = true}) {
+  void addItems(
+    List<T> items, {
+    bool increment = false,
+    bool skipIfExist = false,
+    bool shouldNotifyListeners = true,
+  }) {
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot add new items after calling close'),
+        StackTrace.current,
+      );
+    }
     _checkLock();
     for (final item in items) {
       if (skipIfExist && _items.containsKey(item.key)) continue;
       _add(item, increment);
     }
     emit(this);
+    _log(
+      'Items have been added: $items',
+      notified: shouldNotifyListeners,
+    );
     if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Removes all items not included in the provided list.
-  void removeItemsNotInList(List<T> items) {
+  void removeItemsNotInList(
+    List<T> items, {
+    bool shouldNotifyListeners = true,
+  }) {
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot remove items not in list after calling close'),
+        StackTrace.current,
+      );
+    }
     _checkLock();
     final keepKeys = items.map((e) => e.key).toSet();
     for (final item in itemsList) {
       if (!keepKeys.contains(item.key)) _delete(item);
     }
     emit(this);
-    notifyListeners();
+    _log(
+      'Items have been removed: $items',
+      notified: shouldNotifyListeners,
+    );
+    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Deletes a single item from the cart.
-  void delete(T item) {
+  void delete(T item, {bool shouldNotifyListeners = true}) {
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot delete item after calling close'),
+        StackTrace.current,
+      );
+    }
     _checkLock();
     _delete(item);
     emit(this);
-    notifyListeners();
+    _log(
+      'Item has been removed: ${item.key}',
+      notified: shouldNotifyListeners,
+    );
+    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Clears all items from the cart without affecting metadata.
   void resetItems({bool shouldNotifyListeners = true}) {
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot reset items after calling close'),
+        StackTrace.current,
+      );
+    }
     _checkLock();
+    _log(
+      'Items have been reset: $itemsList',
+      notified: shouldNotifyListeners,
+    );
     groups.clear();
     _items.clear();
     emit(this);
@@ -225,22 +323,55 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Fully resets the cart and its metadata.
   void reset({bool shouldNotifyListeners = true}) {
-    _checkLock();
-    groups.clear();
-    _items.clear();
-    _note = null;
-    _deliveredAt = null;
-    _expiresAt = null;
-    addZeroQuantity = false;
-    removeItemCondition = null;
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot reset cart after calling close'),
+        StackTrace.current,
+      );
+    }
+
+    try {
+      _log(
+        'Cart has been reset:\n'
+        '- groups: $groups\n'
+        '- items: $_items\n'
+        '- deliveredAt: $_deliveredAt\n'
+        '- expiresAt: $_expiresAt',
+        notified: shouldNotifyListeners,
+      );
+
+      groups.clear();
+      _items.clear();
+      _note = null;
+      _deliveredAt = null;
+      _expiresAt = null;
+      addZeroQuantity = false;
+      removeItemCondition = null;
+
+      emit(this);
+      if (shouldNotifyListeners) notifyListeners();
+    } catch (error, stackTrace) {
+      _notifyOnErrorPlugins(error, stackTrace);
+      rethrow;
+    }
   }
 
   /// Clears a specific item group by ID.
   void clearItemsGroup(String groupId, {bool shouldNotifyListeners = true}) {
+    if (disposed) {
+      _notifyOnErrorPlugins(
+        StateError('Cannot clear items group after calling close'),
+        StackTrace.current,
+      );
+    }
+    _checkLock();
+
     groups.remove(groupId);
     _items.removeWhere((_, item) => item.group == groupId);
+    _log(
+      'Group has been removed from the cart: $groupId',
+      notified: shouldNotifyListeners,
+    );
     emit(this);
     if (shouldNotifyListeners) notifyListeners();
   }
@@ -282,6 +413,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Disposes of the cart and triggers [onDisposed].
   @override
   void dispose() {
+    _notifyOnClosePlugins();
+    _log('Cart has been disposed');
     onDisposed?.call();
     disposeStream(); // call this if using the mixin's stream
     super.dispose();
@@ -300,8 +433,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     onAddItem?.call();
     _addToItems(item, increment: increment);
     _addToGroup(item);
-    _log('Item added: ${item.key}');
-    _notifyPlugins();
+    _notifyOnChangedPlugins();
   }
 
   /// Adds an item to the item map.
@@ -332,8 +464,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     _items.remove(item.key);
     _deleteFromGroup(item);
     onDeleteItem?.call();
-    _log('Item removed: ${item.key}');
-    _notifyPlugins();
+    _notifyOnChangedPlugins();
   }
 
   /// Removes an item from its group.
@@ -349,5 +480,30 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 /// Interface for plugins that want to be notified when the cart changes.
 abstract class ICartPlugin<T extends ICartItem> {
   /// Called when the cart is updated.
-  void onCartChanged(FlexiCart<T> cart);
+  @protected
+  @mustCallSuper
+  @Deprecated('Use [onChanged] instead')
+  void onCartChanged(FlexiCart<T> cart) {}
+
+  /// Called whenever a [onChange] occurs in any [cart]
+  /// A [onChange] occurs when a new value is emitted.
+  /// [onChange] is called before a cart's state has been updated.
+  @protected
+  @mustCallSuper
+  void onChange(FlexiCart<T> cart) {}
+
+  /// Called whenever an [error] is thrown in the cart.
+  /// The [stackTrace] argument may be [StackTrace.empty] if an error
+  /// was received without a stack trace.
+  @protected
+  @mustCallSuper
+  void onError(FlexiCart<T> cart, Object error, StackTrace stackTrace) {}
+
+  /// Called whenever a [cart] is closed.
+  /// [onClose] is called just before the [cart] is closed
+  /// and indicates that the particular instance will no longer
+  /// emit new states.
+  @protected
+  @mustCallSuper
+  void onClose(FlexiCart<T> cart) {}
 }
