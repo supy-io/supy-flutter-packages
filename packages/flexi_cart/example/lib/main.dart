@@ -281,12 +281,10 @@ class _ExampleState extends State<Example> {
                     id: 'decimal-nobutton',
                     name: 'DecimalOnly',
                     price: 8.0,
-
                     quantity: 2.75),
                 decimalDigits: 0,
                 axis: Axis.vertical,
-                style: CartInputStyle(
-                    border: Border.all(color: Colors.black)),
+                style: CartInputStyle(border: Border.all(color: Colors.black)),
                 onChanged: (item) =>
                     debugPrint("Decimal keyboard input: $item"),
               ),
