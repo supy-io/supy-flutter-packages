@@ -37,12 +37,12 @@ dependencies:
 
 <div style="display: flex; gap: 10px;">
 
-  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="250" />
+  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="220" />
 
-  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="250" />
-  <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="250" />
+  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="220" />
+  <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="220" />
 
-  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="250" />
+  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="220" />
 
 </div>
 
