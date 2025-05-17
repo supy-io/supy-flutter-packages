@@ -3,8 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'flexi_cart_test.dart';
 
-// A mock implementation of ICartItem for testing
-
 void main() {
   group('CartDiff', () {
     test('returns empty diff when maps are equal', () {

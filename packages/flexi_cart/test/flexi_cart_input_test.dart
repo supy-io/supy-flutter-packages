@@ -258,4 +258,66 @@ void main() {
     );
     expect(find.text(hint), findsOneWidget);
   });
+
+  testWidgets(
+      'CartInput renders in vertical layout with correct children order',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ChangeNotifierProvider(
+            create: (_) => FlexiCart(),
+            child: Builder(
+              builder: (context) {
+                return CartInput<TestItem>(
+                  item: item,
+                  axis: Axis.vertical,
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final columnFinder = find.byType(Column);
+    expect(columnFinder, findsOneWidget);
+
+    // Optional: check if "+" and "−" icons exist in correct order
+    final addIcon = find.byIcon(Icons.add_circle_outline_outlined);
+    final removeIcon = find.byIcon(Icons.remove_circle_outline_outlined);
+    expect(addIcon, findsOneWidget);
+    expect(removeIcon, findsOneWidget);
+  });
+
+  testWidgets('CartInput renders with custom border decoration',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ChangeNotifierProvider(
+          create: (_) => FlexiCart(),
+          child: Scaffold(
+            body: Builder(
+              builder: (context) {
+                return CartInput<TestItem>(
+                  item: item,
+                  style: CartInputStyle(
+                    border: Border.all(color: Colors.red, width: 2),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final containerFinder = find.byWidgetPredicate((widget) {
+      return widget is AnimatedContainer &&
+          widget.decoration is BoxDecoration &&
+          (widget.decoration! as BoxDecoration).border != null;
+    });
+
+    expect(containerFinder, findsOneWidget);
+  });
 }

@@ -67,6 +67,7 @@ class _ExampleState extends State<Example> {
         ],
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             const SizedBox(height: 10),
@@ -270,6 +271,26 @@ class _ExampleState extends State<Example> {
                     debugPrint("Decimal keyboard input: $item"),
               ),
             ),
+            _buildLabeledInput(
+              label: "15. Vertical Button",
+              description:
+                  "Starts with 2.75, allows only input via keyboard (no increment buttons).",
+              child: CartInput(
+                size: 40,
+                item: CartItem(
+                    id: 'decimal-nobutton',
+                    name: 'DecimalOnly',
+                    price: 8.0,
+
+                    quantity: 2.75),
+                decimalDigits: 0,
+                axis: Axis.vertical,
+                style: CartInputStyle(
+                    border: Border.all(color: Colors.black)),
+                onChanged: (item) =>
+                    debugPrint("Decimal keyboard input: $item"),
+              ),
+            ),
 
             // _buildLabeledInput(
             //   label: "15. With Helper Text",
@@ -372,8 +393,9 @@ class _ExampleState extends State<Example> {
                       title: Text(item.name),
                       subtitle: Text('Price: ${item.price}'),
                       trailing: SizedBox(
-                        width: 180,
+                        width: 170,
                         child: CartInput(
+                          style: CartInputStyle(),
                           item: item,
                           onChanged: (item) => debugPrint("Changed: $item"),
                         ),

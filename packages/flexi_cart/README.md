@@ -32,6 +32,19 @@ dependencies:
    flexi_cart: ^0.1.0
    provider: ^6.0.0 
 ```
+
+## Screenshots 📸
+
+### Cart overview with badge and reset button
+
+![Shiny Eats Example](screenshots/shiny_eats.png)
+
+### Switch Between Vertical and Horizontal CartInput
+
+![Fresh Market Example](screenshots/fresh_market.png)
+
+
+
 ## 🚀 Getting Started
 #### Basic Setup
 
@@ -78,7 +91,7 @@ final product = ProductItem(
    name: 'Widget Pro',
    price: 29.99,
 );
-context.read<FlexiCart<Product>>().add(product);
+context.read<FlexiCart<ProductItem>>().add(product);
 ```
 - Remove item from cart if existed
 
@@ -123,7 +136,7 @@ cart.registerPlugin(PrintPlugin());
 
 class PrintPlugin extends ICartPlugin<MockItem> {
   @override
-  void onCartChanged(FlexiCart<MockItem> cart) {
+  void onChange(FlexiCart<MockItem> cart) {
   print('Cart changed via plugin: ${cart.totalQuantity()} items');
   }
 }

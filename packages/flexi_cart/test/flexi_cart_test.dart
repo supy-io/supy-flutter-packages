@@ -61,7 +61,6 @@ class MockCartItem2 extends MockCartItem {}
 class TestPlugin<T extends ICartItem> implements ICartPlugin<T> {
   Map<String, bool> calledMap = {
     'onChange': false,
-    'onCartChanged': false,
     'onClose': false,
     'onError': false,
   };
@@ -1022,16 +1021,7 @@ void main() {
 
     expect(plugin.calledMap['onChange'], isTrue);
   });
-  test('plugin is notified on cart onCartChanged', () {
-    final cart = FlexiCart<MockItem>();
-    final plugin = TestPlugin<MockItem>();
-    final item = MockItem(id: '1', name: 'item-name', price: 10);
-    cart
-      ..registerPlugin(plugin)
-      ..add(item);
 
-    expect(plugin.calledMap['onCartChanged'], isTrue);
-  });
   test('plugin is notified on cart onClose', () {
     final cart = FlexiCart<MockItem>();
     final plugin = TestPlugin<MockItem>();

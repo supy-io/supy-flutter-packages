@@ -12,7 +12,6 @@ mixin CartChangeNotifierDisposeMixin on ChangeNotifier {
 
   @override
   void notifyListeners() {
-    // Prevents notifying listeners after disposal
     if (!disposed) {
       super.notifyListeners();
     }
