@@ -35,15 +35,13 @@ dependencies:
 
 ## Screenshots 📸
 
-### Cart overview with badge and reset button
+<div style="display: flex; gap: 10px;">
 
-![Shiny Eats Example](screenshots/shiny_eats.png)
+  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="300" />
 
-### Switch Between Vertical and Horizontal CartInput
+  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="300" />
 
-![Fresh Market Example](screenshots/fresh_market.png)
-
-
+</div>
 
 ## 🚀 Getting Started
 #### Basic Setup
