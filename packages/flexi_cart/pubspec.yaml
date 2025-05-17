@@ -1,6 +1,6 @@
 name: flexi_cart
 description: A versatile and reactive cart solution for Flutter apps, supporting grouping, notes, delivery, quantity control, and custom logic.
-version: 0.1.6
+version: 0.2.0
 repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/flexi_cart
 issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
 homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/flexi_cart
