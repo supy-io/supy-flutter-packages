@@ -43,6 +43,7 @@ dependencies:
   <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="220" />
 
   <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="220" />
+  <img src="screenshots/multi_cart.png" alt="MultiCart" width="220" />
 
 </div>
 

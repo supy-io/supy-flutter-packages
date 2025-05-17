@@ -41,6 +41,7 @@ dependencies:
   lucide_icons: ^0.257.0
   flexi_cart:
     path: ../../flexi_cart
+  iconsax: 0.0.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
