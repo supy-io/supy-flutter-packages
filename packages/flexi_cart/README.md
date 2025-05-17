@@ -41,6 +41,8 @@ dependencies:
 
   <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="300" />
 
+  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="300" />
+
 </div>
 
 ## 🚀 Getting Started
