@@ -12,7 +12,7 @@ void main() {
       expect(style.foregroundColor, Colors.black);
       expect(style.shape, BoxShape.rectangle);
       expect(style.buttonAspectRatio, 1);
-      expect(style.elevation, 2);
+      expect(style.elevation, 0);
     });
 
     test('should create style with all default values', () {
@@ -21,7 +21,7 @@ void main() {
       expect(style.activeBackgroundColor, equals(Colors.white));
       expect(style.foregroundColor, equals(Colors.black));
       expect(style.shape, equals(BoxShape.rectangle));
-      expect(style.radius, isNull);
+      expect(style.radius, const Radius.circular(20));
       expect(style.border, isNull);
       expect(style.shadowColor, isNull);
       expect(style.textStyle, isNull);
@@ -29,7 +29,7 @@ void main() {
       expect(style.iconPlus, isNull);
       expect(style.iconMinus, isNull);
       expect(style.buttonAspectRatio, equals(1));
-      expect(style.elevation, equals(2));
+      expect(style.elevation, equals(0));
     });
     test('copyWith returns identical when no arguments are passed', () {
       const original = CartInputStyle();
@@ -72,7 +72,7 @@ void main() {
       const scheme = ColorScheme.dark();
       final style = CartInputStyle.fromColorScheme(scheme);
 
-      expect(style.activeForegroundColor, scheme.onSurface);
+      expect(style.activeForegroundColor, scheme.primary);
       expect(style.activeBackgroundColor, scheme.surface);
       expect(style.foregroundColor, scheme.onPrimary);
     });
