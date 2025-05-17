@@ -51,10 +51,10 @@ dependencies:
 
 - Create Cart Instance
 ```dart
-Provider(create: (_) => FlexiCart<ProductItem>(...))
+Provider(create: (_) => FlexiCart(...))
 
 /// Initialize the cart:
-final cart = FlexiCart<ProductItem>();
+final cart = FlexiCart();
 ```
 
 -  Define your item model
@@ -71,10 +71,10 @@ final product = ProductItem(...)
 final product = ProductItem(...);
 
 // Add to cart
-context.read<FlexiCart<ProductItem>>().add(product);
+context.read<FlexiCart>().add(product);
 
 // Use in UI
-CartInput<ProductItem>(
+CartInput(
   item: product,
   decimalDigits: 2,
   maxQuantity: 100,
@@ -92,7 +92,7 @@ final product = ProductItem(
    name: 'Widget Pro',
    price: 29.99,
 );
-context.read<FlexiCart<ProductItem>>().add(product);
+context.read<FlexiCart>().add(product);
 ```
 - Remove item from cart if existed
 
@@ -182,13 +182,14 @@ print(diff.added); // List of added items
 
 ### CartInput Widget
 
-| Property        | Description                                      |
-|----------------|--------------------------------------------------|
-| `item`          | Required cart item instance                      |
-| `decimalDigits` | Number of decimal places (0–6)                   |
-| `maxQuantity`   | Maximum allowed quantity                         |
-| `hideButtons`   | Hide +/- buttons (default: `false`)              |
-| `showZeroQty`   | Display 0 instead of empty (default: `false`)    |
+| Property        | Description                                   |
+|-----------------|-----------------------------------------------|
+| `item`          | Required cart item instance                   |
+| `decimalDigits` | Number of decimal places (0–6)                |
+| `maxQuantity`   | Maximum allowed quantity                      |
+| `hideButtons`   | Hide +/- buttons (default: `false`)           |
+| `showZeroQty`   | Display 0 instead of empty (default: `false`) |
+| `axis`          | Set Axis of the Widget                        |
 
 
 ### 🙌 Contributions
