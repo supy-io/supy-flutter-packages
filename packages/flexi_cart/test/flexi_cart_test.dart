@@ -982,22 +982,10 @@ void main() {
     final cart = FlexiCart<MockItem>();
     final item = MockItem(id: '1', name: 'item-name', price: 10);
 
-    cart
-      ..add(item)
-      ..resetItems()
-      ..reset();
-
-    expect(cart.logs.length, 3);
+    cart.add(item);
     expect(cart.logs[0], contains('Item added: 1'));
-    expect(cart.logs[1], contains('Items have been reset: [$item]'));
-    expect(
-      cart.logs[2],
-      contains('Cart has been reset:\n'
-          '- groups: {}\n'
-          '- items: {}\n'
-          '- deliveredAt: null\n'
-          '- expiresAt: null - {notified: true}'),
-    );
+    cart.reset();
+    expect(cart.logs.length, 0);
   });
 
   test('cart expiration check works', () {
@@ -1060,5 +1048,63 @@ void main() {
     // Should work after unlock
     cart.add(item);
     expect(cart.items.length, 1);
+  });
+
+  test('should add and retrieve metadata', () {
+    final cart = FlexiCart<MockItem>()
+      ..setMetadata('coupon', 'SAVE20')
+      ..setMetadata('userId', 123);
+
+    expect(cart.metadata['coupon'], equals('SAVE20'));
+    expect(cart.metadata['userId'], equals(123));
+  });
+
+  test('should overwrite metadata key', () {
+    final cart = FlexiCart<MockItem>()
+      ..setMetadata('coupon', 'SAVE20')
+      ..setMetadata('coupon', 'SAVE50');
+
+    expect(cart.metadata['coupon'], equals('SAVE50'));
+  });
+  test('should reset metadata ', () {
+    final cart = FlexiCart<MockItem>()
+      ..setMetadata('coupon', 'SAVE20')
+      ..setMetadata('coupon', 'SAVE50')
+      ..reset();
+
+    expect(cart.metadata['coupon'], isNull);
+  });
+
+  test('should remove metadata key', () {
+    final cart = FlexiCart<MockItem>()
+      ..setMetadata('session', 'abc-123')
+      ..removeMetadata('session');
+
+    expect(cart.metadata.containsKey('session'), isFalse);
+  });
+
+  test('should not fail on removing nonexistent key', () {
+    final cart = FlexiCart<MockItem>();
+
+    expect(() => cart.removeMetadata('notExist'), returnsNormally);
+  });
+
+  test('should persist metadata in clone', () {
+    final cart = FlexiCart<MockItem>()..setMetadata('note', 'Handle with care');
+
+    final clone = cart.clone();
+    expect(clone.metadata['note'], equals('Handle with care'));
+  });
+
+  test('should notify listeners when metadata changes', () {
+    final cart = FlexiCart<MockItem>();
+
+    var notifyCount = 0;
+    cart
+      ..addListener(() => notifyCount++)
+      ..setMetadata('flag', true)
+      ..removeMetadata('flag');
+
+    expect(notifyCount, equals(2));
   });
 }

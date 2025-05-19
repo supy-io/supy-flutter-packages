@@ -29,6 +29,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   })  : _items = items ?? {},
         groups = groups ?? {};
 
+  /// Custom metadata storage.
+  final Map<String, dynamic> _metadata = {};
+
+  /// Returns a read-only view of the metadata.
+  Map<String, dynamic> get metadata => Map.unmodifiable(_metadata);
+
   /// Callback triggered when the cart is disposed.
   final VoidCallback? onDisposed;
 
@@ -98,6 +104,29 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       notified: shouldNotifyListeners,
     );
     if (shouldNotifyListeners) notifyListeners();
+  }
+
+  /// Sets a metadata key-value pair.
+  void setMetadata(
+    String key,
+    dynamic value, {
+    bool shouldNotifyListeners = true,
+  }) {
+    _metadata[key] = value;
+    _log('Metadata set: $key = $value', notified: shouldNotifyListeners);
+    if (shouldNotifyListeners) notifyListeners();
+  }
+
+  /// get metadata value by key
+  D? getMetadata<D>(String key) => _metadata[key] as D?;
+
+  /// Removes a metadata entry.
+  void removeMetadata(String key, {bool shouldNotifyListeners = true}) {
+    if (_metadata.containsKey(key)) {
+      _metadata.remove(key);
+      _log('Metadata removed: $key', notified: shouldNotifyListeners);
+      if (shouldNotifyListeners) notifyListeners();
+    }
   }
 
   /// Locks the cart from being edited.
@@ -328,21 +357,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     }
 
     try {
-      _log(
-        'Cart has been reset:\n'
-        '- groups: $groups\n'
-        '- items: $_items\n'
-        '- deliveredAt: $_deliveredAt\n'
-        '- expiresAt: $_expiresAt',
-        notified: shouldNotifyListeners,
-      );
-
       groups.clear();
       _items.clear();
       _note = null;
       _deliveredAt = null;
       _expiresAt = null;
       addZeroQuantity = false;
+      _metadata.clear();
+      _isLocked = false;
+      _logs.clear();
       removeItemCondition = null;
 
       emit(this);
@@ -396,6 +419,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       ..removeItemCondition = removeItemCondition
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
+      .._metadata.addAll(_metadata)
       .._deliveredAt = _deliveredAt;
   }
 

@@ -123,6 +123,14 @@ try {
 }
 cart.unlock(); // Now it's safe to mutate
 ```
+
+- Set Metadata
+```dart
+cart.setMetadata('couponCode', 'SUMMER25');
+cart.setMetadata('sessionId', 'abc-123');
+print(cart.metadata['couponCode']); // SUMMER25
+```
+
 - Set expiration
 ```dart
 cart.setExpiration(Duration(minutes: 30));

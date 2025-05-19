@@ -1,3 +1,14 @@
+## 0.3.0
+
+- Added a private `_metadata` map to store key-value pairs.
+- Added a public getter `metadata` which returns an unmodifiable view of the `_metadata`.
+- Introduced `setMetadata(String key, dynamic value)` to add or update metadata entries.
+- Introduced `getMetadata<D>(String key)` to retrieve metadata values by key.
+- Introduced `removeMetadata(String key)` to remove metadata entries.
+- Ensured metadata is cleared during `reset()`.
+- Metadata operations can optionally trigger listener notifications.
+- The `reset()` method now clears metadata, lock status, and logs, providing a more complete reset.
+
 ## 0.2.0
 
 - Added `CartInputTheme` as a `ThemeExtension` for consistent styling.
