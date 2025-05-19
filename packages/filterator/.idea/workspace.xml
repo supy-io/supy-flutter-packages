@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="fix: removed caches">
+      <change afterPath="$PROJECT_DIR$/.github/CONTRIBUTING.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/bug_report.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/feature_request.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/PULL_REQUEST_TEMPLATE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_options.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/standards/custom/supy_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/standards/custom/supy_converter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/converters_test/odata_converter_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/converters_test/odata_converter_test.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;abed-supy-io&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/supy-io/supy-flutter-packages.git&quot;,
+    &quot;accountId&quot;: &quot;3dbda2b3-ee7d-4395-81f0-ddd04b380e0e&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2xGGhsRgqkl0J2pUwabBsDjWqp8" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Dart Command Line App.filterator_example.dart.executor": "Run",
+    "Dart Test.ApiQuery toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQuery toMap should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQuery with null values should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQuery with null values should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQueryFiltering toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryFiltering with invalid operation should throw an exception in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQueryFilteringGroup toMap should handle empty group in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryFilteringGroup with nested groups should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryOrdering toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryPaging toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryResponse empty should produce correct JSON in api_query_tools_test.dart.executor": "Debug",
+    "Dart Test.ApiQueryResponse with data should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryResponse with data should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Complex ordering + paging + selection in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Empty filtering and selection only in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Empty selection should not include selection key in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filter with boolean value in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filter with empty string should serialize correctly in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filter with int and double values in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filtering with 3-level nested group hierarchy in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Nested AND inside OR in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Null filter value with other filters in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Ordering with invalid direction should handle gracefully in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Request body includes all sections in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Request body returns valid JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Selection with fields in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Selection with include and exclude together in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Tests in api_query_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.Tests in composite_converter_test.dart.executor": "Run",
+    "Dart Test.Tests in fiterator_test.dart.executor": "Run",
+    "Dart Test.Tests in odata_converter_test.dart.executor": "Run",
+    "Dart Test.Tests in paging_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in query_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.formatValue handles all supported types in odata_converter_test.dart.executor": "Run",
+    "Dart Test.gracefully handles unsupported operation in odata_converter_test.dart.executor": "Run",
+    "Dart Test.throws on unsupported operation in ODataConverter in odata_converter_test.dart.executor": "Run",
+    "Dart Test.throws on unsupported operation in odata_converter_test.dart.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/abdalqaderalnajjar/Projects/supy-projects/supy-flutter-packages./packages/filterator",
+    "settings.editor.selected.configurable": "dart.settings",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/test/query_tests" />
+      <recent name="$PROJECT_DIR$/lib/src/core" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/converters_test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Dart Test.Tests in fiterator_test.dart">
+    <configuration name="filterator_example.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/example/filterator_example.dart" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Empty ApiQuery produces a map in supy_converter_tests.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Empty ApiQuery produces a map" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Filter with int and double values in supy_converter_tests.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Filter with int and double values" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in fiterator_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/fiterator_test.dart" />
+      <option name="testName" value="fiterator_test.dart" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in supy_converter_tests.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" />
+      <option name="testName" value="supy_converter_tests.dart" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Dart Test.Tests in fiterator_test.dart" />
+        <item itemvalue="Dart Command Line App.filterator_example.dart" />
+        <item itemvalue="Dart Test.Tests in supy_converter_tests.dart" />
+        <item itemvalue="Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart" />
+        <item itemvalue="Dart Test.Filter with int and double values in supy_converter_tests.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="" />
+      <created>1747557119061</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1747557119061</updated>
+    </task>
+    <task id="LOCAL-00001" summary="fix: removed caches">
+      <option name="closed" value="true" />
+      <created>1747675083431</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1747675083431</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix: removed caches" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: removed caches" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/filterator_example.dart</url>
+          <line>2</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/query_tests/query_operators_test.dart</url>
+          <line>3</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/standards/odata/odata_converter.dart</url>
+          <line>59</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart</url>
+          <line>265</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

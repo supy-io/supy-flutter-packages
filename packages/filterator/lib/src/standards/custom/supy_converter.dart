@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../../filterator.dart';
+import 'package:filterator/filterator.dart';
 
 /// A custom API converter for the Supy platform.
 ///
@@ -175,7 +175,9 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
       'groups': _visitGroups(groups.groups) ?? [],
     };
 
-    return encode ? jsonDecode(jsonEncode(groupMap)) : groupMap;
+    return encode
+        ? jsonDecode(jsonEncode(groupMap)) as Map<String, dynamic>
+        : groupMap;
   }
 
   /// Recursively visits and transforms nested filtering groups.

@@ -5,8 +5,8 @@ import 'query_operation.dart';
 ///
 /// This interface provides a blueprint
 /// for creating ordering configurations in an API query.
-abstract interface class IApiQueryOrdering<T>
-    implements ICloneable<ApiQueryOrdering<T>>, IMap<dynamic> {
+abstract interface class IApiQueryOrdering
+    implements ICloneable<ApiQueryOrdering>, IMap<dynamic> {
   /// The field by which the ordering is applied.
   String get field;
 
@@ -18,7 +18,7 @@ abstract interface class IApiQueryOrdering<T>
 ///
 /// An instance of this class defines an ordering operation in an API query,
 /// specifying the field [by] and the order [dir] (ascending or descending).
-class ApiQueryOrdering<T> implements IApiQueryOrdering<T> {
+class ApiQueryOrdering implements IApiQueryOrdering {
   /// Creates an [ApiQueryOrdering] instance with the specified field [by]
   /// and order direction [dir].
   const ApiQueryOrdering({required this.field, required this.dir});
@@ -30,7 +30,7 @@ class ApiQueryOrdering<T> implements IApiQueryOrdering<T> {
 
   /// Creates a clone of the current [ApiQueryOrdering] instance.
   @override
-  ApiQueryOrdering<T> clone() => ApiQueryOrdering<T>(field: field, dir: dir);
+  ApiQueryOrdering clone() => ApiQueryOrdering(field: field, dir: dir);
 
   /// Converts the ordering configuration to a JSON-like map.
   @override

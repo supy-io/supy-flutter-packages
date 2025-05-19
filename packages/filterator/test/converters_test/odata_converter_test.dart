@@ -531,7 +531,7 @@ class MockApiQuery<T> implements ApiQuery<T> {
   @override
   final IApiQueryFilteringGroup<T>? filtering;
   @override
-  final List<IApiQueryOrdering<T>>? ordering;
+  final List<IApiQueryOrdering>? ordering;
   @override
   final IApiQueryPaging? paging;
 
@@ -546,7 +546,7 @@ class MockApiQuery<T> implements ApiQuery<T> {
   @override
   ApiQuery<T> copyWith({
     IApiQueryFilteringGroup<T>? filtering,
-    List<IApiQueryOrdering<T>>? ordering,
+    List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,
   }) {

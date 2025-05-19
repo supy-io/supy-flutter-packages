@@ -25,6 +25,7 @@ dev_dependencies:
   mockito: ^5.4.6
   build_runner: ^2.4.15
   json_serializable: ^6.9.5
+  very_good_analysis: ^7.0.0
 
 
 example: example/main.dart

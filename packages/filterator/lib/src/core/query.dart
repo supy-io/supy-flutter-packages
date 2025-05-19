@@ -1,10 +1,9 @@
-
-import 'interfaces/interfaces.dart';
-import 'query_filter_group.dart';
-import 'query_operation.dart';
-import 'query_ordering.dart';
-import 'query_paging.dart';
-import 'query_selections.dart';
+import 'package:filterator/src/core/interfaces/interfaces.dart';
+import 'package:filterator/src/core/query_filter_group.dart';
+import 'package:filterator/src/core/query_operation.dart';
+import 'package:filterator/src/core/query_ordering.dart';
+import 'package:filterator/src/core/query_paging.dart';
+import 'package:filterator/src/core/query_selections.dart';
 
 /// Interface defining the structure of an API query.
 ///
@@ -17,7 +16,7 @@ abstract interface class IApiQuery<T>
   IApiQueryFilteringGroup<T>? get filtering;
 
   /// Gets the list of ordering details in the API query.
-  List<IApiQueryOrdering<T>>? get ordering;
+  List<IApiQueryOrdering>? get ordering;
 
   /// Gets the paging details of the API query.
   IApiQueryPaging? get paging;
@@ -32,7 +31,7 @@ abstract interface class IApiQuery<T>
   /// the original query while modifying specific components.
   IApiQuery<T> copyWith({
     IApiQueryFilteringGroup<T>? filtering,
-    List<IApiQueryOrdering<T>>? ordering,
+    List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,
   });
@@ -71,7 +70,7 @@ class ApiQuery<T> implements IApiQuery<T> {
   final IApiQueryFilteringGroup<T>? filtering;
 
   @override
-  final List<IApiQueryOrdering<T>>? ordering;
+  final List<IApiQueryOrdering>? ordering;
 
   @override
   final IApiQueryPaging? paging;
@@ -101,7 +100,7 @@ class ApiQuery<T> implements IApiQuery<T> {
   @override
   ApiQuery<T> copyWith({
     IApiQueryFilteringGroup<T>? filtering,
-    List<IApiQueryOrdering<T>>? ordering,
+    List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,
   }) {
