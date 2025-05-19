@@ -6,7 +6,7 @@ void main() {
     test('offset function should modify offset in IApiQuery', () {
       // Arrange
       final originalQuery = ApiQuery(
-        filtering: ApiQueryFilteringGroup<dynamic>(
+        filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
           filtering: [],
         ),
@@ -24,7 +24,7 @@ void main() {
     test('limit function should modify limit in IApiQuery', () {
       // Arrange
       final originalQuery = ApiQuery<String>(
-        filtering: ApiQueryFilteringGroup<String>(
+        filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
           filtering: [],
         ),
@@ -60,7 +60,7 @@ void main() {
     test('ExApiQuery setOffset method should modify offset in IApiQuery', () {
       // Arrange
       IApiQuery<dynamic> originalQuery = ApiQuery<String>(
-        filtering: ApiQueryFilteringGroup<String>(
+        filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
           filtering: [],
         ),

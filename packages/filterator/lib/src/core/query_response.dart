@@ -1,5 +1,5 @@
-import 'interfaces/interfaces.dart';
-import 'query_metadata.dart';
+import 'package:filterator/src/core/interfaces/interfaces.dart';
+import 'package:filterator/src/core/query_metadata.dart';
 
 /// Interface defining a generic API query response.
 ///

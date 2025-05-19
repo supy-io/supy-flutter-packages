@@ -1,4 +1,4 @@
-import 'query.dart';
+import 'package:filterator/src/core/query.dart';
 
 /// Adds or modifies the offset value in an [IApiQuery] instance.
 ///

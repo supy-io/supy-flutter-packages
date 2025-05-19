@@ -1,4 +1,4 @@
-import 'query.dart';
+import 'package:filterator/src/core/query.dart';
 
 abstract class ApiStandardConverter<T> {
   const ApiStandardConverter(this.query);

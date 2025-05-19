@@ -1,9 +1,9 @@
-import 'query_filter.dart';
-import 'query_filter_group.dart';
-import 'query_operation.dart';
-import 'query_ordering.dart';
-import 'query_paging.dart';
-import 'query_selections.dart';
+import 'package:filterator/src/core/query_filter.dart';
+import 'package:filterator/src/core/query_filter_group.dart';
+import 'package:filterator/src/core/query_operation.dart';
+import 'package:filterator/src/core/query_ordering.dart';
+import 'package:filterator/src/core/query_paging.dart';
+import 'package:filterator/src/core/query_selections.dart';
 
 /// Returns a paging configuration that fetches a single item.
 ///
@@ -19,7 +19,7 @@ IApiQueryPaging takeOne() => const ApiQueryPaging(limit: 1, offset: 0);
 /// - [offset]: Number of items to skip (optional).
 /// - [limit]: Maximum number of items to fetch.
 /// - [cursor]: Optional cursor token for cursor-based pagination.
-IApiQueryPaging paginate({int? offset, required int limit, String? cursor}) =>
+IApiQueryPaging paginate({required int limit, int? offset, String? cursor}) =>
     ApiQueryPaging(limit: limit, offset: offset, cursor: cursor);
 
 /// Returns a paging configuration with no limit.
@@ -34,9 +34,9 @@ IApiQueryPaging noLimit() => ApiQueryPaging.noLimit();
 ///
 /// - [filters]: List of individual field filters (optional).
 /// - [groups]: List of nested filter groups (optional).
-IApiQueryFilteringGroup<dynamic> or({
+IApiQueryFilteringGroup or({
   List<IApiQueryFilter>? filters,
-  List<IApiQueryFilteringGroup<dynamic>>? groups,
+  List<IApiQueryFilteringGroup>? groups,
 }) {
   return ApiQueryFilteringGroup(
     condition: FilterConditionType.or,
@@ -51,9 +51,9 @@ IApiQueryFilteringGroup<dynamic> or({
 ///
 /// - [filters]: List of individual field filters (optional).
 /// - [groups]: List of nested filter groups (optional).
-IApiQueryFilteringGroup<dynamic> and({
+IApiQueryFilteringGroup and({
   List<IApiQueryFilter>? filters,
-  List<IApiQueryFilteringGroup<dynamic>>? groups,
+  List<IApiQueryFilteringGroup>? groups,
 }) {
   return ApiQueryFilteringGroup(
     condition: FilterConditionType.and,
@@ -68,9 +68,9 @@ IApiQueryFilteringGroup<dynamic> and({
 ///
 /// - [filters]: List of individual field filters (optional).
 /// - [groups]: List of nested filter groups (optional).
-IApiQueryFilteringGroup<dynamic> not({
+IApiQueryFilteringGroup not({
   List<IApiQueryFilter>? filters,
-  List<IApiQueryFilteringGroup<dynamic>>? groups,
+  List<IApiQueryFilteringGroup>? groups,
 }) {
   return ApiQueryFilteringGroup(
     condition: FilterConditionType.not,
@@ -145,5 +145,3 @@ IApiQuerySelection exclude(List<String> excludes) {
 IApiQuerySelection include(List<String> includes) {
   return ApiQuerySelection(includes: includes);
 }
-
-

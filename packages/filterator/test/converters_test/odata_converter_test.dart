@@ -11,14 +11,9 @@ void main() {
       );
       final group = MockFilteringGroup(
         filtering: [filter],
-        groups: null,
         condition: FilterConditionType.and,
       );
-      final query = MockApiQuery(
-        filtering: group,
-        ordering: null,
-        paging: null,
-      );
+      final query = MockApiQuery(filtering: group);
       final converter = ODataConverter(query);
 
       final params = converter.toQueryParameters();
@@ -30,11 +25,7 @@ void main() {
       final ordering = [
         MockOrdering(field: 'Age', dir: QueryOrderDirection.desc),
       ];
-      final query = MockApiQuery(
-        filtering: null,
-        ordering: ordering,
-        paging: null,
-      );
+      final query = MockApiQuery(ordering: ordering);
       final converter = ODataConverter(query);
 
       final params = converter.toQueryParameters();
@@ -43,12 +34,8 @@ void main() {
     });
 
     test('converts paging with limit and offset', () {
-      final paging = MockPaging(limit: 10, offset: 5, cursor: null);
-      final query = MockApiQuery(
-        filtering: null,
-        ordering: null,
-        paging: paging,
-      );
+      final paging = MockPaging(limit: 10, offset: 5);
+      final query = MockApiQuery(paging: paging);
       final converter = ODataConverter(query);
 
       final params = converter.toQueryParameters();
@@ -58,15 +45,11 @@ void main() {
     });
 
     test('throws UnsupportedError on cursor-based paging', () {
-      final paging = MockPaging(limit: 10, offset: null, cursor: 'cursor123');
-      final query = MockApiQuery(
-        filtering: null,
-        ordering: null,
-        paging: paging,
-      );
+      final paging = MockPaging(limit: 10, cursor: 'cursor123');
+      final query = MockApiQuery(paging: paging);
       final converter = ODataConverter(query);
 
-      expect(() => converter.toQueryParameters(), throwsUnsupportedError);
+      expect(converter.toQueryParameters, throwsUnsupportedError);
     });
 
     test('toRequestBody outputs JSON string', () {
@@ -77,10 +60,9 @@ void main() {
       );
       final group = MockFilteringGroup(
         filtering: [filter],
-        groups: null,
         condition: FilterConditionType.and,
       );
-      final paging = MockPaging(limit: 5, offset: 0, cursor: null);
+      final paging = MockPaging(limit: 5, offset: 0);
       final ordering = [
         MockOrdering(field: 'CreatedAt', dir: QueryOrderDirection.asc),
       ];
@@ -117,16 +99,15 @@ void main() {
       groups: [
         MockFilteringGroup(
           filtering: [filter2],
-          groups: null,
           condition: FilterConditionType.or,
         ),
       ],
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
     final filterParam = converter.toQueryParameters()[r'$filter'];
-    expect(filterParam, "(A eq 1 and (B eq 2))");
+    expect(filterParam, '(A eq 1 and (B eq 2))');
   });
 
   test('throws on NOT with multiple filters', () {
@@ -135,13 +116,12 @@ void main() {
         MockFilter(field: 'A', operation: QueryOperation.equals, value: 1),
         MockFilter(field: 'B', operation: QueryOperation.equals, value: 2),
       ],
-      groups: null,
       condition: FilterConditionType.not,
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
-    expect(() => converter.toQueryParameters(), throwsFormatException);
+    expect(converter.toQueryParameters, throwsFormatException);
   });
 
   test('inList and notIn are rendered correctly (OData v4)', () {
@@ -157,10 +137,9 @@ void main() {
     );
     final group = MockFilteringGroup(
       filtering: [inFilter, notInFilter],
-      groups: null,
       condition: FilterConditionType.and,
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
     final filter = converter.toQueryParameters()[r'$filter'];
@@ -176,14 +155,13 @@ void main() {
     );
     final group = MockFilteringGroup(
       filtering: [filter],
-      groups: null,
       condition: FilterConditionType.and,
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
     final result = converter.toQueryParameters()[r'$filter'];
-    expect(result, contains("indexof(name, 0) eq"));
+    expect(result, contains('indexof(name, 0) eq'));
   });
 
   test('length, substring, datePart, mathOp', () {
@@ -210,17 +188,16 @@ void main() {
     ];
     final group = MockFilteringGroup(
       filtering: filters,
-      groups: null,
       condition: FilterConditionType.and,
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
     final filterStr = converter.toQueryParameters()[r'$filter'];
-    expect(filterStr, contains("length(name) eq 5"));
+    expect(filterStr, contains('length(name) eq 5'));
     expect(filterStr, contains("substring(title, 0, 3) eq 'abc'"));
-    expect(filterStr, contains("year(birthdate) eq 1990"));
-    expect(filterStr, contains("round(price) eq 20"));
+    expect(filterStr, contains('year(birthdate) eq 1990'));
+    expect(filterStr, contains('round(price) eq 20'));
   });
 
   test('any and all lambda filters', () {
@@ -241,20 +218,19 @@ void main() {
     );
     final group = MockFilteringGroup(
       filtering: [anyFilter, allFilter],
-      groups: null,
       condition: FilterConditionType.and,
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
     final result = converter.toQueryParameters()[r'$filter'];
-    expect(result, contains("results/any(r: r/score gt 50)"));
-    expect(result, contains("results/all(r: r/score gt 50)"));
+    expect(result, contains('results/any(r: r/score gt 50)'));
+    expect(result, contains('results/all(r: r/score gt 50)'));
   });
 
   test('formatValue handles all supported types', () {
     final now = DateTime.utc(2020, 1, 1, 12, 30, 45);
-    final duration = Duration(minutes: 5);
+    const duration = Duration(minutes: 5);
 
     final tests = <IApiQueryFilter>[
       MockFilter(
@@ -297,22 +273,15 @@ void main() {
         operation: QueryOperation.equals,
         value: duration,
       ),
-      MockFilter(
-        field: 'NullField',
-        operation: QueryOperation.equals,
-        value: null,
-      ),
+      MockFilter(field: 'NullField', operation: QueryOperation.equals),
     ];
 
     for (final filter in tests) {
       final query = MockApiQuery(
         filtering: MockFilteringGroup(
           filtering: [filter],
-          groups: null,
           condition: FilterConditionType.and,
         ),
-        ordering: null,
-        paging: null,
       );
       final converter = ODataConverter(query);
       final params = converter.toQueryParameters();
@@ -349,7 +318,6 @@ void main() {
 
     final innerOr = MockFilteringGroup(
       filtering: [filter2, filter3],
-      groups: null,
       condition: FilterConditionType.or,
     );
 
@@ -359,15 +327,11 @@ void main() {
       condition: FilterConditionType.and,
     );
 
-    final query = MockApiQuery(
-      filtering: outerGroup,
-      ordering: null,
-      paging: null,
-    );
+    final query = MockApiQuery(filtering: outerGroup);
     final converter = ODataConverter(query);
     final result = converter.toQueryParameters()[r'$filter'];
 
-    expect(result, "(X eq 1 and (Y eq 2 or Z eq 3))");
+    expect(result, '(X eq 1 and (Y eq 2 or Z eq 3))');
   });
 
   test('handles special characters in string values', () {
@@ -378,10 +342,9 @@ void main() {
     );
     final group = MockFilteringGroup(
       filtering: [filter],
-      groups: null,
       condition: FilterConditionType.and,
     );
-    final query = MockApiQuery(filtering: group, ordering: null, paging: null);
+    final query = MockApiQuery(filtering: group);
     final converter = ODataConverter(query);
 
     final filterStr = converter.toQueryParameters()[r'$filter'];
@@ -401,11 +364,8 @@ void main() {
     final query = MockApiQuery(
       filtering: MockFilteringGroup(
         filtering: [filter],
-        groups: null,
         condition: FilterConditionType.and,
       ),
-      ordering: null,
-      paging: null,
     );
 
     final converter = ODataConverter(query);
@@ -421,6 +381,12 @@ void main() {
 // Mock classes to simulate dependencies
 
 class MockFilter implements IApiQueryFilter {
+  MockFilter({
+    required this.field,
+    required this.operation,
+    this.value,
+    this.values,
+  });
   @override
   final String field;
   @override
@@ -429,13 +395,6 @@ class MockFilter implements IApiQueryFilter {
   final dynamic value;
   @override
   final List<dynamic>? values;
-
-  MockFilter({
-    required this.field,
-    required this.operation,
-    this.value,
-    this.values,
-  });
 
   @override
   IApiQueryFilter clone() {
@@ -450,22 +409,21 @@ class MockFilter implements IApiQueryFilter {
   }
 }
 
-class MockFilteringGroup<T> implements IApiQueryFilteringGroup<T> {
+class MockFilteringGroup implements IApiQueryFilteringGroup {
+  MockFilteringGroup({
+    required this.filtering,
+    required this.condition,
+    this.groups,
+  });
   @override
   final List<IApiQueryFilter> filtering;
   @override
-  final List<IApiQueryFilteringGroup<T>>? groups;
+  final List<IApiQueryFilteringGroup>? groups;
   @override
   final FilterConditionType condition;
 
-  MockFilteringGroup({
-    required this.filtering,
-    this.groups,
-    required this.condition,
-  });
-
   @override
-  clone() {
+  void clone() {
     // TODO: implement clone
     throw UnimplementedError();
   }
@@ -478,12 +436,11 @@ class MockFilteringGroup<T> implements IApiQueryFilteringGroup<T> {
 }
 
 class MockOrdering implements IApiQueryOrdering {
+  MockOrdering({required this.field, required this.dir});
   @override
   final String field;
   @override
   final QueryOrderDirection dir;
-
-  MockOrdering({required this.field, required this.dir});
 
   @override
   ApiQueryOrdering clone() {
@@ -499,14 +456,13 @@ class MockOrdering implements IApiQueryOrdering {
 }
 
 class MockPaging implements IApiQueryPaging {
+  MockPaging({required this.limit, this.offset, this.cursor});
   @override
   final int limit;
   @override
   final int? offset;
   @override
   final String? cursor;
-
-  MockPaging({required this.limit, this.offset, this.cursor});
 
   @override
   ApiQueryPaging clone() {
@@ -528,14 +484,13 @@ class MockPaging implements IApiQueryPaging {
 }
 
 class MockApiQuery<T> implements ApiQuery<T> {
+  MockApiQuery({this.filtering, this.ordering, this.paging});
   @override
-  final IApiQueryFilteringGroup<T>? filtering;
+  final IApiQueryFilteringGroup? filtering;
   @override
   final List<IApiQueryOrdering>? ordering;
   @override
   final IApiQueryPaging? paging;
-
-  MockApiQuery({this.filtering, this.ordering, this.paging});
 
   @override
   ApiQuery<T> clone() {
@@ -545,7 +500,7 @@ class MockApiQuery<T> implements ApiQuery<T> {
 
   @override
   ApiQuery<T> copyWith({
-    IApiQueryFilteringGroup<T>? filtering,
+    IApiQueryFilteringGroup? filtering,
     List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,

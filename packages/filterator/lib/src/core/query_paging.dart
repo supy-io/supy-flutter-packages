@@ -1,4 +1,4 @@
-import 'interfaces/interfaces.dart';
+import 'package:filterator/src/core/interfaces/interfaces.dart';
 
 /// Interface defining the paging details for an API query.
 ///

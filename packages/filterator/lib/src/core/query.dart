@@ -13,7 +13,7 @@ import 'package:filterator/src/core/query_selections.dart';
 abstract interface class IApiQuery<T>
     implements ICloneable<IApiQuery<T>>, IMap<dynamic> {
   /// Gets the filtering details of the API query.
-  IApiQueryFilteringGroup<T>? get filtering;
+  IApiQueryFilteringGroup? get filtering;
 
   /// Gets the list of ordering details in the API query.
   List<IApiQueryOrdering>? get ordering;
@@ -30,7 +30,7 @@ abstract interface class IApiQuery<T>
   /// with the provided changes. It allows for creating a new query based on
   /// the original query while modifying specific components.
   IApiQuery<T> copyWith({
-    IApiQueryFilteringGroup<T>? filtering,
+    IApiQueryFilteringGroup? filtering,
     List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,
@@ -57,7 +57,7 @@ class ApiQuery<T> implements IApiQuery<T> {
   ApiQuery._({IApiQuery<T>? query})
     : filtering =
           query?.filtering ??
-          ApiQueryFilteringGroup<T>(
+          ApiQueryFilteringGroup(
             condition: FilterConditionType.and,
             filtering: [],
             groups: [],
@@ -67,7 +67,7 @@ class ApiQuery<T> implements IApiQuery<T> {
       selection = null;
 
   @override
-  final IApiQueryFilteringGroup<T>? filtering;
+  final IApiQueryFilteringGroup? filtering;
 
   @override
   final List<IApiQueryOrdering>? ordering;
@@ -99,7 +99,7 @@ class ApiQuery<T> implements IApiQuery<T> {
   /// modifications, allowing for easy creation of updated queries.
   @override
   ApiQuery<T> copyWith({
-    IApiQueryFilteringGroup<T>? filtering,
+    IApiQueryFilteringGroup? filtering,
     List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,

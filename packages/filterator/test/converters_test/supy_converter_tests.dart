@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('SupyConverter Tests', () {
     test('Empty query should return empty map', () {
-      final query = ApiQuery();
+      const query = ApiQuery();
       final result = query.toSupyQueryParameters();
       expect(result, isEmpty);
     });
@@ -119,7 +119,7 @@ void main() {
     });
 
     test('Empty ordering list included', () {
-      final query = ApiQuery(ordering: []);
+      const query = ApiQuery(ordering: []);
       final result = query.toSupyQueryParameters();
       expect(result['ordering'], equals('[]'));
     });
@@ -191,11 +191,7 @@ void main() {
       final query = ApiQuery(
         filtering: and(
           filters: [
-            ApiQueryFilter(
-              field: 'tags',
-              operation: QueryOperation.inList,
-              values: null,
-            ),
+            ApiQueryFilter(field: 'tags', operation: QueryOperation.inList),
           ],
         ),
       );
@@ -516,8 +512,8 @@ void main() {
     expect(result['groups'], contains('"by":"depth"'));
   });
   test('Selection with include and exclude together', () {
-    final selection = ApiQuerySelection(excludes: ['name']);
-    final query = ApiQuery(selection: selection);
+    const selection = ApiQuerySelection(excludes: ['name']);
+    const query = ApiQuery(selection: selection);
     final result = query.toSupyQueryParameters();
     expect(result['selection'], contains('exclude'));
   });
@@ -558,7 +554,7 @@ void main() {
   });
 
   test('Empty ApiQuery produces a map', () {
-    final query = ApiQuery();
+    const query = ApiQuery();
     final result = query.toSupyQueryParameters();
     expect(result, isA<Map>());
   });

@@ -1,6 +1,6 @@
-import 'interfaces/interfaces.dart';
-import 'query_filter.dart';
-import 'query_operation.dart';
+import 'package:filterator/src/core/interfaces/interfaces.dart';
+import 'package:filterator/src/core/query_filter.dart';
+import 'package:filterator/src/core/query_operation.dart';
 
 /// Interface defining the structure of an API query filtering group.
 ///
@@ -12,13 +12,13 @@ import 'query_operation.dart';
 /// The interface also enforces the ability to:
 /// - clone the group
 /// - convert the group into a map representation (typically for JSON serialization).
-abstract interface class IApiQueryFilteringGroup<T>
+abstract interface class IApiQueryFilteringGroup
     implements ICloneable<dynamic>, IMap<dynamic> {
   /// List of nested filtering groups.
   ///
   /// Each item in the list is another [IApiQueryFilteringGroup], allowing
   /// for recursive nesting of conditions (e.g. AND with nested ORs).
-  List<IApiQueryFilteringGroup<T>>? get groups;
+  List<IApiQueryFilteringGroup>? get groups;
 
   /// List of individual filtering operations.
   ///
@@ -39,7 +39,7 @@ abstract interface class IApiQueryFilteringGroup<T>
 /// - converting the group to a serializable map
 ///
 /// Typically used to define structured, composable filter queries.
-class ApiQueryFilteringGroup<T> implements IApiQueryFilteringGroup<T> {
+class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   /// Creates a new instance of [ApiQueryFilteringGroup].
   ///
   /// The [condition] defines how filters and groups are combined.
@@ -77,15 +77,15 @@ class ApiQueryFilteringGroup<T> implements IApiQueryFilteringGroup<T> {
   ///
   /// Allows recursively building complex filtering logic.
   @override
-  final List<IApiQueryFilteringGroup<T>>? groups;
+  final List<IApiQueryFilteringGroup>? groups;
 
   /// Clones this filtering group and its contents.
   ///
   /// The clone will deeply copy all filters and subgroups, producing a
   /// new independent instance.
   @override
-  ApiQueryFilteringGroup<T> clone() {
-    return ApiQueryFilteringGroup<T>(
+  ApiQueryFilteringGroup clone() {
+    return ApiQueryFilteringGroup(
       condition: condition,
       filtering: List.from(filtering.map((filter) => filter.clone())),
       groups:
@@ -103,7 +103,7 @@ class ApiQueryFilteringGroup<T> implements IApiQueryFilteringGroup<T> {
   /// - `'filters'`: list of individual filter maps
   /// - `'groups'`: list of nested group maps (if any)
   List<Map<String, Object?>?>? _visitGroups(
-    List<IApiQueryFilteringGroup<dynamic>>? groups,
+    List<IApiQueryFilteringGroup>? groups,
   ) {
     return groups
         ?.map((group) {
@@ -137,5 +137,4 @@ class ApiQueryFilteringGroup<T> implements IApiQueryFilteringGroup<T> {
     };
     return {'filtering': filtering};
   }
-
 }

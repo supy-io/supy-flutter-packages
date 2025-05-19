@@ -67,13 +67,9 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
           'groups':
               encode
                   ? jsonEncode(
-                    filtering.groups!
-                        .map((e) => _transformFiltering(e))
-                        .toList(),
+                    filtering.groups!.map(_transformFiltering).toList(),
                   )
-                  : filtering.groups!
-                      .map((e) => _transformFiltering(e))
-                      .toList(),
+                  : filtering.groups!.map(_transformFiltering).toList(),
       },
       if (query.paging != null)
         'paging':
@@ -99,15 +95,14 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
   /// recursively serialized. This method is used for both top-level
   /// and nested filtering logic.
   Map<String, dynamic> _transformFiltering(
-    IApiQueryFilteringGroup<T> filtering, {
+    IApiQueryFilteringGroup filtering, {
     bool includeGroups = true,
   }) {
     return {
       'condition': filtering.condition.name,
       'filtering': filtering.filtering.map(_transformFilter).toList(),
       if (filtering.groups != null && includeGroups)
-        'groups':
-            filtering.groups?.map((group) => _transformGroups(group)).toList(),
+        'groups': filtering.groups?.map(_transformGroups).toList(),
     };
   }
 
@@ -166,7 +161,7 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
   /// filtering rules, and any subgroups. When [encode] is true, the
   /// result is first encoded and then decoded to ensure serialization.
   Map<String, dynamic> _transformGroups(
-    IApiQueryFilteringGroup<T> groups, {
+    IApiQueryFilteringGroup groups, {
     bool encode = true,
   }) {
     final groupMap = {
@@ -185,7 +180,7 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
   /// Returns a list of maps representing each group. Skips null or
   /// empty groups to keep the result clean.
   List<Map<String, Object?>?>? _visitGroups(
-    List<IApiQueryFilteringGroup<dynamic>>? groups,
+    List<IApiQueryFilteringGroup>? groups,
   ) {
     return groups
         ?.map((group) {

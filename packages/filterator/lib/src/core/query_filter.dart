@@ -1,5 +1,5 @@
-import 'interfaces/interfaces.dart';
-import 'query_operation.dart';
+import 'package:filterator/src/core/interfaces/interfaces.dart';
+import 'package:filterator/src/core/query_operation.dart';
 
 abstract class IApiQueryFilter
     implements ICloneable<IApiQueryFilter>, IMap<dynamic> {

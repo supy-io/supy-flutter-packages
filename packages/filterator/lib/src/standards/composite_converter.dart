@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../filterator.dart';
+import 'package:filterator/filterator.dart';
 
 typedef ConverterFactory<T> =
     ApiStandardConverter<T> Function(IApiQuery<T> query);
@@ -16,13 +16,6 @@ typedef BodyMerger =
     );
 
 class CompositeConverter<T> implements ApiStandardConverter<T> {
-  @override
-  final IApiQuery<T> query;
-  final List<ConverterFactory<T>> converterFactories;
-  final QueryParamMerger paramMerger;
-  final BodyMerger bodyMerger;
-  final void Function(Object error, StackTrace stack)? onConverterError;
-
   const CompositeConverter({
     required this.query,
     required this.converterFactories,
@@ -30,6 +23,12 @@ class CompositeConverter<T> implements ApiStandardConverter<T> {
     this.bodyMerger = _defaultBodyMerger,
     this.onConverterError,
   });
+  @override
+  final IApiQuery<T> query;
+  final List<ConverterFactory<T>> converterFactories;
+  final QueryParamMerger paramMerger;
+  final BodyMerger bodyMerger;
+  final void Function(Object error, StackTrace stack)? onConverterError;
 
   /// Default parameter merging strategy: later converters override earlier ones
   static Map<String, dynamic> _defaultParamMerger(
@@ -49,18 +48,12 @@ class CompositeConverter<T> implements ApiStandardConverter<T> {
 
   @override
   Map<String, dynamic> toQueryParameters() {
-    return _converters.fold<Map<String, dynamic>>(
-      {},
-      (combined, converter) => _mergeParamsSafe(combined, converter),
-    );
+    return _converters.fold<Map<String, dynamic>>({}, _mergeParamsSafe);
   }
 
   @override
   String toRequestBody() {
-    final merged = _converters.fold<Map<String, dynamic>>(
-      {},
-      (combined, converter) => _mergeBodySafe(combined, converter),
-    );
+    final merged = _converters.fold<Map<String, dynamic>>({}, _mergeBodySafe);
     return jsonEncode(merged);
   }
 
