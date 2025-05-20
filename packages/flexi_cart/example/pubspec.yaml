@@ -42,6 +42,7 @@ dependencies:
   flexi_cart:
     path: ../../flexi_cart
   iconsax: 0.0.8
+  intl:
 dev_dependencies:
   flutter_test:
     sdk: flutter

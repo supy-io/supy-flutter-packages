@@ -44,6 +44,7 @@ dependencies:
 
   <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="220" />
   <img src="screenshots/multi_cart.png" alt="MultiCart" width="220" />
+  <img src="screenshots/currencies.png" alt="Exchanges" width="220" />
 
 </div>
 

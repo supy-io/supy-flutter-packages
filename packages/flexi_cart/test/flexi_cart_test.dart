@@ -1223,4 +1223,34 @@ void main() {
 
     expect(cart.items['item1']?.price, closeTo(80.0, 0.001));
   });
+  test('Multiple same exchange rate ', () {
+    final cart = FlexiCart<MockItem>()
+      ..add(
+        MockItem(
+          id: 'item1',
+          price: 100,
+          name: 'Apple',
+          groupId: 'A',
+        ),
+      )
+      ..add(
+        MockItem(
+          id: 'item2',
+          price: 200,
+          name: 'Orange',
+          groupId: 'A',
+        ),
+      );
+
+    final currency = CartCurrency(code: 'EUR', rate: 1.2);
+
+    cart
+      ..applyExchangeRate(currency) // 100 -> 120
+      ..applyExchangeRate(currency) // 120 -> 120
+      ..applyExchangeRate(currency) // 120 -> 120
+      ..applyExchangeRate(currency) // 120 -> 120
+      ..applyExchangeRate(currency); // 120 -> 120
+
+    expect(cart.items['item1']?.price, closeTo(120.0, 0.001));
+  });
 }
