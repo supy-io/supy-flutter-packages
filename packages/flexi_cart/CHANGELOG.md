@@ -1,3 +1,17 @@
+## 0.4.0
+New methods:
+- `applyExchangeRate(CartCurrency cartCurrency)`: Multiplies all item prices by the given exchange rate and sets the cart's currency.
+- `removeExchangeRate()`: Reverts item prices to their original values before the last exchange rate application.
+
+A new class `CartCurrency` is introduced to hold the currency code and exchange rate.
+
+Tests have been added to verify:
+- Correct price multiplication after applying an exchange rate.
+- Restoration of original prices after removing an exchange rate.
+- No change if `removeExchangeRate` is called without a currency applied.
+- Price updates when multiple exchange rates are applied sequentially (the new rate is applied to the current prices, not the original ones).
+
+
 ## 0.3.0
 
 - Added a private `_metadata` map to store key-value pairs.

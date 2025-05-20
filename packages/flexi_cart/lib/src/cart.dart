@@ -68,6 +68,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Indicates if the cart is locked for editing.
   bool _isLocked = false;
 
+  /// Currency if needed for the cart.
+  CartCurrency? _cartCurrency;
+
   /// Internal logs of cart events.
   final List<String> _logs = [];
 
@@ -431,6 +434,67 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     );
   }
 
+  /// Applies an exchange rate to all items based on the target currency.
+  void applyExchangeRate(
+    CartCurrency cartCurrency, {
+    bool shouldNotifyListeners = true,
+  }) {
+    _checkLock();
+
+    removeExchangeRate();
+
+    _cartCurrency = cartCurrency;
+    final rate = cartCurrency.rate;
+
+    _items.forEach((key, item) {
+      item.price *= rate;
+
+      // Update item in group if necessary
+      final groupId = item.group;
+      if (groups[groupId]?.items != null) {
+        groups[groupId]!.items[key] = item;
+      }
+    });
+
+    _log(
+      'Applied exchange rate for ${cartCurrency.code}: $rate',
+      notified: shouldNotifyListeners,
+    );
+
+    emit(this);
+    if (shouldNotifyListeners) notifyListeners();
+  }
+
+  /// Removes the applied exchange rate and reverts item prices.
+  void removeExchangeRate({
+    bool shouldNotifyListeners = true,
+  }) {
+    _checkLock();
+    if (_cartCurrency == null) return;
+
+    final rate = _cartCurrency!.rate;
+
+    _items.forEach((key, item) {
+      item.price /= rate;
+
+      // Update item in group if necessary
+      final groupId = item.group;
+      if (groups[groupId]?.items != null) {
+        groups[groupId]!.items[key] = item;
+      }
+    });
+
+    _log(
+      'Removed exchange rate for ${_cartCurrency!.code}: $rate',
+      notified: shouldNotifyListeners,
+    );
+
+    _cartCurrency = null;
+
+    emit(this);
+    if (shouldNotifyListeners) notifyListeners();
+  }
+
   /// Disposes of the cart and triggers [onDisposed].
   @override
   void dispose() {
@@ -521,4 +585,12 @@ abstract class ICartPlugin<T extends ICartItem> {
   @protected
   @mustCallSuper
   void onClose(FlexiCart<T> cart) {}
+}
+
+///
+class CartCurrency {
+  CartCurrency({required this.rate, required this.code});
+
+  final num rate;
+  final String code;
 }

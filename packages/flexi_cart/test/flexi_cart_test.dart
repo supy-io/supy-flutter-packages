@@ -1107,4 +1107,120 @@ void main() {
 
     expect(notifyCount, equals(2));
   });
+
+  test(
+    'applyExchangeRate multiplies item prices correctly',
+    () {
+      final cart = FlexiCart<MockItem>()
+        ..add(
+          MockItem(
+            id: 'item1',
+            price: 100,
+            name: 'Apple',
+            groupId: 'A',
+          ),
+        )
+        ..add(
+          MockItem(
+            id: 'item2',
+            price: 200,
+            name: 'Orange',
+            groupId: 'A',
+          ),
+        );
+
+      final currency = CartCurrency(code: 'EUR', rate: 1.2);
+      cart.applyExchangeRate(currency, shouldNotifyListeners: false);
+
+      expect(
+        cart.items['item1']?.price,
+        closeTo(120.0, 0.001),
+      );
+      expect(
+        cart.items['item2']?.price,
+        closeTo(240.0, 0.001),
+      );
+    },
+  );
+
+  test('removeExchangeRate restores original item prices', () {
+    final cart = FlexiCart<MockItem>()
+      ..add(
+        MockItem(
+          id: 'item1',
+          price: 100,
+          name: 'Apple',
+          groupId: 'A',
+        ),
+      )
+      ..add(
+        MockItem(
+          id: 'item2',
+          price: 200,
+          name: 'Orange',
+          groupId: 'A',
+        ),
+      );
+
+    final currency = CartCurrency(code: 'EUR', rate: 1.2);
+    cart
+      ..applyExchangeRate(currency, shouldNotifyListeners: false)
+      ..removeExchangeRate(shouldNotifyListeners: false);
+
+    expect(cart.items['item1']?.price, closeTo(100.0, 0.001));
+    expect(cart.items['item2']?.price, closeTo(200.0, 0.001));
+  });
+
+  test('removeExchangeRate does nothing if no currency applied', () {
+    final cart = FlexiCart<MockItem>()
+      ..add(
+        MockItem(
+          id: 'item1',
+          price: 100,
+          name: 'Apple',
+          groupId: 'A',
+        ),
+      )
+      ..add(
+        MockItem(
+          id: 'item2',
+          price: 200,
+          name: 'Orange',
+          groupId: 'A',
+        ),
+      )
+      ..removeExchangeRate(shouldNotifyListeners: false);
+
+    expect(cart.items['item1']?.price, closeTo(100.0, 0.001));
+    expect(cart.items['item2']?.price, closeTo(200.0, 0.001));
+  });
+
+  test('Multiple exchange rate applications accumulate price changes', () {
+    final cart = FlexiCart<MockItem>()
+      ..add(
+        MockItem(
+          id: 'item1',
+          price: 100,
+          name: 'Apple',
+          groupId: 'A',
+        ),
+      )
+      ..add(
+        MockItem(
+          id: 'item2',
+          price: 200,
+          name: 'Orange',
+          groupId: 'A',
+        ),
+      );
+
+    final currency1 = CartCurrency(code: 'EUR', rate: 1.2);
+    final currency2 = CartCurrency(code: 'JPY', rate: 0.8);
+
+    cart
+      ..applyExchangeRate(currency1) // 100 -> 120
+      ..applyExchangeRate(currency2); // 120 -> 96
+
+    expect(cart.items['item1']?.price, closeTo(80.0, 0.001));
+  });
 }

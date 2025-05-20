@@ -29,7 +29,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-   flexi_cart: ^0.1.0
+   flexi_cart: ^0.4.0
    provider: ^6.0.0 
 ```
 
@@ -48,9 +48,9 @@ dependencies:
 </div>
 
 ## 🚀 Getting Started
-#### Basic Setup
+### Basic Setup
 
-- Create Cart Instance
+- #### Create Cart Instance
 ```dart
 Provider(create: (_) => FlexiCart(...))
 
@@ -58,8 +58,8 @@ Provider(create: (_) => FlexiCart(...))
 final cart = FlexiCart();
 ```
 
--  Define your item model
-   Your model must implement the ICartItem interface.
+- #### Define your item model
+  Your model must implement the ICartItem interface.
 ```dart
 class ProductItem extends ICartItem {
    // implement required properties like id, name, quantity, etc.
@@ -67,7 +67,7 @@ class ProductItem extends ICartItem {
 
 final product = ProductItem(...)
 ```
--  Use CartInput Widget
+- #### Use CartInput Widget
 ```dart
 final product = ProductItem(...);
 
@@ -85,8 +85,8 @@ CartInput(
 );
 
 ```
-#### Basic Operations
-- Initalize a cart item object and add it to cart
+### Basic Operations
+- #### Initalize a cart item object and add it to cart
 ```dart
 final product = ProductItem(
    id: '123',
@@ -95,25 +95,25 @@ final product = ProductItem(
 );
 context.read<FlexiCart>().add(product);
 ```
-- Remove item from cart if existed
+- #### Remove item from cart if existed
 
 ```dart
 cart.delete(product);
 ```
-- Get Total Calculation:
+- #### Get Total Calculation:
 
 ```dart
 double total = cart.totalPrice();
 int itemCount = cart.totalQuantity();
 ```
 
-- Stream: Listen to cart changes reactively
+- #### Stream: Listen to cart changes reactively
 ```dart
 cart.stream.listen((updatedCart) {
   print('Cart updated: ${updatedCart.items.length} items');
 });
 ```
-- Lock the cart to prevent changes
+- #### Lock the cart to prevent changes
 ```dart
 cart.lock();
 try {
@@ -124,23 +124,36 @@ try {
 cart.unlock(); // Now it's safe to mutate
 ```
 
-- Set Metadata
+- #### Set Metadata
 ```dart
 cart.setMetadata('couponCode', 'SUMMER25');
 cart.setMetadata('sessionId', 'abc-123');
 print(cart.metadata['couponCode']); // SUMMER25
 ```
 
-- Set expiration
+- #### Currency Exchange Feature
+```dart
+final cart=context.read<FlexiCart>();
+final currency = CartCurrency(code: 'EUR', rate: 1.2);
+cart.applyExchangeRate(currency);
+
+// ... later
+cart.removeExchangeRate();
+```
+- ```applyExchangeRate()``` multiplies item prices and updates internal cart currency.
+
+- ```removeExchangeRate()``` restores original prices by dividing using the last applied rate.
+
+- #### Set expiration
 ```dart
 cart.setExpiration(Duration(minutes: 30));
 print(cart.isExpired);
 ```
-- Logs
+- #### Logs
 ```dart
 print(cart.logs); // View history of cart changes
 ```
-- Register plugin
+- #### Register plugin
 ```dart
 cart.registerPlugin(PrintPlugin());
 
@@ -151,7 +164,7 @@ class PrintPlugin extends ICartPlugin<MockItem> {
   }
 }
 ```
-- CartDiff To track item changes between states:
+- ####  CartDiff To track item changes between states:
 ```dart
 final old = {...cart.items}; // snapshot
 cart.add(newItem);
@@ -186,6 +199,8 @@ print(diff.added); // List of added items
 | `registerPlugin()`    | Register Plugin to cart           |
 | `setExpiration()`    | Set an Expiration date           |
 | `logs`    | Get Logs History           |
+| `applyExchangeRate()`    | multiplies item prices and updates internal cart currency.           |
+| `removeExchangeRate()`    | restores original prices by dividing using the last applied            |
 
 
 
