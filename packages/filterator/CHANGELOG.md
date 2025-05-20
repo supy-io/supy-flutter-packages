@@ -1,3 +1,8 @@
+## 0.1.2-beta.1
+- updates the package version to `0.1.2-beta.1` in `pubspec.yaml` and `README.md`.
+  It also removes the `meta` package from the dependencies as it is no longer required.
+
+
 ## 0.1.1-beta.1
 - Updating the dependency version in `README.md` to `^0.1.0-beta.1`.
 - Removing extra newlines and whitespace from code examples in `README.md`.

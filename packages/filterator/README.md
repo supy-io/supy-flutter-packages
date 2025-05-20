@@ -19,7 +19,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-   filterator: ^0.1.0-beta.1
+   filterator: ^0.1.2-beta.1
 ```
 ## 🚀 Getting Started
 #### Quick Start

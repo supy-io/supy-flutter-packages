@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="chore: Update CHANGELOG for initial beta release&#10;&#10;This commit updates the CHANGELOG.md file to reflect the initial beta release version as `0.1.0-beta.1`.">
+    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="docs: update README and pubspec for beta release&#10;&#10;This commit updates the `README.md` and `pubspec.yaml` files for the initial beta release (`0.1.0-beta.1`).&#10;&#10;Changes include:&#10;- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.&#10;- Removing extra newlines and whitespace from code examples in `README.md`.&#10;- Updating the package description in `pubspec.yaml` for better clarity.&#10;- Minor changes in `.idea/workspace.xml` reflecting the commit history.">
       <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/caches/deviceStreaming.xml" afterDir="false" />
@@ -34,7 +34,7 @@
       <change afterPath="$PROJECT_DIR$/../flutter_upkeep/pubspec.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../flutter_upkeep/test/flutter_upkeep_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../flexi_cart/build/test_cache/build/cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/build/test_cache/build/cache.dill.track.dill" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -249,7 +249,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747737287300</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="docs: update README and pubspec for beta release&#10;&#10;This commit updates the `README.md` and `pubspec.yaml` files for the initial beta release (`0.1.0-beta.1`).&#10;&#10;Changes include:&#10;- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.&#10;- Removing extra newlines and whitespace from code examples in `README.md`.&#10;- Updating the package description in `pubspec.yaml` for better clarity.&#10;- Minor changes in `.idea/workspace.xml` reflecting the commit history.">
+      <option name="closed" value="true" />
+      <created>1747738020810</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747738020810</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -259,7 +267,8 @@
     <MESSAGE value="refactor: Remove generic types and update converter paths&#10;&#10;This commit refactors the codebase to remove generic type parameters `T` from `ApiQuery`, `IApiQuery`, `ApiStandardConverter`, `SupyConverter`, `ODataConverter`, and related classes and methods. This simplifies the API and removes unnecessary type constraints.&#10;&#10;Additionally, converter implementations (`SupyConverter`, `ODataConverter`) have been moved from the `lib/src/standards` directory to the `example` directory to clarify their role as usage examples rather than core library components. The `GraphQLConverter` and `CompositeConverter` have been removed.&#10;&#10;Other changes include:&#10;- Renamed `filtering` to `filters` in `IApiQueryFilteringGroup` and its implementations for clarity.&#10;- Updated `filterator_example.dart` to include examples for `ODataConverter` and a new `ResetApiConverter`.&#10;- Added `ResetApiConverter` as an example of a custom converter for REST APIs.&#10;- Updated `README.md` to reflect the changes in converter usage and provide an example for custom converters.&#10;- Adjusted import paths and test files to reflect the new locations of converters.&#10;- Removed unused `converters_test.dart` and related files.&#10;- Updated `pubspec.yaml` topics.&#10;- Removed unused exception file." />
     <MESSAGE value="docs: remove raw map example from README&#10;&#10;This commit removes the example demonstrating how to get the request body as a raw map using `converter.body()` from the README.md." />
     <MESSAGE value="chore: Update CHANGELOG for initial beta release&#10;&#10;This commit updates the CHANGELOG.md file to reflect the initial beta release version as `0.1.0-beta.1`." />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: Update CHANGELOG for initial beta release&#10;&#10;This commit updates the CHANGELOG.md file to reflect the initial beta release version as `0.1.0-beta.1`." />
+    <MESSAGE value="docs: update README and pubspec for beta release&#10;&#10;This commit updates the `README.md` and `pubspec.yaml` files for the initial beta release (`0.1.0-beta.1`).&#10;&#10;Changes include:&#10;- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.&#10;- Removing extra newlines and whitespace from code examples in `README.md`.&#10;- Updating the package description in `pubspec.yaml` for better clarity.&#10;- Minor changes in `.idea/workspace.xml` reflecting the commit history." />
+    <option name="LAST_COMMIT_MESSAGE" value="docs: update README and pubspec for beta release&#10;&#10;This commit updates the `README.md` and `pubspec.yaml` files for the initial beta release (`0.1.0-beta.1`).&#10;&#10;Changes include:&#10;- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.&#10;- Removing extra newlines and whitespace from code examples in `README.md`.&#10;- Updating the package description in `pubspec.yaml` for better clarity.&#10;- Minor changes in `.idea/workspace.xml` reflecting the commit history." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
