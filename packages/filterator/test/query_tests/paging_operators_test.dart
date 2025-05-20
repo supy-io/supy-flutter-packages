@@ -8,7 +8,7 @@ void main() {
       final originalQuery = ApiQuery(
         filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
-          filtering: [],
+          filters: [],
         ),
         paging: const ApiQueryPaging(offset: 0, limit: 10),
       );
@@ -23,10 +23,10 @@ void main() {
 
     test('limit function should modify limit in IApiQuery', () {
       // Arrange
-      final originalQuery = ApiQuery<String>(
+      final originalQuery = ApiQuery(
         filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
-          filtering: [],
+          filters: [],
         ),
         paging: const ApiQueryPaging(offset: 0, limit: 10),
       );
@@ -41,10 +41,10 @@ void main() {
 
     test('ExApiQuery setLimit method should modify limit in IApiQuery', () {
       // Arrange
-      IApiQuery<dynamic> originalQuery = ApiQuery(
+      IApiQuery originalQuery = ApiQuery(
         filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
-          filtering: [],
+          filters: [],
         ),
         paging: const ApiQueryPaging(offset: 0, limit: 10),
       );
@@ -59,10 +59,10 @@ void main() {
 
     test('ExApiQuery setOffset method should modify offset in IApiQuery', () {
       // Arrange
-      IApiQuery<dynamic> originalQuery = ApiQuery<String>(
+      IApiQuery originalQuery = ApiQuery(
         filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
-          filtering: [],
+          filters: [],
         ),
         paging: const ApiQueryPaging(offset: 0, limit: 10),
       );

@@ -1,6 +1,8 @@
 import 'package:filterator/filterator.dart';
 import 'package:test/test.dart';
 
+import '../supy_converter_example.dart';
+
 void main() {
   group('SupyConverter Tests', () {
     test('Empty query should return empty map', () {
@@ -263,7 +265,7 @@ void main() {
     final query = ApiQuery(
       filtering: ApiQueryFilteringGroup(
         condition: FilterConditionType.and,
-        filtering: [
+        filters: [
           ApiQueryFilter(
             field: 'name.en',
             operation: QueryOperation.like,
@@ -278,7 +280,7 @@ void main() {
         groups: [
           ApiQueryFilteringGroup(
             condition: FilterConditionType.or,
-            filtering: [
+            filters: [
               ApiQueryFilter(
                 field: 'G1',
                 operation: QueryOperation.like,
@@ -293,7 +295,7 @@ void main() {
             groups: [
               ApiQueryFilteringGroup(
                 condition: FilterConditionType.and,
-                filtering: [
+                filters: [
                   ApiQueryFilter(
                     field: 'G2',
                     operation: QueryOperation.like,
@@ -350,10 +352,10 @@ void main() {
   });
 
   test('ApiQuery with null values should produce correct JSON', () {
-    final queryWithNulls = ApiQuery<String>(
+    final queryWithNulls = ApiQuery(
       filtering: ApiQueryFilteringGroup(
         condition: FilterConditionType.and,
-        filtering: [
+        filters: [
           ApiQueryFilter(
             field: 'field1',
             operation: QueryOperation.equals,
@@ -374,10 +376,10 @@ void main() {
   test(
     'ApiQuery with empty ordering and paging should produce correct JSON',
     () {
-      final queryWithEmptyValues = ApiQuery<String>(
+      final queryWithEmptyValues = ApiQuery(
         filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
-          filtering: [
+          filters: [
             ApiQueryFilter(
               field: 'field1',
               operation: QueryOperation.equals,

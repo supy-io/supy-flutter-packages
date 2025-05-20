@@ -16,12 +16,12 @@ void main() {
   test('ApiQueryFilteringGroup toMap should handle empty group', () {
     final emptyGroup = ApiQueryFilteringGroup(
       condition: FilterConditionType.and,
-      filtering: [],
+      filters: [],
       groups: [],
     );
 
     final expectedJson = {
-      'filtering': {'condition': 'and', 'filtering': [], 'groups': []},
+      'filtering': {'condition': 'and', 'filters': [], 'groups': []},
     };
 
     expect(emptyGroup.toMap(), equals(expectedJson));
@@ -65,7 +65,7 @@ void main() {
     final query = ApiQuery(
       filtering: ApiQueryFilteringGroup(
         condition: FilterConditionType.and,
-        filtering: [
+        filters: [
           ApiQueryFilter(
             field: 'name.en',
             operation: QueryOperation.like,
@@ -80,7 +80,7 @@ void main() {
         groups: [
           ApiQueryFilteringGroup(
             condition: FilterConditionType.or,
-            filtering: [
+            filters: [
               ApiQueryFilter(
                 field: 'G1',
                 operation: QueryOperation.like,
@@ -95,7 +95,7 @@ void main() {
             groups: [
               ApiQueryFilteringGroup(
                 condition: FilterConditionType.and,
-                filtering: [
+                filters: [
                   ApiQueryFilter(
                     field: 'G2',
                     operation: QueryOperation.like,
@@ -122,21 +122,21 @@ void main() {
     final expectedJson = {
       'filtering': {
         'condition': 'and',
-        'filtering': [
+        'filters': [
           {'field': 'name.en', 'operation': 'like', 'value': 'apple'},
           {'field': 'name.ar', 'operation': 'like', 'value': 'apple'},
         ],
         'groups': [
           {
             'condition': 'or',
-            'filtering': [
+            'filters': [
               {'field': 'G1', 'operation': 'like', 'value': 'G1'},
               {'field': 'G1', 'operation': 'like', 'value': 'G1'},
             ],
             'groups': [
               {
                 'condition': 'and',
-                'filtering': [
+                'filters': [
                   {'field': 'G2', 'operation': 'like', 'value': 'G2'},
                   {'field': 'G2', 'operation': 'like', 'value': 'G2'},
                 ],
@@ -174,7 +174,7 @@ void main() {
     () {
       final nestedGroup = ApiQueryFilteringGroup(
         condition: FilterConditionType.and,
-        filtering: [
+        filters: [
           ApiQueryFilter(
             field: 'field1',
             operation: QueryOperation.equals,
@@ -189,7 +189,7 @@ void main() {
         groups: [
           ApiQueryFilteringGroup(
             condition: FilterConditionType.or,
-            filtering: [
+            filters: [
               ApiQueryFilter(
                 field: 'nestedField1',
                 operation: QueryOperation.contains,
@@ -209,14 +209,14 @@ void main() {
       final expectedJson = {
         'filtering': {
           'condition': 'and',
-          'filtering': [
+          'filters': [
             {'field': 'field1', 'operation': 'equals', 'value': 'value1'},
             {'field': 'field2', 'operation': 'notEquals', 'value': 'value2'},
           ],
           'groups': [
             {
               'condition': 'or',
-              'filtering': [
+              'filters': [
                 {
                   'field': 'nestedField1',
                   'operation': 'contains',
@@ -240,10 +240,10 @@ void main() {
   );
 
   test('ApiQuery with null values should produce correct JSON', () {
-    final queryWithNulls = ApiQuery<String>(
+    final queryWithNulls = ApiQuery(
       filtering: ApiQueryFilteringGroup(
         condition: FilterConditionType.and,
-        filtering: [
+        filters: [
           ApiQueryFilter(
             field: 'field1',
             operation: QueryOperation.equals,
@@ -256,7 +256,7 @@ void main() {
     final expectedJson = {
       'filtering': {
         'condition': 'and',
-        'filtering': [
+        'filters': [
           {'field': 'field1', 'operation': 'equals', 'value': 'value1'},
         ],
         'groups': [],
@@ -268,10 +268,10 @@ void main() {
   test(
     'ApiQuery with empty ordering and paging should produce correct JSON',
     () {
-      final queryWithEmptyValues = ApiQuery<String>(
+      final queryWithEmptyValues = ApiQuery(
         filtering: ApiQueryFilteringGroup(
           condition: FilterConditionType.and,
-          filtering: [
+          filters: [
             ApiQueryFilter(
               field: 'field1',
               operation: QueryOperation.equals,
@@ -287,7 +287,7 @@ void main() {
       final expectedJson = {
         'filtering': {
           'condition': 'and',
-          'filtering': [
+          'filters': [
             {'field': 'field1', 'operation': 'equals', 'value': 'value1'},
           ],
           'groups': [],

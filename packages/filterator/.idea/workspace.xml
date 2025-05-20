@@ -4,19 +4,63 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="fix: removed caches">
-      <change afterPath="$PROJECT_DIR$/.github/CONTRIBUTING.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/bug_report.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/feature_request.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/PULL_REQUEST_TEMPLATE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="refactor: Remove generic types and update converter paths&#10;&#10;This commit refactors the codebase to remove generic type parameters `T` from `ApiQuery`, `IApiQuery`, `ApiStandardConverter`, `SupyConverter`, `ODataConverter`, and related classes and methods. This simplifies the API and removes unnecessary type constraints.&#10;&#10;Additionally, converter implementations (`SupyConverter`, `ODataConverter`) have been moved from the `lib/src/standards` directory to the `example` directory to clarify their role as usage examples rather than core library components. The `GraphQLConverter` and `CompositeConverter` have been removed.&#10;&#10;Other changes include:&#10;- Renamed `filtering` to `filters` in `IApiQueryFilteringGroup` and its implementations for clarity.&#10;- Updated `filterator_example.dart` to include examples for `ODataConverter` and a new `ResetApiConverter`.&#10;- Added `ResetApiConverter` as an example of a custom converter for REST APIs.&#10;- Updated `README.md` to reflect the changes in converter usage and provide an example for custom converters.&#10;- Adjusted import paths and test files to reflect the new locations of converters.&#10;- Removed unused `converters_test.dart` and related files.&#10;- Updated `pubspec.yaml` topics.&#10;- Removed unused exception file.">
+      <change afterPath="$PROJECT_DIR$/example/reset_api_converter_example.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/test/test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/analysis_options.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/example/flutter_upkeep_example.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/flutter_upkeep.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/data.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/http_upkeep_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/local_upkeep_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/multi_source_upkeep_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/upkeep_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/flutter_upkeep_client.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/maintenance_config.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/models.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/update_config.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/upkeep_config.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/strategies/maintenance_check_strategy.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/strategies/strategies.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/strategies/update_check_strategy.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/upkeep_context.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/pubspec.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/test/flutter_upkeep_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_options.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/filterator_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/filterator_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/filterator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/filterator.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/converter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/paging_operators.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/paging_operators.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/core/query.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/standards/custom/supy_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/standards/custom/supy_converter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_operators.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_operators.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/standards/composite_converter.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/standards/custom/supy_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/supy_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/standards/graphql/graphql_converter.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/standards/odata/odata_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/odata_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/validation/exceptions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/validation/exceptions.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/converters_test/odata_converter_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/converters_test/odata_converter_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/converters_test/composite_converter_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/converters_test/converters_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/converters_test/odata_converter_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/odata_converter_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fiterator_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/fiterator_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/paging_operators_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/paging_operators_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/build/test_cache/build/cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/build/test_cache/build/cache.dill.track.dill" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +111,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Dart Command Line App.filterator_example.dart.executor": "Run",
+    "Dart Command Line App.odata_converter_test.dart.executor": "Run",
+    "Dart Command Line App.supy_converter_example_tests.dart.executor": "Run",
     "Dart Test.ApiQuery toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
     "Dart Test.ApiQuery toMap should produce correct JSON in supy_converter_tests.dart.executor": "Run",
     "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in api_query_tools_test.dart.executor": "Run",
@@ -119,7 +165,7 @@
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/abdalqaderalnajjar/Projects/supy-projects/supy-flutter-packages./packages/filterator",
-    "settings.editor.selected.configurable": "dart.settings",
+    "settings.editor.selected.configurable": "flutter.settings",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
@@ -130,6 +176,8 @@
       <recent name="$PROJECT_DIR$/lib/src/core" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/example" />
+      <recent name="$PROJECT_DIR$/example/test" />
       <recent name="$PROJECT_DIR$/test/converters_test" />
     </key>
   </component>
@@ -139,16 +187,14 @@
       <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="Empty ApiQuery produces a map in supy_converter_tests.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" />
-      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Empty ApiQuery produces a map" />
+    <configuration name="odata_converter_test.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/example/test/odata_converter_test.dart" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="Filter with int and double values in supy_converter_tests.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" />
-      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Filter with int and double values" />
+    <configuration name="supy_converter_example_tests.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
     <configuration name="Tests in fiterator_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
@@ -156,18 +202,18 @@
       <option name="testName" value="fiterator_test.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="Tests in supy_converter_tests.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart" />
-      <option name="testName" value="supy_converter_tests.dart" />
+    <configuration name="Tests in query_operators_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" />
+      <option name="testName" value="query_operators_test.dart" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Dart Test.Tests in fiterator_test.dart" />
+        <item itemvalue="Dart Test.Tests in query_operators_test.dart" />
+        <item itemvalue="Dart Command Line App.supy_converter_example_tests.dart" />
+        <item itemvalue="Dart Command Line App.odata_converter_test.dart" />
         <item itemvalue="Dart Command Line App.filterator_example.dart" />
-        <item itemvalue="Dart Test.Tests in supy_converter_tests.dart" />
-        <item itemvalue="Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart" />
-        <item itemvalue="Dart Test.Filter with int and double values in supy_converter_tests.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -188,33 +234,42 @@
       <option name="project" value="LOCAL" />
       <updated>1747675083431</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="chore: add MIT license and contribution guidelines&#10;&#10;This commit introduces an MIT license file and a set of contribution guidelines for the Filterator package. It also includes:&#10;&#10;- `.github` folder with templates for bug reports, feature requests, and pull requests.&#10;- Update to `README.md` with the correct pub.dev link.&#10;- Update to `pubspec.yaml` to include `very_good_analysis`.&#10;- Update to `analysis_options.yaml` to use `very_good_analysis`.&#10;- Minor refactor in `ApiQueryOrdering` to remove the generic type `T`.&#10;- Minor refactor in `ApiQuery` to update the generic type for `ordering`.&#10;- Corrected import paths in `supy_converter.dart` and `fiterator_test.dart`.&#10;- Added `.idea/workspace.xml` and `.idea/libraries/Dart_Packages.xml` to `.gitignore` (implicitly, as these are new files).">
+      <option name="closed" value="true" />
+      <created>1747675395552</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747675395552</updated>
+    </task>
+    <task id="LOCAL-00003" summary="refactor: Update import paths and minor code style&#10;&#10;This commit updates import paths to use package-relative paths (e.g., `package:filterator/src/...`) across several files. It also includes minor code style adjustments such as:&#10;&#10;- Making `ApiQuery` constructor parameters `const` where applicable in tests.&#10;- Reordering imports in test files.&#10;- Removing trailing whitespace.&#10;- Slightly adjusting the order of named parameters in the `paginate` function.&#10;- Updating the package description in `pubspec.yaml`.&#10;- Removing an unused generic type parameter from `IApiQueryFilteringGroup` and its implementations.&#10;- Simplifying list transformations in `SupyConverter`.&#10;- Minor adjustments to string literals in `ODataConverter`.&#10;- Using method tear-offs for `fold` operations in `CompositeConverter`.&#10;- Removing redundant `null` assignments in mock constructors in OData tests.">
+      <option name="closed" value="true" />
+      <created>1747675849947</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747675849947</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix: removed caches" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: removed caches" />
+    <MESSAGE value="chore: add MIT license and contribution guidelines&#10;&#10;This commit introduces an MIT license file and a set of contribution guidelines for the Filterator package. It also includes:&#10;&#10;- `.github` folder with templates for bug reports, feature requests, and pull requests.&#10;- Update to `README.md` with the correct pub.dev link.&#10;- Update to `pubspec.yaml` to include `very_good_analysis`.&#10;- Update to `analysis_options.yaml` to use `very_good_analysis`.&#10;- Minor refactor in `ApiQueryOrdering` to remove the generic type `T`.&#10;- Minor refactor in `ApiQuery` to update the generic type for `ordering`.&#10;- Corrected import paths in `supy_converter.dart` and `fiterator_test.dart`.&#10;- Added `.idea/workspace.xml` and `.idea/libraries/Dart_Packages.xml` to `.gitignore` (implicitly, as these are new files)." />
+    <MESSAGE value="refactor: Update import paths and minor code style&#10;&#10;This commit updates import paths to use package-relative paths (e.g., `package:filterator/src/...`) across several files. It also includes minor code style adjustments such as:&#10;&#10;- Making `ApiQuery` constructor parameters `const` where applicable in tests.&#10;- Reordering imports in test files.&#10;- Removing trailing whitespace.&#10;- Slightly adjusting the order of named parameters in the `paginate` function.&#10;- Updating the package description in `pubspec.yaml`.&#10;- Removing an unused generic type parameter from `IApiQueryFilteringGroup` and its implementations.&#10;- Simplifying list transformations in `SupyConverter`.&#10;- Minor adjustments to string literals in `ODataConverter`.&#10;- Using method tear-offs for `fold` operations in `CompositeConverter`.&#10;- Removing redundant `null` assignments in mock constructors in OData tests." />
+    <MESSAGE value="refactor: Remove generic types and update converter paths&#10;&#10;This commit refactors the codebase to remove generic type parameters `T` from `ApiQuery`, `IApiQuery`, `ApiStandardConverter`, `SupyConverter`, `ODataConverter`, and related classes and methods. This simplifies the API and removes unnecessary type constraints.&#10;&#10;Additionally, converter implementations (`SupyConverter`, `ODataConverter`) have been moved from the `lib/src/standards` directory to the `example` directory to clarify their role as usage examples rather than core library components. The `GraphQLConverter` and `CompositeConverter` have been removed.&#10;&#10;Other changes include:&#10;- Renamed `filtering` to `filters` in `IApiQueryFilteringGroup` and its implementations for clarity.&#10;- Updated `filterator_example.dart` to include examples for `ODataConverter` and a new `ResetApiConverter`.&#10;- Added `ResetApiConverter` as an example of a custom converter for REST APIs.&#10;- Updated `README.md` to reflect the changes in converter usage and provide an example for custom converters.&#10;- Adjusted import paths and test files to reflect the new locations of converters.&#10;- Removed unused `converters_test.dart` and related files.&#10;- Updated `pubspec.yaml` topics.&#10;- Removed unused exception file." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Remove generic types and update converter paths&#10;&#10;This commit refactors the codebase to remove generic type parameters `T` from `ApiQuery`, `IApiQuery`, `ApiStandardConverter`, `SupyConverter`, `ODataConverter`, and related classes and methods. This simplifies the API and removes unnecessary type constraints.&#10;&#10;Additionally, converter implementations (`SupyConverter`, `ODataConverter`) have been moved from the `lib/src/standards` directory to the `example` directory to clarify their role as usage examples rather than core library components. The `GraphQLConverter` and `CompositeConverter` have been removed.&#10;&#10;Other changes include:&#10;- Renamed `filtering` to `filters` in `IApiQueryFilteringGroup` and its implementations for clarity.&#10;- Updated `filterator_example.dart` to include examples for `ODataConverter` and a new `ResetApiConverter`.&#10;- Added `ResetApiConverter` as an example of a custom converter for REST APIs.&#10;- Updated `README.md` to reflect the changes in converter usage and provide an example for custom converters.&#10;- Adjusted import paths and test files to reflect the new locations of converters.&#10;- Removed unused `converters_test.dart` and related files.&#10;- Updated `pubspec.yaml` topics.&#10;- Removed unused exception file." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/filterator_example.dart</url>
-          <line>2</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/test/query_tests/query_operators_test.dart</url>
           <line>3</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/standards/odata/odata_converter.dart</url>
-          <line>59</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/test/converters_test/supy_converter_tests.dart</url>
+          <url>file://$PROJECT_DIR$/example/test/supy_converter_example_tests.dart</url>
           <line>265</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>

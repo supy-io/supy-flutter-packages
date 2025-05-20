@@ -1,6 +1,8 @@
 import 'package:filterator/filterator.dart';
 import 'package:test/test.dart';
 
+import '../odata_converter_example.dart';
+
 void main() {
   group('ODataConverter', () {
     test('converts simple equals filter', () {
@@ -10,7 +12,7 @@ void main() {
         value: 'John',
       );
       final group = MockFilteringGroup(
-        filtering: [filter],
+        filters: [filter],
         condition: FilterConditionType.and,
       );
       final query = MockApiQuery(filtering: group);
@@ -59,7 +61,7 @@ void main() {
         value: true,
       );
       final group = MockFilteringGroup(
-        filtering: [filter],
+        filters: [filter],
         condition: FilterConditionType.and,
       );
       final paging = MockPaging(limit: 5, offset: 0);
@@ -95,10 +97,10 @@ void main() {
     );
     final group = MockFilteringGroup(
       condition: FilterConditionType.and,
-      filtering: [filter1],
+      filters: [filter1],
       groups: [
         MockFilteringGroup(
-          filtering: [filter2],
+          filters: [filter2],
           condition: FilterConditionType.or,
         ),
       ],
@@ -112,7 +114,7 @@ void main() {
 
   test('throws on NOT with multiple filters', () {
     final group = MockFilteringGroup(
-      filtering: [
+      filters: [
         MockFilter(field: 'A', operation: QueryOperation.equals, value: 1),
         MockFilter(field: 'B', operation: QueryOperation.equals, value: 2),
       ],
@@ -136,7 +138,7 @@ void main() {
       values: ['admin', 'guest'],
     );
     final group = MockFilteringGroup(
-      filtering: [inFilter, notInFilter],
+      filters: [inFilter, notInFilter],
       condition: FilterConditionType.and,
     );
     final query = MockApiQuery(filtering: group);
@@ -154,7 +156,7 @@ void main() {
       value: 0,
     );
     final group = MockFilteringGroup(
-      filtering: [filter],
+      filters: [filter],
       condition: FilterConditionType.and,
     );
     final query = MockApiQuery(filtering: group);
@@ -187,7 +189,7 @@ void main() {
       ),
     ];
     final group = MockFilteringGroup(
-      filtering: filters,
+      filters: filters,
       condition: FilterConditionType.and,
     );
     final query = MockApiQuery(filtering: group);
@@ -217,7 +219,7 @@ void main() {
       values: ['r', innerFilter],
     );
     final group = MockFilteringGroup(
-      filtering: [anyFilter, allFilter],
+      filters: [anyFilter, allFilter],
       condition: FilterConditionType.and,
     );
     final query = MockApiQuery(filtering: group);
@@ -279,7 +281,7 @@ void main() {
     for (final filter in tests) {
       final query = MockApiQuery(
         filtering: MockFilteringGroup(
-          filtering: [filter],
+          filters: [filter],
           condition: FilterConditionType.and,
         ),
       );
@@ -317,12 +319,12 @@ void main() {
     );
 
     final innerOr = MockFilteringGroup(
-      filtering: [filter2, filter3],
+      filters: [filter2, filter3],
       condition: FilterConditionType.or,
     );
 
     final outerGroup = MockFilteringGroup(
-      filtering: [filter1],
+      filters: [filter1],
       groups: [innerOr],
       condition: FilterConditionType.and,
     );
@@ -341,7 +343,7 @@ void main() {
       value: "O'Reilly & Sons",
     );
     final group = MockFilteringGroup(
-      filtering: [filter],
+      filters: [filter],
       condition: FilterConditionType.and,
     );
     final query = MockApiQuery(filtering: group);
@@ -363,7 +365,7 @@ void main() {
 
     final query = MockApiQuery(
       filtering: MockFilteringGroup(
-        filtering: [filter],
+        filters: [filter],
         condition: FilterConditionType.and,
       ),
     );
@@ -411,12 +413,12 @@ class MockFilter implements IApiQueryFilter {
 
 class MockFilteringGroup implements IApiQueryFilteringGroup {
   MockFilteringGroup({
-    required this.filtering,
+    required this.filters,
     required this.condition,
     this.groups,
   });
   @override
-  final List<IApiQueryFilter> filtering;
+  final List<IApiQueryFilter> filters;
   @override
   final List<IApiQueryFilteringGroup>? groups;
   @override
@@ -483,7 +485,7 @@ class MockPaging implements IApiQueryPaging {
   }
 }
 
-class MockApiQuery<T> implements ApiQuery<T> {
+class MockApiQuery<T> implements ApiQuery {
   MockApiQuery({this.filtering, this.ordering, this.paging});
   @override
   final IApiQueryFilteringGroup? filtering;
@@ -493,13 +495,13 @@ class MockApiQuery<T> implements ApiQuery<T> {
   final IApiQueryPaging? paging;
 
   @override
-  ApiQuery<T> clone() {
+  ApiQuery clone() {
     // TODO: implement clone
     throw UnimplementedError();
   }
 
   @override
-  ApiQuery<T> copyWith({
+  ApiQuery copyWith({
     IApiQueryFilteringGroup? filtering,
     List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,

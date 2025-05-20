@@ -7,7 +7,7 @@ import 'package:filterator/src/core/query.dart';
 /// and returns a new [IApiQuery] instance with the specified offset value.
 /// If the original query does not have paging details, the function returns
 /// the original query without modification.
-IApiQuery<dynamic> offset(IApiQuery<dynamic> query, {required int offset}) {
+IApiQuery offset(IApiQuery query, {required int offset}) {
   return query.copyWith(paging: query.paging?.copyWith(offset: offset));
 }
 
@@ -17,21 +17,21 @@ IApiQuery<dynamic> offset(IApiQuery<dynamic> query, {required int offset}) {
 /// and returns a new [IApiQuery] instance with the specified limit value.
 /// If the original query does not have paging details, the function returns
 /// the original query without modification.
-IApiQuery<dynamic> limit(IApiQuery<dynamic> query, {required int limit}) {
+IApiQuery limit(IApiQuery query, {required int limit}) {
   return query.copyWith(paging: query.paging?.copyWith(limit: limit));
 }
 
 /// Extension methods for convenient modification of [IApiQuery] instances.
-extension ExApiQuery on IApiQuery<dynamic> {
+extension ExApiQuery on IApiQuery {
   /// Sets the limit value in the current [IApiQuery] instance.
   ///
   /// This extension method allows you to set the limit value directly on an
   /// [IApiQuery] instance without the need to use the [limit] function.
-  IApiQuery<dynamic> setLimit(int value) => limit(this, limit: value);
+  IApiQuery setLimit(int value) => limit(this, limit: value);
 
   /// Sets the offset value in the current [IApiQuery] instance.
   ///
   /// This extension method allows you to set the offset value directly on an
   /// [IApiQuery] instance without the need to use the [offset] function.
-  IApiQuery<dynamic> setOffset(int value) => offset(this, offset: value);
+  IApiQuery setOffset(int value) => offset(this, offset: value);
 }

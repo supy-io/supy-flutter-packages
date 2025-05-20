@@ -24,7 +24,7 @@ abstract interface class IApiQueryFilteringGroup
   ///
   /// Each item is a field-level filter like "status == active" or
   /// "price > 100".
-  List<IApiQueryFilter> get filtering;
+  List<IApiQueryFilter> get filters;
 
   /// Logical condition (AND, OR, NOT) that joins the filters/groups.
   FilterConditionType get condition;
@@ -47,7 +47,7 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   /// - [groups] is an optional list of nested filter groups.
   ApiQueryFilteringGroup({
     required this.condition,
-    required this.filtering,
+    required this.filters,
     this.groups,
   });
 
@@ -55,15 +55,15 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   ///
   /// Useful for writing: `ApiQueryFilteringGroup.and([...])`
   ApiQueryFilteringGroup.and(List<IApiQueryFilter> filters)
-    : this(condition: FilterConditionType.and, filtering: filters);
+    : this(condition: FilterConditionType.and, filters: filters);
 
   /// Shortcut constructor for an `OR` filter group.
   ApiQueryFilteringGroup.or(List<IApiQueryFilter> filters)
-    : this(condition: FilterConditionType.or, filtering: filters);
+    : this(condition: FilterConditionType.or, filters: filters);
 
   /// Shortcut constructor for a `NOT` filter group.
   ApiQueryFilteringGroup.not(List<IApiQueryFilter> filters)
-    : this(condition: FilterConditionType.not, filtering: filters);
+    : this(condition: FilterConditionType.not, filters: filters);
 
   /// The logical condition that joins all filters and subgroups.
   @override
@@ -71,7 +71,7 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
 
   /// List of field-level filters (e.g. `name == 'test'`).
   @override
-  final List<IApiQueryFilter> filtering;
+  final List<IApiQueryFilter> filters;
 
   /// List of nested filter groups.
   ///
@@ -87,7 +87,7 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   ApiQueryFilteringGroup clone() {
     return ApiQueryFilteringGroup(
       condition: condition,
-      filtering: List.from(filtering.map((filter) => filter.clone())),
+      filters: List.from(filters.map((filter) => filter.clone())),
       groups:
           groups == null
               ? null
@@ -107,13 +107,13 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   ) {
     return groups
         ?.map((group) {
-          final filtering = group.filtering.map((e) => e.toMap()).toList();
+          final filters = group.filters.map((e) => e.toMap()).toList();
           final nestedGroups = _visitGroups(group.groups);
 
-          if (filtering.isNotEmpty || (nestedGroups != null)) {
+          if (filters.isNotEmpty || (nestedGroups != null)) {
             return {
               'condition': group.condition.name,
-              'filtering': filtering,
+              'filters': filters,
               'groups': nestedGroups ?? [],
             };
           }
@@ -132,7 +132,7 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   Map<String, dynamic> toMap() {
     final filtering = {
       'condition': condition.name,
-      'filtering': this.filtering.map((e) => e.toMap()).toList(),
+      'filters': filters.map((e) => e.toMap()).toList(),
       'groups': _visitGroups(groups) ?? [],
     };
     return {'filtering': filtering};

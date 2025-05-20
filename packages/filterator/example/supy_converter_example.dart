@@ -18,7 +18,7 @@ import 'package:filterator/filterator.dart';
 /// final params = converter.toQueryParameters();
 /// final body = converter.toRequestBody();
 /// ```
-class SupyConverter<T> extends ApiStandardConverter<T> {
+class SupyConverter extends ApiStandardConverter {
   /// Creates a new instance of [SupyConverter] with the given [query].
   ///
   /// The [query] is the domain-specific query object that will be
@@ -100,7 +100,7 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
   }) {
     return {
       'condition': filtering.condition.name,
-      'filtering': filtering.filtering.map(_transformFilter).toList(),
+      'filtering': filtering.filters.map(_transformFilter).toList(),
       if (filtering.groups != null && includeGroups)
         'groups': filtering.groups?.map(_transformGroups).toList(),
     };
@@ -166,7 +166,7 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
   }) {
     final groupMap = {
       'condition': groups.condition.name,
-      'filtering': groups.filtering.map(_transformFilter).toList(),
+      'filtering': groups.filters.map(_transformFilter).toList(),
       'groups': _visitGroups(groups.groups) ?? [],
     };
 
@@ -184,7 +184,7 @@ class SupyConverter<T> extends ApiStandardConverter<T> {
   ) {
     return groups
         ?.map((group) {
-          final filtering = group.filtering.map(_transformFilter).toList();
+          final filtering = group.filters.map(_transformFilter).toList();
           final nestedGroups = _visitGroups(group.groups);
 
           if (filtering.isNotEmpty || (nestedGroups != null)) {

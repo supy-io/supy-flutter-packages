@@ -25,7 +25,7 @@ dependencies:
 #### Quick Start
 Instead of manually constructing queries as raw **String** or **JSON** objects, this library introduces a typed query interface that allows you to express complex query logic using fluent, composable functions.
 This approach offers a safer and more readable API for building queries, while remaining flexible enough to support multiple backends like REST, GraphQL, OData, or any other API format.
-By defining your queries using this interface (e.g. ApiQuery, where, and, or, ordering, paginate, etc.), you can then pass them through a standardized converter, such as ODataConverter, to serialize them into the appropriate format (query parameters, request body, etc.) — fully decoupling query logic from transport format.
+By defining your queries using this interface (e.g. ApiQuery, where, and, or, ordering, paginate, etc.), you can then pass them through your standardized converter, such as ODataConverter Example, to serialize them into the appropriate format (query parameters, request body, etc.) — fully decoupling query logic from transport format.
 
 
 ### 🔍 Simple Filters (Short Style)
@@ -141,16 +141,39 @@ final query = ApiQuery(
 🔄 Combines filtering, nested groups, ordering, paging, and selection
 
 
-- ## Convert to Supy API Format or To any format
+- ## Convert to your format
 ```dart
 final converter = 
   SupyConverter(query) ,
-  GraphQLConverter(query),
   ODataConverter(query),
+/// or any other customConverter
 
 
 ```
+- ## Customize your query format
+```dart
+class CustomConverter extends ApiStandardConverter {
+  CustomConverter(super.query);
 
+  @override
+  Map<String, dynamic> toQueryParameters() {
+    final params = <String, dynamic>{};
+
+    /// your custom transformer here. for example
+    if (query.filtering != null) {
+      params['fields'] = query.filtering!.filters.map((e) => {e.value});
+    }
+    return params;
+  }
+
+  @override
+  String toRequestBody() {
+    /// your custom transformer here
+    return '';
+  }
+}
+
+```
 -  #### As query parameters (for GET requests)
 ```dart
 final params = converter.toQueryParameters();

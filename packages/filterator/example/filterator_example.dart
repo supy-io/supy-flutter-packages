@@ -1,5 +1,9 @@
 import 'package:filterator/filterator.dart';
 
+import 'odata_converter_example.dart';
+import 'reset_api_converter_example.dart';
+import 'supy_converter_example.dart';
+
 void main() {
   final query = ApiQuery(
     /// 🔍 Filtering section: where you define conditions on fields
@@ -49,7 +53,12 @@ void main() {
     ), // Return 20 items starting from index 0
   );
   final supyConverter = SupyConverter(query);
+  final oDataConverter = ODataConverter(query);
+  final restApiConverter = ResetApiConverter(query);
 
   print(supyConverter.toRequestBody());
   print(supyConverter.toQueryParameters());
+  print(oDataConverter.toRequestBody());
+  print(oDataConverter.toQueryParameters());
+  print(restApiConverter.toQueryParameters());
 }

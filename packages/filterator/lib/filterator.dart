@@ -4,6 +4,3 @@
 library;
 
 export 'src/core/core.dart';
-export 'src/standards/composite_converter.dart';
-export 'src/standards/custom/supy_converter.dart';
-export 'src/standards/odata/odata_converter.dart';

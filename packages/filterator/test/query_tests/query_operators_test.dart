@@ -8,14 +8,14 @@ void main() {
       final expectedJson = {
         'filtering': {
           'condition': 'and',
-          'filtering': [
+          'filters': [
             {'field': 'field1', 'operation': 'equals', 'value': 'value1'},
             {'field': 'field2', 'operation': 'equals', 'value': 'value2'},
           ],
           'groups': [
             {
               'condition': 'or',
-              'filtering': [
+              'filters': [
                 {'field': 'field3', 'operation': 'equals', 'value': 'value3'},
                 {'field': 'field4', 'operation': 'equals', 'value': 'value4'},
               ],
@@ -23,7 +23,7 @@ void main() {
             },
             {
               'condition': 'or',
-              'filtering': [
+              'filters': [
                 {'field': 'field3', 'operation': 'equals', 'value': 'value3'},
                 {'field': 'field4', 'operation': 'equals', 'value': 'value4'},
               ],

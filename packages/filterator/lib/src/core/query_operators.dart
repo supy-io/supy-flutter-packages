@@ -40,7 +40,7 @@ IApiQueryFilteringGroup or({
 }) {
   return ApiQueryFilteringGroup(
     condition: FilterConditionType.or,
-    filtering: filters ?? [],
+    filters: filters ?? [],
     groups: groups ?? [],
   );
 }
@@ -57,7 +57,7 @@ IApiQueryFilteringGroup and({
 }) {
   return ApiQueryFilteringGroup(
     condition: FilterConditionType.and,
-    filtering: filters ?? [],
+    filters: filters ?? [],
     groups: groups ?? [],
   );
 }
@@ -74,7 +74,7 @@ IApiQueryFilteringGroup not({
 }) {
   return ApiQueryFilteringGroup(
     condition: FilterConditionType.not,
-    filtering: filters ?? [],
+    filters: filters ?? [],
     groups: groups ?? [],
   );
 }

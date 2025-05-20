@@ -1,4 +1,4 @@
-## \[1.0.0] -Beta Initial Release
+## \[0.1.0] -Beta Initial Release
 
 ### 🚀 Features
 

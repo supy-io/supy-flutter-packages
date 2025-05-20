@@ -13,10 +13,11 @@ import 'package:filterator/src/core/query_operation.dart';
 ///
 /// Supports filtering, ordering, and pagination (limit/offset only).
 /// Cursor-based pagination is not supported, as per OData specification.
-class ODataConverter<T> extends ApiStandardConverter<T> {
+class ODataConverter extends ApiStandardConverter {
   /// Creates a new [ODataConverter] from the given query.
   const ODataConverter(super.query, {this.version = ODataVersion.v4});
 
+  /// The OData version to use.
   final ODataVersion version;
 
   /// Converts the API query into a map of OData query parameters for use
@@ -100,7 +101,7 @@ class ODataConverter<T> extends ApiStandardConverter<T> {
   /// logical condition (`and` / `or` / `not`).
   void _writeGroup(StringBuffer buffer, IApiQueryFilteringGroup group) {
     final parts = <String>[
-      ...group.filtering.map(_convertFilter),
+      ...group.filters.map(_convertFilter),
       if (group.groups != null) ...group.groups!.map(_buildFilter),
     ];
 
@@ -112,9 +113,10 @@ class ODataConverter<T> extends ApiStandardConverter<T> {
       }
       buffer.write('not ${parts.first}');
     } else {
-      buffer.write('(');
-      buffer.write(parts.join(' $condition '));
-      buffer.write(')');
+      buffer
+        ..write('(')
+        ..write(parts.join(' $condition '))
+        ..write(')');
     }
   }
 
