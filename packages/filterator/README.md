@@ -183,11 +183,6 @@ final params = converter.toQueryParameters();
 final body = converter.toRequestBody();
 ```
 
-- ####  Or as raw map
-```dart
-final bodyMap = converter.body();
-```
-
 ## 📚 API Reference
 
 - ### ApiQuery Field Reference Table
