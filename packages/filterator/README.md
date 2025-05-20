@@ -19,7 +19,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-   filterator: ^0.1.0
+   filterator: ^0.1.0-beta.1
 ```
 ## 🚀 Getting Started
 #### Quick Start
@@ -30,7 +30,6 @@ By defining your queries using this interface (e.g. ApiQuery, where, and, or, or
 
 ### 🔍 Simple Filters (Short Style)
 ```dart
-
 final query = ApiQuery(
   filtering: and(
     filters: [
@@ -46,7 +45,6 @@ final query = ApiQuery(
 
 ###  🧱 Filters (Verbose Object Style)
 ```dart
-
 final query = ApiQuery(
   filtering: and(
     filters: [
@@ -147,8 +145,6 @@ final converter =
   SupyConverter(query) ,
   ODataConverter(query),
 /// or any other customConverter
-
-
 ```
 - ## Customize your query format
 ```dart
@@ -172,7 +168,6 @@ class CustomConverter extends ApiStandardConverter {
     return '';
   }
 }
-
 ```
 -  #### As query parameters (for GET requests)
 ```dart

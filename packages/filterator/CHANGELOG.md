@@ -1,6 +1,11 @@
-## \[0.1.0-beta.1] Initial Release
+## 0.1.1-beta.1
+- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.
+- Removing extra newlines and whitespace from code examples in `README.md`.
+- Updating the package description in `pubspec.yaml` for better clarity.
 
-### 🚀 Features
+## 0.1.0-beta.1
+
+### 🚀 Features - Initial Release
 
 * **Dynamic Query Interface (`ApiQuery`)**
   Introduced a flexible, type-safe API query builder interface supporting:
