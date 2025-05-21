@@ -39,8 +39,6 @@ class MockItem extends ICartItem {
 
   @override
   double notNullQty() => quantityVal;
-
-
 }
 
 class MockCartItem extends Mock implements ICartItem {}

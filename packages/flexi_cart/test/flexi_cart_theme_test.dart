@@ -110,10 +110,12 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: Builder(builder: (context) {
-            style = CartInputTheme.of(context);
-            return Container();
-          },),
+          home: Builder(
+            builder: (context) {
+              style = CartInputTheme.of(context);
+              return Container();
+            },
+          ),
         ),
       );
 

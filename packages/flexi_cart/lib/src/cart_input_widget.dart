@@ -213,8 +213,10 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
     // Add to cart if initial value is set and item doesn't exist.
     if (widget.initialValue != null &&
         _cart.items[widget.item.key]?.quantity == null) {
-      _cart.add(widget.item..quantity = widget.initialValue,
-          shouldNotifyListeners: false,);
+      _cart.add(
+        widget.item..quantity = widget.initialValue,
+        shouldNotifyListeners: false,
+      );
     }
   }
 
