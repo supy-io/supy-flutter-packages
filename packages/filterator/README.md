@@ -1,5 +1,5 @@
 # Filterator
-[![Pub Version](https://img.shields.io/pub/v/flexi_cart)](https://pub.dev/packages/filterator)
+[![Pub Version](https://img.shields.io/pub/v/filterator)](https://pub.dev/packages/filterator)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 API Query Builder for Dart, A powerful and flexible library for constructing structured API queries with support for filtering, ordering, paging, and seamless conversion to API-specific formats.
