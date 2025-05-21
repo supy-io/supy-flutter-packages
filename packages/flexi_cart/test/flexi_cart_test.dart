@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -42,16 +40,7 @@ class MockItem extends ICartItem {
   @override
   double notNullQty() => quantityVal;
 
-  @override
-  bool operator ==(Object other) =>
-      other is MockItem &&
-      other.id == id &&
-      other.name == name &&
-      other.price == price &&
-      other.quantity == quantity;
 
-  @override
-  int get hashCode => Object.hash(id, name, price, quantity);
 }
 
 class MockCartItem extends Mock implements ICartItem {}
@@ -794,12 +783,11 @@ void main() {
 
           cart
             ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
-            ..setNote('note', shouldNotifyListeners: true);
-
-          cart.addZeroQuantity = true;
-          cart.removeItemCondition = (item) => false;
-
-          cart
+            ..setNote('note', shouldNotifyListeners: true)
+            ..addZeroQuantity = true
+            ..removeItemCondition = (item) {
+              return false;
+            }
             ..add(item)
             ..resetItems();
 
@@ -840,10 +828,11 @@ void main() {
             ..addZeroQuantity = true
             ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
             ..setNote('note', shouldNotifyListeners: true)
-            ..removeItemCondition = (item) => true;
-
-          cart.add(item);
-          cart.reset();
+            ..removeItemCondition = (item) {
+              return true;
+            }
+            ..add(item)
+            ..reset();
 
           verify(mockCallback.call).called(4);
           expect(cart.items, isEmpty);
@@ -855,14 +844,15 @@ void main() {
           expect(cart.note, isNull);
           expect(cart.removeItemCondition, isNull);
 
-          cart.addZeroQuantity = true;
-          cart.setDeliveredAt(DateTime.now(), shouldNotifyListeners: true);
           cart
+            ..addZeroQuantity = true
+            ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
             ..setNote('note', shouldNotifyListeners: true)
-            ..removeItemCondition = (item) => true;
-
-          cart.add(item);
-          cart.reset(shouldNotifyListeners: false);
+            ..removeItemCondition = (item) {
+              return true;
+            }
+            ..add(item)
+            ..reset(shouldNotifyListeners: false);
 
           verify(mockCallback.call).called(3);
           expect(cart.items, isEmpty);
@@ -929,12 +919,14 @@ void main() {
           when(item.totalPrice).thenReturn(10);
           when(item.notNullQty).thenReturn(1);
 
-          cart.addZeroQuantity = true;
-          cart.setDeliveredAt(DateTime.now());
-          cart.setNote('note');
-          cart.removeItemCondition = (item) => false;
-
-          cart.add(item);
+          cart
+            ..addZeroQuantity = true
+            ..setDeliveredAt(DateTime.now())
+            ..setNote('note')
+            ..removeItemCondition = (item) {
+              return false;
+            }
+            ..add(item);
 
           final clonedCart = cart.clone();
 
@@ -1129,7 +1121,7 @@ void main() {
           ),
         );
 
-      final currency = CartCurrency(code: 'EUR', rate: 1.2);
+      const currency = CartCurrency(code: 'EUR', rate: 1.2);
       cart.applyExchangeRate(currency, shouldNotifyListeners: false);
 
       expect(
@@ -1162,7 +1154,7 @@ void main() {
         ),
       );
 
-    final currency = CartCurrency(code: 'EUR', rate: 1.2);
+    const currency = CartCurrency(code: 'EUR', rate: 1.2);
     cart
       ..applyExchangeRate(currency, shouldNotifyListeners: false)
       ..removeExchangeRate(shouldNotifyListeners: false);
@@ -1214,8 +1206,8 @@ void main() {
         ),
       );
 
-    final currency1 = CartCurrency(code: 'EUR', rate: 1.2);
-    final currency2 = CartCurrency(code: 'JPY', rate: 0.8);
+    const currency1 = CartCurrency(code: 'EUR', rate: 1.2);
+    const currency2 = CartCurrency(code: 'JPY', rate: 0.8);
 
     cart
       ..applyExchangeRate(currency1) // 100 -> 120
@@ -1242,7 +1234,7 @@ void main() {
         ),
       );
 
-    final currency = CartCurrency(code: 'EUR', rate: 1.2);
+    const currency = CartCurrency(code: 'EUR', rate: 1.2);
 
     cart
       ..applyExchangeRate(currency) // 100 -> 120
@@ -1272,7 +1264,7 @@ void main() {
         ),
       );
 
-    final currency = CartCurrency(code: 'EUR', rate: 1.2);
+    const currency = CartCurrency(code: 'EUR', rate: 1.2);
 
     cart.applyExchangeRate(currency);
     expect(cart.cartCurrency, isNotNull);

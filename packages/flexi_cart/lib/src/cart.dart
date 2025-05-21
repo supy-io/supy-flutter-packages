@@ -48,7 +48,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   RemoveCallBack<T>? removeItemCondition;
 
   /// Internal storage for cart items.
-  Map<String, T> _items;
+  final Map<String, T> _items;
 
   /// Storage for item groups.
   Map<String, CartItemsGroup<T>> groups;
@@ -171,7 +171,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     for (final plugin in _plugins) {
       try {
         plugin.onChange(this);
-      } catch (e, s) {
+      } on Exception catch (e, s) {
         debugPrint('Plugin onChange error: $e\n$s');
       }
     }
@@ -304,7 +304,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     if (disposed) {
       _notifyOnErrorPlugins(
         CartDisposedException(
-            'Cannot remove items not in list after calling close'),
+          'Cannot remove items not in list after calling close',
+        ),
         StackTrace.current,
       );
     }
@@ -602,11 +603,12 @@ abstract class ICartPlugin<T extends ICartItem> {
 ///
 /// This class holds the exchange [rate] relative to a base currency
 /// and the [code] representing the currency (e.g., "USD", "EUR").
+@immutable
 class CartCurrency {
   /// Creates a [CartCurrency] instance with the given [rate] and [code].
   ///
   /// Both [rate] and [code] are required.
-  CartCurrency({required this.rate, required this.code});
+  const CartCurrency({required this.rate, required this.code});
 
   /// The exchange rate relative to a base currency.
   final num rate;
