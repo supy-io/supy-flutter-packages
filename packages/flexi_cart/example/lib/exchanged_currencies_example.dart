@@ -11,15 +11,12 @@ void main() {
         useMaterial3: true,
         colorSchemeSeed: Colors.amber,
         brightness: Brightness.light,
-
       ),
       home: ChangeNotifierProvider(
         create: (_) => FlexiCart(),
-        child: Builder(
-          builder: (context) {
-            return const FlexiCartProPage();
-          }
-        ),
+        child: Builder(builder: (context) {
+          return const FlexiCartProPage();
+        }),
       ),
     ),
   );
@@ -84,8 +81,8 @@ class _FlexiCartProPageState extends State<FlexiCartProPage>
     cart.add(CartItem(id: '3', name: '🎧 Headphones', price: 199.99));
 
     _currencyAnimController =
-    AnimationController(vsync: this, duration: const Duration(seconds: 1))
-      ..repeat(reverse: true);
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..repeat(reverse: true);
   }
 
   @override
@@ -104,7 +101,7 @@ class _FlexiCartProPageState extends State<FlexiCartProPage>
     final item = cart.itemsList.firstWhere((element) => element.id == id);
     final newQty = (item.quantity ?? 1) + delta;
     if (newQty < 1) return;
-    cart.add(item..quantity=newQty);
+    cart.add(item..quantity = newQty);
   }
 
   @override
@@ -120,7 +117,8 @@ class _FlexiCartProPageState extends State<FlexiCartProPage>
             const Text('FlexiCart Pro'),
             const SizedBox(width: 8),
             ScaleTransition(
-              scale: Tween(begin: 0.8, end: 1.2).animate(_currencyAnimController),
+              scale:
+                  Tween(begin: 0.8, end: 1.2).animate(_currencyAnimController),
               child: Text(flag, style: const TextStyle(fontSize: 24)),
             ),
           ],
@@ -163,7 +161,6 @@ class CurrencyDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<CartCurrency>(
-
       value: selected,
       isDense: true,
       isExpanded: true,
@@ -174,17 +171,17 @@ class CurrencyDropdown extends StatelessWidget {
       ),
       items: currencies
           .map((c) => DropdownMenuItem(
-        value: c,
-        child: Row(
-          children: [
-            Text(currencyFlags[c.code] ?? ''),
-            const SizedBox(width: 8),
-            Text('${c.code} — ${currencyNames[c.code] ?? ''}'),
-            const Spacer(),
-            Text(c.rate.toStringAsFixed(2)),
-          ],
-        ),
-      ))
+                value: c,
+                child: Row(
+                  children: [
+                    Text(currencyFlags[c.code] ?? ''),
+                    const SizedBox(width: 8),
+                    Text('${c.code} — ${currencyNames[c.code] ?? ''}'),
+                    const Spacer(),
+                    Text(c.rate.toStringAsFixed(2)),
+                  ],
+                ),
+              ))
           .toList(),
       onChanged: onChanged,
     );
@@ -215,21 +212,22 @@ class CartItemList extends StatelessWidget {
           final item = cart.itemsList[i];
           return Card(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Row(
                 children: [
-
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item.name, style: Theme.of(context).textTheme.titleMedium),
+                        Text(item.name,
+                            style: Theme.of(context).textTheme.titleMedium),
                         const SizedBox(height: 6),
-                        Text('Unit Price: ${formatCurrency(item.price, currency.code)}'),
+                        Text(
+                            'Unit Price: ${formatCurrency(item.price, currency.code)}'),
                       ],
                     ),
                   ),
@@ -239,7 +237,8 @@ class CartItemList extends StatelessWidget {
                         onPressed: () => onQuantityChange(item.id, -1),
                         icon: const Icon(Icons.remove_circle_outline),
                       ),
-                      Text('${item.quantity?.toInt() ?? 1}', style: const TextStyle(fontSize: 18)),
+                      Text('${item.quantity?.toInt() ?? 1}',
+                          style: const TextStyle(fontSize: 18)),
                       IconButton(
                         onPressed: () => onQuantityChange(item.id, 1),
                         icon: const Icon(Icons.add_circle_outline),
@@ -250,7 +249,8 @@ class CartItemList extends StatelessWidget {
                   Text(
                     formatCurrency(
                         (item.price * (item.quantity ?? 1)), currency.code),
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ],
               ),
@@ -274,7 +274,7 @@ class CartSummary extends StatelessWidget {
     final cart = context.watch<FlexiCart>();
     final subtotal = cart.itemsList.fold<double>(
       0,
-          (sum, item) => sum + (item.price * (item.quantity ?? 1)),
+      (sum, item) => sum + (item.price * (item.quantity ?? 1)),
     );
     final tax = subtotal * taxRate;
     final total = subtotal + tax;
@@ -303,15 +303,22 @@ class CartSummary extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal, fontSize: fontSize)),
-        Text(value, style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal, fontSize: fontSize)),
+        Text(label,
+            style: TextStyle(
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                fontSize: fontSize)),
+        Text(value,
+            style: TextStyle(
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                fontSize: fontSize)),
       ],
     );
   }
 }
 
 String formatCurrency(double amount, String code) {
-  return NumberFormat.currency(name: code, symbol: getCurrencySymbol(code)).format(amount);
+  return NumberFormat.currency(name: code, symbol: getCurrencySymbol(code))
+      .format(amount);
 }
 
 String getCurrencySymbol(String code) {

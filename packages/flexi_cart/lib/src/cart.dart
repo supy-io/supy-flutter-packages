@@ -303,7 +303,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        CartDisposedException('Cannot remove items not in list after calling close'),
+        CartDisposedException(
+            'Cannot remove items not in list after calling close'),
         StackTrace.current,
       );
     }
