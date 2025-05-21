@@ -1,7 +1,15 @@
 # FlexiCart 🛒
 
-[![Pub Version](https://img.shields.io/pub/v/flexi_cart)](https://pub.dev/packages/flexi_cart)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
+[![pub package][pub_badge]][pub_badge_link] [![style: very good analysis][vgv_badge]][vgv_badge_link] [![License: MIT][license_badge]][license_badge_link]
+
+[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[license_badge_link]: https://opensource.org/licenses/MIT
+[vgv_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
+[vgv_badge_link]: https://pub.dev/packages/very_good_analysis
+[pub_badge]: https://img.shields.io/pub/v/flexi_cart
+[pub_badge_link]: https://pub.dartlang.org/packages/flexi_cart
+
 
 A flexible, feature-rich cart management system for Flutter applications. FlexiCart provides reactive cart management with support for item grouping, quantity control, notes, delivery tracking, and custom business rules.
 
