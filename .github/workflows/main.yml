@@ -43,6 +43,8 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: packages/flexi_cart/coverage/lcov.info
+        env:
+            min_coverage: 80
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
