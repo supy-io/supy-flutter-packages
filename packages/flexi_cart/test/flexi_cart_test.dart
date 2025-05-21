@@ -1039,8 +1039,8 @@ void main() {
     cart.lock();
     expect(cart.isLocked, isTrue);
 
-    expect(() => cart.add(item), throwsStateError);
-    expect(() => cart.delete(item), throwsStateError);
+    expect(() => cart.add(item), throwsException);
+    expect(() => cart.delete(item), throwsException);
 
     cart.unlock();
     expect(cart.isLocked, isFalse);
@@ -1252,5 +1252,33 @@ void main() {
       ..applyExchangeRate(currency); // 120 -> 120
 
     expect(cart.items['item1']?.price, closeTo(120.0, 0.001));
+  });
+  test('Reset Currency with reset cart', () {
+    final cart = FlexiCart<MockItem>()
+      ..add(
+        MockItem(
+          id: 'item1',
+          price: 100,
+          name: 'Apple',
+          groupId: 'A',
+        ),
+      )
+      ..add(
+        MockItem(
+          id: 'item2',
+          price: 200,
+          name: 'Orange',
+          groupId: 'A',
+        ),
+      );
+
+    final currency = CartCurrency(code: 'EUR', rate: 1.2);
+
+    cart.applyExchangeRate(currency);
+    expect(cart.cartCurrency, isNotNull);
+    expect(cart.items['item1']?.price, closeTo(120.0, 0.001));
+    cart.reset();
+    expect(cart.items, isEmpty);
+    expect(cart.cartCurrency, isNull);
   });
 }

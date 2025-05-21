@@ -96,6 +96,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   bool get isExpired =>
       _expiresAt != null && DateTime.now().isAfter(_expiresAt!);
 
+  /// Returns the CartCurrency.
+  CartCurrency? get cartCurrency => _cartCurrency;
+
   /// Returns the internal log entries.
   List<String> get logs => List.unmodifiable(_logs);
 
@@ -149,7 +152,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Throws an exception if the cart is locked.
   void _checkLock() {
     if (_isLocked) {
-      final error = StateError('Cart is locked.');
+      final error = CartLockedException();
       _notifyOnErrorPlugins(error, StackTrace.current);
       throw error;
     }
@@ -166,7 +169,11 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Notifies all registered plugins about a cart change.
   void _notifyOnChangedPlugins() {
     for (final plugin in _plugins) {
-      plugin.onChange(this);
+      try {
+        plugin.onChange(this);
+      } catch (e, s) {
+        debugPrint('Plugin onChange error: $e\n$s');
+      }
     }
   }
 
@@ -245,7 +252,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot add new item after calling close'),
+        CartDisposedException('Cannot add new item after calling close'),
         StackTrace.current,
       );
     }
@@ -272,7 +279,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot add new items after calling close'),
+        CartDisposedException('Cannot add new items after calling close'),
         StackTrace.current,
       );
     }
@@ -296,7 +303,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot remove items not in list after calling close'),
+        CartDisposedException('Cannot remove items not in list after calling close'),
         StackTrace.current,
       );
     }
@@ -317,7 +324,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void delete(T item, {bool shouldNotifyListeners = true}) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot delete item after calling close'),
+        CartDisposedException('Cannot delete item after calling close'),
         StackTrace.current,
       );
     }
@@ -335,7 +342,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void resetItems({bool shouldNotifyListeners = true}) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot reset items after calling close'),
+        CartDisposedException('Cannot reset items after calling close'),
         StackTrace.current,
       );
     }
@@ -354,7 +361,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void reset({bool shouldNotifyListeners = true}) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot reset cart after calling close'),
+        CartDisposedException('Cannot reset cart after calling close'),
         StackTrace.current,
       );
     }
@@ -369,6 +376,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       _metadata.clear();
       _isLocked = false;
       _logs.clear();
+      _cartCurrency = null;
       removeItemCondition = null;
 
       emit(this);
@@ -383,7 +391,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void clearItemsGroup(String groupId, {bool shouldNotifyListeners = true}) {
     if (disposed) {
       _notifyOnErrorPlugins(
-        StateError('Cannot clear items group after calling close'),
+        CartDisposedException('Cannot clear items group after calling close'),
         StackTrace.current,
       );
     }
@@ -423,6 +431,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
       .._metadata.addAll(_metadata)
+      .._cartCurrency = _cartCurrency
       .._deliveredAt = _deliveredAt;
   }
 

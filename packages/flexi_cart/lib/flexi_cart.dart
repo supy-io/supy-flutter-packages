@@ -6,3 +6,4 @@ export 'src/cart_item.dart';
 export 'src/cart_items_group.dart';
 export 'src/cart_theme.dart';
 export 'src/mixins.dart';
+export 'src/cart_exception.dart';
