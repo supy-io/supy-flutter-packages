@@ -22,6 +22,7 @@ A flexible, feature-rich cart management system for Flutter applications. FlexiC
 - **Stream-based** state emission
 - **Plugin architecture** for extending behavior
 - **Internal logging** for debugging
+- **Exchange Rate Support**  for converting item prices
 
 ## Installation 📦
 
