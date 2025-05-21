@@ -25,20 +25,24 @@ jobs:
 
       - name: Install Dependencies
         run: flutter packages get
+        working-directory: packages/flexi_cart
 
       - name: Format
         run: dart format --set-exit-if-changed .
+        working-directory: packages/flexi_cart
 
       - name: Analyze
         run: flutter analyze lib test example
+        working-directory: packages/flexi_cart
 
       - name: Run tests
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+        working-directory: packages/flexi_cart
 
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: coverage/lcov.info
+          path: packages/flexi_cart/coverage/lcov.info
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
