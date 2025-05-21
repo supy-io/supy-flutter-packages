@@ -7,7 +7,7 @@
 [license_badge_link]: https://opensource.org/licenses/MIT
 [vgv_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
 [vgv_badge_link]: https://pub.dev/packages/very_good_analysis
-[pub_badge]: https://img.shields.io/badge/pub-1.0.1-blue
+[pub_badge]: https://img.shields.io/pub/v/flexi_cart
 [pub_badge_link]: https://pub.dartlang.org/packages/flexi_cart
 
 
