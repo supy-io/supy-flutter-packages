@@ -16,12 +16,13 @@ dependencies:
   json_annotation: ^4.9.0
 
 dev_dependencies:
-  lints: ^5.1.1
-  test: ^1.26.1
-  mockito: ^5.4.6
   build_runner: ^2.4.15
   json_serializable: ^6.9.5
+  lints: ^5.1.1
+  mockito: ^5.4.6
+  test: ^1.26.1
   very_good_analysis: ^7.0.0
+
 
 
 example: example/main.dart

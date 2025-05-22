@@ -1,7 +1,7 @@
+import 'dart:developer';
+
 import 'package:filterator/filterator.dart';
 
-import 'odata_converter_example.dart';
-import 'reset_api_converter_example.dart';
 import 'supy_converter_example.dart';
 
 void main() {
@@ -12,7 +12,8 @@ void main() {
         // ✅ SHORT STYLE: Using the helper function `where(field, op, value)`
         where('email', 'contains', '@example.com'),
 
-        // ✅ SHORT STYLE: Multiple values (e.g., for "in" or "not in" operations)
+        // ✅ SHORT STYLE: Multiple values
+        // (e.g., for "in" or "not in" operations)
         wheres('status', 'in', ['active', 'pending']),
 
         // ✅ VERBOSE STYLE: Directly constructing the filter object
@@ -52,13 +53,14 @@ void main() {
       offset: 0,
     ), // Return 20 items starting from index 0
   );
-  final supyConverter = SupyConverter(query);
-  final oDataConverter = ODataConverter(query);
-  final restApiConverter = ResetApiConverter(query);
-
-  print(supyConverter.toRequestBody());
-  print(supyConverter.toQueryParameters());
-  print(oDataConverter.toRequestBody());
-  print(oDataConverter.toQueryParameters());
-  print(restApiConverter.toQueryParameters());
+  log(SupyConverter(query).toQueryParameters().toString());
+  // final supyConverter = SupyConverter(query);
+  // final oDataConverter = ODataConverter(query);
+  // final restApiConverter = ResetApiConverter(query);
+  //
+  // print(supyConverter.toRequestBody());
+  // print(supyConverter.toQueryParameters());
+  // print(oDataConverter.toRequestBody());
+  // print(oDataConverter.toQueryParameters());
+  // print(restApiConverter.toQueryParameters());
 }

@@ -1,4 +1,3 @@
-import 'package:filterator/src/core/interfaces/interfaces.dart';
 import 'package:filterator/src/core/query_filter_group.dart';
 import 'package:filterator/src/core/query_operation.dart';
 import 'package:filterator/src/core/query_ordering.dart';
@@ -8,10 +7,9 @@ import 'package:filterator/src/core/query_selections.dart';
 /// Interface defining the structure of an API query.
 ///
 /// This interface outlines the components of an API query, including
-/// filtering, ordering, and paging details. It provides methods to clone
-/// the query, create a modified copy, and convert the query to a map.
-abstract interface class IApiQuery
-    implements ICloneable<IApiQuery>, IMap<dynamic> {
+/// filtering, ordering, and paging details. It provides methods to create a
+/// modified copy, and convert the query to a map.
+abstract interface class IApiQuery {
   /// Gets the filtering details of the API query.
   IApiQueryFilteringGroup? get filtering;
 
@@ -37,6 +35,14 @@ abstract interface class IApiQuery
   });
 }
 
+/// Creates a clone of an [IApiQuery] instance.
+///
+/// This is a top-level function replacing the `clone()` method.
+/// Implement cloning logic here if needed.
+ApiQuery cloneApiQuery(IApiQuery query) {
+  return ApiQuery._(query: query);
+}
+
 /// Class representing a complete API query.
 ///
 /// This class implements the [IApiQuery] interface and represents a complete
@@ -49,6 +55,14 @@ class ApiQuery implements IApiQuery {
   /// for the API query. It creates an immutable instance representing a
   /// complete API query.
   const ApiQuery({this.filtering, this.ordering, this.paging, this.selection});
+
+  /// Creates an API query instance from another query instance.
+  ///
+  /// This static method is used to create an [ApiQuery] instance from an
+  /// existing [IApiQuery] instance.
+  factory ApiQuery.from(IApiQuery query) {
+    return ApiQuery._(query: query);
+  }
 
   /// Creates an API query instance with default values.
   ///
@@ -85,14 +99,6 @@ class ApiQuery implements IApiQuery {
     return ApiQuery._(query: query);
   }
 
-  /// Creates an API query instance from another query instance.
-  ///
-  /// This static method is used to create an [ApiQuery] instance from an
-  /// existing [IApiQuery] instance.
-  static ApiQuery from(IApiQuery query) {
-    return ApiQuery._(query: query);
-  }
-
   /// Creates a modified copy of the API query with specified changes.
   ///
   /// This method returns a new instance of [ApiQuery] with the specified
@@ -112,20 +118,10 @@ class ApiQuery implements IApiQuery {
     );
   }
 
-  /// Creates a clone of the API query instance.
-  ///
-  /// This method returns a clone of the original [ApiQuery] instance,
-  /// producing an identical but separate instance.
-  @override
-  ApiQuery clone() {
-    return ApiQuery._(query: this);
-  }
-
   /// Converts the API query instance to a map representation.
   ///
   /// This method converts the API query details into a map that can be easily
   /// serialized to JSON or used in HTTP requests.
-  @override
   Map<String, dynamic> toMap() {
     final filteringMap = filtering?.toMap();
     final pagingMap = paging?.toMap();

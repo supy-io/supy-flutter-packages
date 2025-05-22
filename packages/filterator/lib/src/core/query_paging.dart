@@ -1,11 +1,8 @@
-import 'package:filterator/src/core/interfaces/interfaces.dart';
-
 /// Interface defining the paging details for an API query.
 ///
 /// This interface outlines the structure of paging details in an API query,
 /// specifying the offset and limit for fetching data.
-abstract interface class IApiQueryPaging
-    implements ICloneable<ApiQueryPaging>, IMap<dynamic> {
+abstract interface class IApiQueryPaging {
   /// The offset parameter for the API query,
   /// indicating the starting index of the results.
   int? get offset;
@@ -20,15 +17,17 @@ abstract interface class IApiQueryPaging
   /// Creates a copy of the current paging
   /// configuration with optional modifications.
   ///
-  /// The [offset] and [limit] parameters allow modifying
-  /// the offset and limit values while keeping other values intact.
-  IApiQueryPaging copyWith({int? offset, int? limit});
+  /// The [offset], [limit], and [cursor] parameters allow modifying
+  /// these values while keeping others intact.
+  IApiQueryPaging copyWith({int? offset, int? limit, String? cursor});
+
+  /// Converts the selection to a map format.
+  Map<String, dynamic> toMap();
 }
 
-/// Class representing paging details in an API query.
+/// Concrete implementation of [IApiQueryPaging].
 ///
-/// An instance of this class defines the paging details in an API query,
-/// specifying the offset and limit parameters for result pagination.
+/// Defines the paging details with offset, limit, and optional cursor.
 class ApiQueryPaging implements IApiQueryPaging {
   /// Creates an [ApiQueryPaging] instance with the specified offset and limit.
   const ApiQueryPaging({
@@ -44,6 +43,7 @@ class ApiQueryPaging implements IApiQueryPaging {
   factory ApiQueryPaging.noLimit() =>
       const ApiQueryPaging(offset: kNoOffset, limit: kNoLimit);
 
+  /// Returns a paging configuration using cursor-based pagination.
   const ApiQueryPaging.cursorBased({required this.limit, required this.cursor})
     : offset = null;
 
@@ -63,8 +63,8 @@ class ApiQueryPaging implements IApiQueryPaging {
   /// Creates a copy of the current [ApiQueryPaging]
   /// instance with optional modifications.
   ///
-  /// The [offset] and [limit] parameters allow modifying the offset and limit
-  /// values while keeping other values intact.
+  /// The [offset], [limit], and [cursor] parameters allow modifying these
+  /// values while keeping others intact.
   @override
   IApiQueryPaging copyWith({int? offset, int? limit, String? cursor}) {
     return ApiQueryPaging(
@@ -73,11 +73,6 @@ class ApiQueryPaging implements IApiQueryPaging {
       cursor: cursor ?? this.cursor,
     );
   }
-
-  /// Creates a clone of the current [ApiQueryPaging] instance.
-  @override
-  ApiQueryPaging clone() =>
-      ApiQueryPaging(offset: offset, limit: limit, cursor: cursor);
 
   /// Converts the paging configuration to a JSON-like map.
   @override
@@ -88,4 +83,15 @@ class ApiQueryPaging implements IApiQueryPaging {
       'limit': limit,
     };
   }
+}
+
+/// Clones the given [IApiQueryPaging] instance.
+///
+/// Returns a new [ApiQueryPaging] with identical values.
+ApiQueryPaging cloneApiQueryPaging(IApiQueryPaging paging) {
+  return ApiQueryPaging(
+    offset: paging.offset,
+    limit: paging.limit,
+    cursor: paging.cursor,
+  );
 }

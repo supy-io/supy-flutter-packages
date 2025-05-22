@@ -1,15 +1,12 @@
-import 'package:filterator/src/core/interfaces/interfaces.dart';
-
 /// Interface defining the selection behavior in an API query.
 ///
 /// This interface allows specifying which fields should be included or excluded
-/// when querying data from an API. It is typically used to optimize data retrieval
+/// when querying data from an API. It is typically used
+/// to optimize data retrieval
 /// by selecting only the necessary fields.
 ///
-/// It extends [ICloneable] to allow cloning, and [IMap] to allow conversion
-/// to a map (e.g., for serialization).
-abstract interface class IApiQuerySelection
-    implements ICloneable<ApiQuerySelection>, IMap<dynamic> {
+/// It extends [Map] to allow conversion to a map (e.g., for serialization).
+abstract interface class IApiQuerySelection {
   /// List of field names to exclude from the result.
   List<String> get excludes;
 
@@ -19,16 +16,30 @@ abstract interface class IApiQuerySelection
   /// Returns a copy of this selection instance with optional new values
   /// for [excludes] and [includes].
   IApiQuerySelection copyWith({List<String>? excludes, List<String>? includes});
+
+  /// Converts the selection to a map format.
+  Map<String, dynamic> toMap();
 }
+
+/// Creates a clone of an [IApiQuerySelection] instance.
+///
+/// This is a top-level function replacing the `clone()` method.
+ApiQuerySelection cloneApiQuerySelection(IApiQuerySelection selection) =>
+    ApiQuerySelection(
+      excludes: selection.excludes,
+      includes: selection.includes,
+    );
 
 /// Concrete implementation of [IApiQuerySelection].
 ///
 /// Allows inclusion or exclusion of specific fields in an API query result.
-/// Only one of `includes` or `excludes` should be used at a time to avoid ambiguity.
+/// Only one of `includes` or `excludes`
+/// should be used at a time to avoid ambiguity.
 ///
-/// This class is immutable and supports cloning and conversion to a map.
+/// This class is immutable and supports conversion to a map.
 class ApiQuerySelection implements IApiQuerySelection {
-  /// Creates a new [ApiQuerySelection] instance with optional includes or excludes.
+  /// Creates a new [ApiQuerySelection] instance with optional includes
+  /// or excludes.
   ///
   /// Either [includes] or [excludes] can be specified. If both are provided,
   /// asserts will enforce that one must be empty.
@@ -60,16 +71,10 @@ class ApiQuerySelection implements IApiQuerySelection {
     );
   }
 
-  /// Creates a deep copy of this selection instance.
-  ///
-  /// This method is useful when a separate but identical copy is required.
-  @override
-  ApiQuerySelection clone() =>
-      ApiQuerySelection(excludes: excludes, includes: includes);
-
   /// Converts the selection to a [Map] format suitable for API serialization.
   ///
-  /// The resulting map will contain either an `exclude` or `include` key, but not both.
+  /// The resulting map will contain either
+  /// an `exclude` or `include` key, but not both.
   ///
   /// Assertions:
   /// - If `excludes` is not empty, `includes` must be empty, and vice versa.

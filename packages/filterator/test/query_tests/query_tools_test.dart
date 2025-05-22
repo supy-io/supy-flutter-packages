@@ -21,7 +21,11 @@ void main() {
     );
 
     final expectedJson = {
-      'filtering': {'condition': 'and', 'filters': [], 'groups': []},
+      'filtering': {
+        'condition': 'and',
+        'filters': <dynamic>[],
+        'groups': <dynamic>[],
+      },
     };
 
     expect(emptyGroup.toMap(), equals(expectedJson));
@@ -140,7 +144,7 @@ void main() {
                   {'field': 'G2', 'operation': 'like', 'value': 'G2'},
                   {'field': 'G2', 'operation': 'like', 'value': 'G2'},
                 ],
-                'groups': [],
+                'groups': <dynamic>[],
               },
             ],
           },
@@ -228,14 +232,13 @@ void main() {
                   'value': 'nestedValue2',
                 },
               ],
-              'groups': [],
+              'groups': <dynamic>[],
             },
           ],
         },
       };
 
       expect(nestedGroup.toMap(), equals(expectedJson));
-      //  expect(SupyConverter(ApiQuery(filtering: nestedGroup)).toQueryParameters(), equals(expectedJson));
     },
   );
 
@@ -259,7 +262,7 @@ void main() {
         'filters': [
           {'field': 'field1', 'operation': 'equals', 'value': 'value1'},
         ],
-        'groups': [],
+        'groups': <dynamic>[],
       },
     };
 
@@ -290,10 +293,10 @@ void main() {
           'filters': [
             {'field': 'field1', 'operation': 'equals', 'value': 'value1'},
           ],
-          'groups': [],
+          'groups': <dynamic>[],
         },
         'paging': {'offset': 0, 'limit': -1},
-        'ordering': [],
+        'ordering': <dynamic>[],
       };
 
       expect(queryWithEmptyValues.toMap(), equals(expectedJson));

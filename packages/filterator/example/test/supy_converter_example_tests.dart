@@ -186,7 +186,7 @@ void main() {
       final query = ApiQuery(filtering: and(filters: [where('x', 'eq', 1)]));
       final converter = SupyConverter(query);
       final map = converter.toQueryParameters(encode: false);
-      expect(map['filtering'], isA<Map>());
+      expect(map['filtering'], isA<Map<dynamic, dynamic>>());
     });
 
     test('Multiple values: filter with nulls', () {
@@ -558,6 +558,6 @@ void main() {
   test('Empty ApiQuery produces a map', () {
     const query = ApiQuery();
     final result = query.toSupyQueryParameters();
-    expect(result, isA<Map>());
+    expect(result, isA<Map<dynamic, dynamic>>());
   });
 }

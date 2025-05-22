@@ -1,5 +1,3 @@
-import 'package:filterator/src/core/interfaces/interfaces.dart';
-
 /// Interface defining metadata for a query result.
 ///
 /// This interface outlines the structure of metadata associated
@@ -7,12 +5,15 @@ import 'package:filterator/src/core/interfaces/interfaces.dart';
 /// including the count and total number of items.
 /// It provides a method to convert
 /// the metadata to a map for easy serialization.
-abstract interface class IApiQueryMetadata implements IMap<dynamic> {
+abstract interface class IApiQueryMetadata {
   /// The count of items in the query result.
   int get count;
 
   /// The total number of items available.
   int get total;
+
+  /// Converts the selection to a map format.
+  Map<String, dynamic> toMap();
 }
 
 /// Class representing metadata for a query result.

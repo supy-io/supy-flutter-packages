@@ -1,13 +1,15 @@
 import 'package:filterator/filterator.dart';
 
-/// A custom API query converter that transforms a [Filterator] query into a
+/// A custom API query converter that transforms a  query into a
 /// map of query parameters suitable for REST API requests.
 ///
-/// This converter processes filtering, searching, ordering, selection, and paging
+/// This converter processes filtering, searching,
+/// ordering, selection, and paging
 /// criteria defined in the [query] object and converts them into a structured
 /// query parameters map.
 ///
-/// - Search filters with field 'q' and `contains` operation are handled specially.
+/// - Search filters with field 'q' and `contains`
+/// operation are handled specially.
 /// - Other filters are converted with operator suffixes, e.g., `field__eq`.
 /// - Ordering fields are concatenated as `sort=field:asc,otherField:desc`.
 /// - Selected fields are concatenated as `fields=field1,field2`.
@@ -43,7 +45,8 @@ class ResetApiConverter extends ApiStandardConverter {
     return params;
   }
 
-  /// Processes search filters where the field is 'q' and operation is `contains`.
+  /// Processes search filters where the
+  /// field is 'q' and operation is `contains`.
   /// Adds the value as 'q' parameter.
   void _processSearch() {
     final searchFilters = query.filtering?.filters.where(
@@ -89,57 +92,41 @@ class ResetApiConverter extends ApiStandardConverter {
     final selection = query.selection;
     if (selection == null || selection.includes.isEmpty) return;
 
-    params['fields'] = selection.includes!.join(',');
+    params['fields'] = selection.includes.join(',');
   }
 
-  /// Processes paging information and adds 'limit' and 'offset' parameters if present.
+  /// Processes paging information and adds
+  /// 'limit' and 'offset' parameters if present.
   void _processPaging() {
     final paging = query.paging;
     if (paging == null) return;
 
-    if (paging.limit != null) {
-      params['limit'] = paging.limit;
-    }
+    params['limit'] = paging.limit;
     if (paging.offset != null) {
       params['offset'] = paging.offset;
     }
   }
 
-  /// Maps a [QueryOperation] enum value to its corresponding API operator string.
+  /// Maps a [QueryOperation] enum value
+  /// to its corresponding API operator string.
   ///
   /// Throws [ArgumentError] for unsupported operators.
-  String _operatorToString(QueryOperation op) {
-    switch (op) {
-      case QueryOperation.equals:
-        return 'eq';
-      case QueryOperation.notEquals:
-        return 'ne';
-      case QueryOperation.greaterThan:
-        return 'gt';
-      case QueryOperation.greaterOrEqual:
-        return 'gte';
-      case QueryOperation.lessThan:
-        return 'lt';
-      case QueryOperation.lessOrEqual:
-        return 'lte';
-      case QueryOperation.contains:
-        return 'contains';
-      case QueryOperation.startsWith:
-        return 'startswith';
-      case QueryOperation.endsWith:
-        return 'endswith';
-      case QueryOperation.inList:
-        return 'in';
-      case QueryOperation.notIn:
-        return 'nin';
-      case QueryOperation.isNull:
-        return 'isnull';
-      case QueryOperation.isNotNull:
-        return 'notnull';
-      default:
-        throw ArgumentError('Unsupported operator $op');
-    }
-  }
+  String _operatorToString(QueryOperation op) => switch (op) {
+    QueryOperation.equals => 'eq',
+    QueryOperation.notEquals => 'ne',
+    QueryOperation.greaterThan => 'gt',
+    QueryOperation.greaterOrEqual => 'gte',
+    QueryOperation.lessThan => 'lt',
+    QueryOperation.lessOrEqual => 'lte',
+    QueryOperation.contains => 'contains',
+    QueryOperation.startsWith => 'startswith',
+    QueryOperation.endsWith => 'endswith',
+    QueryOperation.inList => 'in',
+    QueryOperation.notIn => 'nin',
+    QueryOperation.isNull => 'isnull',
+    QueryOperation.isNotNull => 'notnull',
+    _ => throw ArgumentError('Unsupported operator $op'),
+  };
 
   /// Converts the ordering direction enum to its string representation.
   /// Returns 'asc' for ascending and 'desc' for descending order.

@@ -4,37 +4,43 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="chore: bump version to 0.1.2-beta.1 and remove meta dependency&#10;&#10;This commit updates the package version to `0.1.2-beta.1` in `pubspec.yaml` and `README.md`.&#10;It also removes the `meta` package from the dependencies as it is no longer required.">
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/CHANGELOG.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/analysis_options.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/example/flutter_upkeep_example.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/flutter_upkeep.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/data.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/http_upkeep_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/local_upkeep_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/multi_source_upkeep_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/data/upkeep_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/flutter_upkeep_client.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/maintenance_config.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/models.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/update_config.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/models/upkeep_config.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/strategies/maintenance_check_strategy.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/strategies/strategies.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/strategies/update_check_strategy.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/lib/src/upkeep_context.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/pubspec.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../flutter_upkeep/test/flutter_upkeep_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../flutter_upkeep/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flexi_cart/build/test_cache/build/cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/build/test_cache/build/cache.dill.track.dill" afterDir="false" />
+    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="fix: linters issues">
+      <change afterPath="$PROJECT_DIR$/../../.github/workflows/filterator.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/native_assets/macos/native_assets.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/test_cache/build/cache.dill.track.dill" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/AssetManifest.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/AssetManifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/FontManifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/NOTICES.Z" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/NativeAssetsManifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/shaders/ink_sparkle.frag" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/coverage/lcov.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_options.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/filterator_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/filterator_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/odata_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/odata_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/reset_api_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/reset_api_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/supy_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/supy_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/test/odata_converter_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/odata_converter_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/converter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/field_types.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/field_types.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/interfaces/i_cloneable.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/interfaces/i_cloneable.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/interfaces/i_map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/interfaces/i_map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_metadata.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_metadata.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_operation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_operation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_paging.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_paging.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_selections.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_selections.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,67 +88,67 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Dart Command Line App.filterator_example.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Command Line App.odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Command Line App.supy_converter_example_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQuery toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQuery toMap should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQuery with null values should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQuery with null values should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryFiltering toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryFiltering with invalid operation should throw an exception in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryFilteringGroup toMap should handle empty group in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryFilteringGroup with nested groups should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryOrdering toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryPaging toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryResponse empty should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Debug&quot;,
-    &quot;Dart Test.ApiQueryResponse with data should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.ApiQueryResponse with data should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Complex ordering + paging + selection in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Empty filtering and selection only in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Empty selection should not include selection key in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Filter with boolean value in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Filter with empty string should serialize correctly in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Filter with int and double values in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Filtering with 3-level nested group hierarchy in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Nested AND inside OR in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Null filter value with other filters in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Ordering with invalid direction should handle gracefully in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Request body includes all sections in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Request body returns valid JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Selection with fields in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Selection with include and exclude together in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in api_query_operators_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in composite_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in fiterator_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in paging_operators_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in query_operators_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.Tests in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.formatValue handles all supported types in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.gracefully handles unsupported operation in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.throws on unsupported operation in ODataConverter in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Dart Test.throws on unsupported operation in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/abdalqaderalnajjar/Projects/supy-projects/supy-flutter-packages./packages/filterator&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;flutter.settings&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Dart Command Line App.filterator_example.dart.executor": "Run",
+    "Dart Command Line App.odata_converter_test.dart.executor": "Run",
+    "Dart Command Line App.supy_converter_example_tests.dart.executor": "Run",
+    "Dart Test.ApiQuery toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQuery toMap should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQuery with null values should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQuery with null values should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQueryFiltering toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryFiltering with invalid operation should throw an exception in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.ApiQueryFilteringGroup toMap should handle empty group in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryFilteringGroup with nested groups should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryOrdering toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryPaging toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryResponse empty should produce correct JSON in api_query_tools_test.dart.executor": "Debug",
+    "Dart Test.ApiQueryResponse with data should produce correct JSON in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.ApiQueryResponse with data should produce correct JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Complex ordering + paging + selection in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Empty filtering and selection only in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Empty selection should not include selection key in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filter with boolean value in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filter with empty string should serialize correctly in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filter with int and double values in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Filtering with 3-level nested group hierarchy in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Nested AND inside OR in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Null filter value with other filters in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Ordering with invalid direction should handle gracefully in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Request body includes all sections in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Request body returns valid JSON in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Selection with fields in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Selection with include and exclude together in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.Tests in api_query_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in api_query_tools_test.dart.executor": "Run",
+    "Dart Test.Tests in composite_converter_test.dart.executor": "Run",
+    "Dart Test.Tests in fiterator_test.dart.executor": "Run",
+    "Dart Test.Tests in odata_converter_test.dart.executor": "Run",
+    "Dart Test.Tests in paging_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in query_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in supy_converter_tests.dart.executor": "Run",
+    "Dart Test.formatValue handles all supported types in odata_converter_test.dart.executor": "Run",
+    "Dart Test.gracefully handles unsupported operation in odata_converter_test.dart.executor": "Run",
+    "Dart Test.throws on unsupported operation in ODataConverter in odata_converter_test.dart.executor": "Run",
+    "Dart Test.throws on unsupported operation in odata_converter_test.dart.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/abdalqaderalnajjar/Projects/supy-projects/supy-flutter-packages./packages/filterator",
+    "settings.editor.selected.configurable": "flutter.settings",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -276,7 +282,8 @@
     <MESSAGE value="chore: Update CHANGELOG for initial beta release&#10;&#10;This commit updates the CHANGELOG.md file to reflect the initial beta release version as `0.1.0-beta.1`." />
     <MESSAGE value="docs: update README and pubspec for beta release&#10;&#10;This commit updates the `README.md` and `pubspec.yaml` files for the initial beta release (`0.1.0-beta.1`).&#10;&#10;Changes include:&#10;- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.&#10;- Removing extra newlines and whitespace from code examples in `README.md`.&#10;- Updating the package description in `pubspec.yaml` for better clarity.&#10;- Minor changes in `.idea/workspace.xml` reflecting the commit history." />
     <MESSAGE value="chore: bump version to 0.1.2-beta.1 and remove meta dependency&#10;&#10;This commit updates the package version to `0.1.2-beta.1` in `pubspec.yaml` and `README.md`.&#10;It also removes the `meta` package from the dependencies as it is no longer required." />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: bump version to 0.1.2-beta.1 and remove meta dependency&#10;&#10;This commit updates the package version to `0.1.2-beta.1` in `pubspec.yaml` and `README.md`.&#10;It also removes the `meta` package from the dependencies as it is no longer required." />
+    <MESSAGE value="fix: linters issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: linters issues" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

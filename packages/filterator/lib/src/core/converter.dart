@@ -1,8 +1,11 @@
 import 'package:filterator/src/core/query.dart';
 
+/// A base class for converting API queries to standard-specific formats.
 abstract class ApiStandardConverter {
+  /// Creates an instance of [ApiStandardConverter] with the given [query].
   const ApiStandardConverter(this.query);
 
+  ///
   final IApiQuery query;
 
   /// Convert to standard-specific parameters

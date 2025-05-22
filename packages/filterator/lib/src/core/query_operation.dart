@@ -10,7 +10,8 @@ enum FilterConditionType {
   /// Logical OR condition: at least one contained filter or group must match.
   or,
 
-  /// Logical NOT condition: inverts the result of the contained filters or groups.
+  /// Logical NOT condition: inverts the result
+  /// of the contained filters or groups.
   not,
 }
 
@@ -124,7 +125,8 @@ enum QueryOperation {
 
 /// Extension on [String] to convert a string to a [QueryOperation].
 extension QueryOperationStringExtension on String {
-  /// Converts the string representation of an operation into a [QueryOperation] enum.
+  /// Converts the string representation of an operation into
+  /// a [QueryOperation] enum.
   ///
   /// Supports aliases like `'eq'` for `equals`, `'gt'` for `greaterThan`, etc.
   ///
@@ -154,7 +156,8 @@ extension QueryOperationStringExtension on String {
   }
 }
 
-/// Extension on [QueryOperation] that provides a shorthand string representation
+/// Extension on [QueryOperation] that provides a shorthand
+/// string representation
 /// of each operation, typically used in query serialization.
 ///
 /// This is useful for converting enum values to compact query parameter strings

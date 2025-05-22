@@ -1,0 +1,54 @@
+name: fliterator
+
+concurrency:
+  group: $-$
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/fliterator/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/fliterator/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2.19.0
+
+      - name: Install Dependencies
+        run: flutter packages get
+        working-directory: packages/flexi_cart
+
+      - name: Format
+        run: dart format --set-exit-if-changed .
+        working-directory: packages/fliterator
+
+      - name: Analyze
+        run: flutter analyze lib test example
+        working-directory: packages/fliterator
+
+      - name: Run tests
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+        working-directory: packages/fliterator
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: packages/fliterator/coverage/lcov.info
+          min_coverage: 85
+          # exclude: '**/*_observer.dart **/change.dart'
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/fliterator/coverage/lcov.info
+          flags: fliterator

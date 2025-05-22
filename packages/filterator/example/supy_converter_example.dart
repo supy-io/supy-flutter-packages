@@ -5,7 +5,6 @@ import 'package:filterator/filterator.dart';
 /// A custom API converter for the Supy platform.
 ///
 /// This class extends [ApiStandardConverter] and is responsible for
-/// converting a typed query object [T] into API-compatible formats:
 /// query parameters and request body maps or JSON strings.
 ///
 /// The converter serializes query elements such as filtering,

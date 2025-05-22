@@ -389,6 +389,7 @@ class MockFilter implements IApiQueryFilter {
     this.value,
     this.values,
   });
+
   @override
   final String field;
   @override
@@ -399,14 +400,7 @@ class MockFilter implements IApiQueryFilter {
   final List<dynamic>? values;
 
   @override
-  IApiQueryFilter clone() {
-    // TODO: implement clone
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, dynamic> toMap({bool encode = true}) {
-    // TODO: implement toMap
+  Map<String, dynamic> toMap() {
     throw UnimplementedError();
   }
 }
@@ -417,6 +411,7 @@ class MockFilteringGroup implements IApiQueryFilteringGroup {
     required this.condition,
     this.groups,
   });
+
   @override
   final List<IApiQueryFilter> filters;
   @override
@@ -425,40 +420,28 @@ class MockFilteringGroup implements IApiQueryFilteringGroup {
   final FilterConditionType condition;
 
   @override
-  void clone() {
-    // TODO: implement clone
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, dynamic> toMap({bool encode = true}) {
-    // TODO: implement toMap
+  Map<String, dynamic> toMap() {
     throw UnimplementedError();
   }
 }
 
 class MockOrdering implements IApiQueryOrdering {
   MockOrdering({required this.field, required this.dir});
+
   @override
   final String field;
   @override
   final QueryOrderDirection dir;
 
   @override
-  ApiQueryOrdering clone() {
-    // TODO: implement clone
-    throw UnimplementedError();
-  }
-
-  @override
   Map<String, dynamic> toMap({bool encode = true}) {
-    // TODO: implement toMap
     throw UnimplementedError();
   }
 }
 
 class MockPaging implements IApiQueryPaging {
   MockPaging({required this.limit, this.offset, this.cursor});
+
   @override
   final int limit;
   @override
@@ -467,26 +450,19 @@ class MockPaging implements IApiQueryPaging {
   final String? cursor;
 
   @override
-  ApiQueryPaging clone() {
-    // TODO: implement clone
+  IApiQueryPaging copyWith({int? offset, int? limit, String? cursor}) {
     throw UnimplementedError();
   }
 
   @override
-  IApiQueryPaging copyWith({int? offset, int? limit}) {
-    // TODO: implement copyWith
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, dynamic> toMap({bool encode = true}) {
-    // TODO: implement toMap
+  Map<String, dynamic> toMap() {
     throw UnimplementedError();
   }
 }
 
-class MockApiQuery<T> implements ApiQuery {
+class MockApiQuery implements ApiQuery {
   MockApiQuery({this.filtering, this.ordering, this.paging});
+
   @override
   final IApiQueryFilteringGroup? filtering;
   @override
@@ -495,29 +471,20 @@ class MockApiQuery<T> implements ApiQuery {
   final IApiQueryPaging? paging;
 
   @override
-  ApiQuery clone() {
-    // TODO: implement clone
-    throw UnimplementedError();
-  }
-
-  @override
   ApiQuery copyWith({
     IApiQueryFilteringGroup? filtering,
     List<IApiQueryOrdering>? ordering,
     IApiQueryPaging? paging,
     IApiQuerySelection? selection,
   }) {
-    // TODO: implement copyWith
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement selection
   IApiQuerySelection? get selection => throw UnimplementedError();
 
   @override
   Map<String, dynamic> toMap({bool encode = true}) {
-    // TODO: implement toMap
     throw UnimplementedError();
   }
 }

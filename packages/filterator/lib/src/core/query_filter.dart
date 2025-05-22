@@ -1,8 +1,7 @@
-import 'package:filterator/src/core/interfaces/interfaces.dart';
 import 'package:filterator/src/core/query_operation.dart';
 
-abstract class IApiQueryFilter
-    implements ICloneable<IApiQueryFilter>, IMap<dynamic> {
+/// Interface defining the structure of an API query filter operation.
+abstract class IApiQueryFilter {
   /// Gets the field to filter by in the API query.
   String get field;
 
@@ -12,16 +11,33 @@ abstract class IApiQueryFilter
   /// Gets the value used for matching in the API query.
   dynamic get value;
 
-  /// Gets the value used for matching in the API query.
+  /// Gets the list of values used for matching in the API query.
   List<dynamic>? get values;
+
+  /// Converts the selection to a map format.
+  Map<String, dynamic> toMap();
 }
 
+/// Creates a clone of an [IApiQueryFilter] instance.
+///
+/// This is a top-level function replacing the `clone()` method.
+/// Implement cloning logic here if needed.
+ApiQueryFilter cloneApiQueryFilter(IApiQueryFilter filter) {
+  return ApiQueryFilter(
+    field: filter.field,
+    operation: filter.operation,
+    value: filter.value,
+    values: filter.values,
+  );
+}
+
+/// Class representing a filter operation in an API query.
 class ApiQueryFilter implements IApiQueryFilter {
-  /// Creates a new instance of [ApiQueryFiltering] with specified details.
+  /// Creates a new instance of [ApiQueryFilter] with specified details.
   ///
-  /// The constructor takes the [by], [op], and [match] details for the
-  /// filtering operation. It creates an immutable instance representing a
-  /// filtering operation in an API query.
+  /// The constructor takes the [field], [operation], and [values || value]
+  /// details for the filtering operation. It creates an immutable instance
+  /// representing a filtering operation in an API query.
   ApiQueryFilter({
     required this.field,
     required this.operation,
@@ -47,20 +63,6 @@ class ApiQueryFilter implements IApiQueryFilter {
   /// The values used for matching in the API query.
   @override
   final List<dynamic>? values;
-
-  /// Creates a clone of the filtering operation instance.
-  ///
-  /// This method returns a clone of the original [ApiQueryFiltering] instance,
-  /// producing an identical but separate instance.
-  @override
-  ApiQueryFilter clone() {
-    return ApiQueryFilter(
-      field: field,
-      operation: operation,
-      value: value,
-      values: values,
-    );
-  }
 
   /// Converts the filtering operation instance to a map representation.
   ///

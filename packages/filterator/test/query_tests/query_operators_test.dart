@@ -19,7 +19,7 @@ void main() {
                 {'field': 'field3', 'operation': 'equals', 'value': 'value3'},
                 {'field': 'field4', 'operation': 'equals', 'value': 'value4'},
               ],
-              'groups': [],
+              'groups': <dynamic>[],
             },
             {
               'condition': 'or',
@@ -27,7 +27,7 @@ void main() {
                 {'field': 'field3', 'operation': 'equals', 'value': 'value3'},
                 {'field': 'field4', 'operation': 'equals', 'value': 'value4'},
               ],
-              'groups': [],
+              'groups': <dynamic>[],
             },
           ],
         },

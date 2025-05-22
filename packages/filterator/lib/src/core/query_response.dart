@@ -1,17 +1,19 @@
-import 'package:filterator/src/core/interfaces/interfaces.dart';
 import 'package:filterator/src/core/query_metadata.dart';
 
 /// Interface defining a generic API query response.
 ///
 /// This interface outlines the structure of
 /// a generic API query response, including the data and metadata.
-abstract class IApiQueryResponse<T> implements IMap<dynamic> {
+abstract class IApiQueryResponse<T> {
   /// The list of data elements in the API query response.
   List<T> get data;
 
   /// Metadata associated with the API query response,
   /// providing additional information about the data.
   IApiQueryMetadata get metadata;
+
+  /// Converts the selection to a map format.
+  Map<String, dynamic> toMap();
 }
 
 /// Class representing a complete API query response.
