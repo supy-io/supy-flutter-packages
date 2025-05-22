@@ -2,7 +2,7 @@
 
 
 [![pub package][pub_badge]][pub_badge_link] [![style: very good analysis][vgv_badge]][vgv_badge_link] [![License: MIT][license_badge]][license_badge_link]
-[![codecov](https://codecov.io/gh/supy-io/supy-flutter-packages/branch/main/graph/badge.svg?flag=flexi_cart&token=V5WF4C83K7)](https://app.codecov.io/gh/supy-io/supy-flutter-packages/flags/flexi_cart)
+[![codecov](https://codecov.io/gh/supy-io/supy-flutter-packages/branch/main/graph/badge.svg?flag=flexicart&token=V5WF4C83K7)](https://app.codecov.io/gh/supy-io/supy-flutter-packages/flags/flexicart)
 
 
 
