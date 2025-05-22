@@ -4,25 +4,27 @@ import '../helpers/mocks.dart';
 
 void main() {
   group('Cart Currency', () {
-    late FlexiCart<MockItem> cart;
     const currency = CartCurrency(code: 'EUR', rate: 1.2);
-    final items = [
-      MockItem(id: '1', name: 'Item1', price: 100),
-      MockItem(id: '2', name: 'Item2', price: 200),
-    ];
-
-    setUp(() {
-      cart = FlexiCart<MockItem>()..addItems(items);
-    });
 
     test('Applies exchange rate correctly', () {
-      cart.applyExchangeRate(currency);
+      final items = [
+        MockItem(id: '1', name: 'Item1', price: 100),
+        MockItem(id: '2', name: 'Item2', price: 200),
+      ];
+      final cart = FlexiCart()
+        ..addItems(items)
+        ..applyExchangeRate(currency);
       expect(cart.items['1']!.price, 120);
       expect(cart.items['2']!.price, 240);
     });
 
     test('Restores original prices', () {
-      cart
+      final items = [
+        MockItem(id: '1', name: 'Item1', price: 100),
+        MockItem(id: '2', name: 'Item2', price: 200),
+      ];
+      final cart = FlexiCart()
+        ..addItems(items)
         ..add(MockItem(id: '3', name: 'Item1', price: 100))
         ..applyExchangeRate(currency);
       expect(cart.items['3']!.price, 120);
@@ -31,7 +33,12 @@ void main() {
     });
 
     test('Handles multiple rate applications', () {
-      cart
+      final items = [
+        MockItem(id: '1', name: 'Item1', price: 100),
+        MockItem(id: '2', name: 'Item2', price: 200),
+      ];
+      final cart = FlexiCart<MockItem>()
+        ..addItems(items)
         ..add(MockItem(id: '4', name: 'Item1', price: 100))
         ..applyExchangeRate(const CartCurrency(rate: 2.0, code: 'AED'))
         ..applyExchangeRate(const CartCurrency(rate: 0.5, code: 'SYP'));
