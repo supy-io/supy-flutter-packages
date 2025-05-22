@@ -19,8 +19,8 @@ void main() {
 
     test('noLimit returns paging with no limit set', () {
       final paging = noLimit();
-      expect(paging.limit, isNull);
-      expect(paging.offset, isNull);
+      expect(paging.limit, -1);
+      expect(paging.offset, 0);
       expect(paging.cursor, isNull);
     });
   });
@@ -89,13 +89,13 @@ void main() {
     test('exclude creates selection with excludes set', () {
       final selection = exclude(['password', 'secret']);
       expect(selection.excludes, ['password', 'secret']);
-      expect(selection.includes, isNull);
+      expect(selection.includes, isEmpty);
     });
 
     test('include creates selection with includes set', () {
       final selection = include(['id', 'name']);
       expect(selection.includes, ['id', 'name']);
-      expect(selection.excludes, isNull);
+      expect(selection.excludes, isEmpty);
     });
   });
 }
