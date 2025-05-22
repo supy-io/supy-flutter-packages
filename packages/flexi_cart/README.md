@@ -2,7 +2,8 @@
 
 
 [![pub package][pub_badge]][pub_badge_link] [![style: very good analysis][vgv_badge]][vgv_badge_link] [![License: MIT][license_badge]][license_badge_link]
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/supy-io/supy-flutter-packages/flexi_cart.yaml?branch=main)
+
+
 [![codecov](https://codecov.io/gh/supy-io/supy-flutter-packages/graph/badge.svg?token=V5WF4C83K7)](https://codecov.io/gh/supy-io/supy-flutter-packages)
 ![Null safety](https://img.shields.io/badge/null%20safety-true-brightgreen)
 
