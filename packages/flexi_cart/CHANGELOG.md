@@ -1,3 +1,13 @@
+## 0.4.0+2
+updates the following screenshots with improved image quality and file size:
+
+- `currencies.png`
+- `fresh_market.png`
+- `fresh_market_vertical.png`
+- `multi_cart.png`
+- `shine_beauty.png`
+- `shiny_eats.png`
+The images have been processed to enhance clarity while reducing overall file sizes.
 
 ## 0.4.0+1
 - update unit tests to use `CartCurrency` class
