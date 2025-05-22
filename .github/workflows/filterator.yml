@@ -1,4 +1,4 @@
-name: fliterator
+name: filterator
 
 concurrency:
   group: $-$
@@ -9,12 +9,12 @@ on:
     branches:
       - main
     paths:
-      - 'packages/fliterator/**'
+      - 'packages/filterator/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'packages/fliterator/**'
+      - 'packages/filterator/**'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,24 +25,24 @@ jobs:
 
       - name: Install Dependencies
         run: flutter packages get
-        working-directory: packages/flexi_cart
+        working-directory: packages/filterator
 
       - name: Format
         run: dart format --set-exit-if-changed .
-        working-directory: packages/fliterator
+        working-directory: packages/filterator
 
       - name: Analyze
         run: flutter analyze lib test example
-        working-directory: packages/fliterator
+        working-directory: packages/filterator
 
       - name: Run tests
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
-        working-directory: packages/fliterator
+        working-directory: packages/filterator
 
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: packages/fliterator/coverage/lcov.info
+          path: packages/filterator/coverage/lcov.info
           min_coverage: 85
           # exclude: '**/*_observer.dart **/change.dart'
 
@@ -50,5 +50,5 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/fliterator/coverage/lcov.info
-          flags: fliterator
+          files: packages/filterator/coverage/lcov.info
+          flags: filterator
