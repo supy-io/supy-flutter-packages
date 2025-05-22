@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="fix: linters issues">
+    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="refactor: Organize tests into core directory and remove unused files&#10;&#10;This commit reorganizes the test files by moving them into a `core` subdirectory within the `test` folder. It also involves the following changes:&#10;&#10;- Deleted unused files:&#10;    - `packages/filterator/lib/src/core/field_types.dart`&#10;    - `packages/filterator/lib/src/core/selection.dart`&#10;    - `packages/filterator/test/query_tests/query_operators_test.dart` (functionality moved)&#10;    - `packages/filterator/test/query_tests/query_tests.dart`&#10;    - `packages/filterator/test/query_tests/query_tools_test.dart` (functionality moved)&#10;- Updated `packages/filterator/lib/src/core/query.dart` to remove the static `cast` method from `ApiQuery`.&#10;- Updated `packages/filterator/test/fiterator_test.dart` to import tests from the new `core` directory.&#10;- Created new test files in `packages/filterator/test/core/`:&#10;    - `converter_tests.dart`: Basic tests for `ApiStandardConverter`.&#10;    - `query_test.dart`: Tests for `ApiQuery` construction and `toMap` serialization.&#10;    - `paging_operators_test.dart`: (Renamed from `query_tests/paging_operators_test.dart`) Tests for paging helper functions and `ApiQuery` `toMap` with complex filtering.&#10;    - `query_filter_test.dart`: Tests for `ApiQueryFilter` construction and `toMap` serialization, including `cloneApiQueryFilter`.&#10;    - `query_metadata_test.dart`: Tests for `ApiQueryMetadata` construction, `empty` factory, and `toMap`.&#10;    - `query_filter_group_test.dart`: Tests for `ApiQueryFilteringGroup` construction, shortcut constructors, `toMap` serialization with nested groups, and `cloneApiQueryFilteringGroup`.&#10;    - `query_operators_test.dart`: Tests for helper functions for paging, filter groups, filters, ordering, and selections.&#10;    - `query_operation_test.dart`: Tests for `QueryOperationStringExtension`, `QueryOperationExtension`, and `QueryOrderDirectionExtension`.&#10;    - `query_ordering_test.dart`: Tests for `ApiQueryOrdering` construction, `toMap`, and `cloneApiQueryOrdering`.&#10;    - `query_response_test.dart`: Tests for `ApiQueryResponse` construction, `empty` factory, and `toMap`.&#10;    - `query_paging_test.dart`: Tests for `ApiQueryPaging` construction, factories, `copyWith`, `toMap`, and `cloneApiQueryPaging`.&#10;    - `query_selections_test.dart`: Tests for `ApiQuerySelection` construction, cloning, `copyWith`, and `toMap` serialization.&#10;- Updated `packages/filterator/lib/src/core/core.dart` to remove the export of `field_types.dart`.">
       <change afterPath="$PROJECT_DIR$/test/core/converter_tests.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/core/core_test.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test/core/query_filter_group_test.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test/core/query_filter_test.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test/core/query_metadata_test.dart" afterDir="false" />
@@ -14,13 +13,19 @@
       <change afterPath="$PROJECT_DIR$/test/core/query_operators_test.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test/core/query_ordering_test.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test/core/query_paging_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_response_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_selections_test.dart" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/test/core/query_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/core/core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/core.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/core/field_types.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/core/query.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/selection.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/fiterator_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/fiterator_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/query_tests/paging_operators_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/core/paging_operators_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_tests.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tests.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,75 +73,77 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Dart Command Line App.filterator_example.dart.executor": "Run",
-    "Dart Command Line App.odata_converter_test.dart.executor": "Run",
-    "Dart Command Line App.supy_converter_example_tests.dart.executor": "Run",
-    "Dart Test.ApiQuery toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQuery toMap should produce correct JSON in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.ApiQuery with null values should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQuery with null values should produce correct JSON in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.ApiQueryFiltering toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQueryFiltering with invalid operation should throw an exception in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.ApiQueryFilteringGroup toMap should handle empty group in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQueryFilteringGroup with nested groups should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQueryOrdering toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQueryPaging toMap should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQueryResponse empty should produce correct JSON in api_query_tools_test.dart.executor": "Debug",
-    "Dart Test.ApiQueryResponse with data should produce correct JSON in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.ApiQueryResponse with data should produce correct JSON in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Complex ordering + paging + selection in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Empty filtering and selection only in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Empty selection should not include selection key in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Filter with boolean value in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Filter with empty string should serialize correctly in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Filter with int and double values in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Filtering with 3-level nested group hierarchy in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Nested AND inside OR in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Null filter value with other filters in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Ordering with invalid direction should handle gracefully in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Request body includes all sections in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Request body returns valid JSON in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Selection with fields in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Selection with include and exclude together in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.Tests in api_query_operators_test.dart.executor": "Run",
-    "Dart Test.Tests in api_query_test.dart.executor": "Run",
-    "Dart Test.Tests in api_query_tools_test.dart.executor": "Run",
-    "Dart Test.Tests in composite_converter_test.dart.executor": "Run",
-    "Dart Test.Tests in converter_tests.dart.executor": "Run",
-    "Dart Test.Tests in fiterator_test.dart.executor": "Run",
-    "Dart Test.Tests in odata_converter_test.dart.executor": "Run",
-    "Dart Test.Tests in paging_operators_test.dart.executor": "Run",
-    "Dart Test.Tests in query_filter_group_test.dart.executor": "Run",
-    "Dart Test.Tests in query_filter_test.dart.executor": "Run",
-    "Dart Test.Tests in query_metadata_test.dart.executor": "Run",
-    "Dart Test.Tests in query_operation_test.dart.executor": "Run",
-    "Dart Test.Tests in query_operators_test.dart.executor": "Run",
-    "Dart Test.Tests in query_tests.dart.executor": "Run",
-    "Dart Test.Tests in supy_converter_tests.dart.executor": "Run",
-    "Dart Test.formatValue handles all supported types in odata_converter_test.dart.executor": "Run",
-    "Dart Test.gracefully handles unsupported operation in odata_converter_test.dart.executor": "Run",
-    "Dart Test.private constructor _ initializes default values in api_query_test.dart.executor": "Run",
-    "Dart Test.throws on unsupported operation in ODataConverter in odata_converter_test.dart.executor": "Run",
-    "Dart Test.throws on unsupported operation in odata_converter_test.dart.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/abdalqaderalnajjar/Projects/supy-projects/supy-flutter-packages./packages/filterator",
-    "settings.editor.selected.configurable": "flutter.settings",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Dart Command Line App.filterator_example.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Command Line App.odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Command Line App.supy_converter_example_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQuery toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQuery toMap should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQuery with empty ordering and paging should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQuery with null values should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQuery with null values should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryFiltering toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryFiltering with invalid operation should throw an exception in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryFilteringGroup toMap should handle empty group in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryFilteringGroup with nested groups should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryOrdering toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryPaging toMap should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryResponse empty should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Debug&quot;,
+    &quot;Dart Test.ApiQueryResponse with data should produce correct JSON in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.ApiQueryResponse with data should produce correct JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Complex ordering + paging + selection in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Empty ApiQuery produces a map in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Empty filtering and selection only in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Empty selection should not include selection key in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Filter with boolean value in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Filter with empty string should serialize correctly in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Filter with int and double values in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Filtering with 3-level nested group hierarchy in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Nested AND inside OR in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Null filter value with other filters in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Ordering with invalid direction should handle gracefully in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Request body includes all sections in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Request body returns valid JSON in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Selection with fields in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Selection with include and exclude together in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in api_query_operators_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in api_query_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in api_query_tools_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in composite_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in fiterator_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in paging_operators_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_filter_group_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_filter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_metadata_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_operation_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_operators_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_response_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_selections_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in query_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.Tests in supy_converter_tests.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.formatValue handles all supported types in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.gracefully handles unsupported operation in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.private constructor _ initializes default values in api_query_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.throws on unsupported operation in ODataConverter in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Dart Test.throws on unsupported operation in odata_converter_test.dart.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/abdalqaderalnajjar/Projects/supy-projects/supy-flutter-packages./packages/filterator&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;flutter.settings&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -150,10 +157,10 @@
       <recent name="$PROJECT_DIR$/test/converters_test" />
     </key>
   </component>
-  <component name="RunManager" selected="Dart Test.Tests in query_selections_test.dart">
-    <configuration name="Tests in query_filter_group_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/core/query_filter_group_test.dart" />
-      <option name="testName" value="query_filter_group_test.dart" />
+  <component name="RunManager" selected="Dart Test.Tests in fiterator_test.dart">
+    <configuration name="Tests in fiterator_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/fiterator_test.dart" />
+      <option name="testName" value="fiterator_test.dart" />
       <method v="2" />
     </configuration>
     <configuration name="Tests in query_metadata_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
@@ -178,11 +185,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Dart Test.Tests in fiterator_test.dart" />
         <item itemvalue="Dart Test.Tests in query_selections_test.dart" />
         <item itemvalue="Dart Test.Tests in query_response_test.dart" />
         <item itemvalue="Dart Test.Tests in query_operation_test.dart" />
         <item itemvalue="Dart Test.Tests in query_metadata_test.dart" />
-        <item itemvalue="Dart Test.Tests in query_filter_group_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -275,7 +282,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747902076526</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="refactor: Organize tests into core directory and remove unused files&#10;&#10;This commit reorganizes the test files by moving them into a `core` subdirectory within the `test` folder. It also involves the following changes:&#10;&#10;- Deleted unused files:&#10;    - `packages/filterator/lib/src/core/field_types.dart`&#10;    - `packages/filterator/lib/src/core/selection.dart`&#10;    - `packages/filterator/test/query_tests/query_operators_test.dart` (functionality moved)&#10;    - `packages/filterator/test/query_tests/query_tests.dart`&#10;    - `packages/filterator/test/query_tests/query_tools_test.dart` (functionality moved)&#10;- Updated `packages/filterator/lib/src/core/query.dart` to remove the static `cast` method from `ApiQuery`.&#10;- Updated `packages/filterator/test/fiterator_test.dart` to import tests from the new `core` directory.&#10;- Created new test files in `packages/filterator/test/core/`:&#10;    - `converter_tests.dart`: Basic tests for `ApiStandardConverter`.&#10;    - `query_test.dart`: Tests for `ApiQuery` construction and `toMap` serialization.&#10;    - `paging_operators_test.dart`: (Renamed from `query_tests/paging_operators_test.dart`) Tests for paging helper functions and `ApiQuery` `toMap` with complex filtering.&#10;    - `query_filter_test.dart`: Tests for `ApiQueryFilter` construction and `toMap` serialization, including `cloneApiQueryFilter`.&#10;    - `query_metadata_test.dart`: Tests for `ApiQueryMetadata` construction, `empty` factory, and `toMap`.&#10;    - `query_filter_group_test.dart`: Tests for `ApiQueryFilteringGroup` construction, shortcut constructors, `toMap` serialization with nested groups, and `cloneApiQueryFilteringGroup`.&#10;    - `query_operators_test.dart`: Tests for helper functions for paging, filter groups, filters, ordering, and selections.&#10;    - `query_operation_test.dart`: Tests for `QueryOperationStringExtension`, `QueryOperationExtension`, and `QueryOrderDirectionExtension`.&#10;    - `query_ordering_test.dart`: Tests for `ApiQueryOrdering` construction, `toMap`, and `cloneApiQueryOrdering`.&#10;    - `query_response_test.dart`: Tests for `ApiQueryResponse` construction, `empty` factory, and `toMap`.&#10;    - `query_paging_test.dart`: Tests for `ApiQueryPaging` construction, factories, `copyWith`, `toMap`, and `cloneApiQueryPaging`.&#10;    - `query_selections_test.dart`: Tests for `ApiQuerySelection` construction, cloning, `copyWith`, and `toMap` serialization.&#10;- Updated `packages/filterator/lib/src/core/core.dart` to remove the export of `field_types.dart`.">
+      <option name="closed" value="true" />
+      <created>1747905793328</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1747905793328</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -288,16 +303,12 @@
     <MESSAGE value="docs: update README and pubspec for beta release&#10;&#10;This commit updates the `README.md` and `pubspec.yaml` files for the initial beta release (`0.1.0-beta.1`).&#10;&#10;Changes include:&#10;- Updating the dependency version in `README.md` to `^0.1.0-beta.1`.&#10;- Removing extra newlines and whitespace from code examples in `README.md`.&#10;- Updating the package description in `pubspec.yaml` for better clarity.&#10;- Minor changes in `.idea/workspace.xml` reflecting the commit history." />
     <MESSAGE value="chore: bump version to 0.1.2-beta.1 and remove meta dependency&#10;&#10;This commit updates the package version to `0.1.2-beta.1` in `pubspec.yaml` and `README.md`.&#10;It also removes the `meta` package from the dependencies as it is no longer required." />
     <MESSAGE value="fix: linters issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: linters issues" />
+    <MESSAGE value="refactor: Organize tests into core directory and remove unused files&#10;&#10;This commit reorganizes the test files by moving them into a `core` subdirectory within the `test` folder. It also involves the following changes:&#10;&#10;- Deleted unused files:&#10;    - `packages/filterator/lib/src/core/field_types.dart`&#10;    - `packages/filterator/lib/src/core/selection.dart`&#10;    - `packages/filterator/test/query_tests/query_operators_test.dart` (functionality moved)&#10;    - `packages/filterator/test/query_tests/query_tests.dart`&#10;    - `packages/filterator/test/query_tests/query_tools_test.dart` (functionality moved)&#10;- Updated `packages/filterator/lib/src/core/query.dart` to remove the static `cast` method from `ApiQuery`.&#10;- Updated `packages/filterator/test/fiterator_test.dart` to import tests from the new `core` directory.&#10;- Created new test files in `packages/filterator/test/core/`:&#10;    - `converter_tests.dart`: Basic tests for `ApiStandardConverter`.&#10;    - `query_test.dart`: Tests for `ApiQuery` construction and `toMap` serialization.&#10;    - `paging_operators_test.dart`: (Renamed from `query_tests/paging_operators_test.dart`) Tests for paging helper functions and `ApiQuery` `toMap` with complex filtering.&#10;    - `query_filter_test.dart`: Tests for `ApiQueryFilter` construction and `toMap` serialization, including `cloneApiQueryFilter`.&#10;    - `query_metadata_test.dart`: Tests for `ApiQueryMetadata` construction, `empty` factory, and `toMap`.&#10;    - `query_filter_group_test.dart`: Tests for `ApiQueryFilteringGroup` construction, shortcut constructors, `toMap` serialization with nested groups, and `cloneApiQueryFilteringGroup`.&#10;    - `query_operators_test.dart`: Tests for helper functions for paging, filter groups, filters, ordering, and selections.&#10;    - `query_operation_test.dart`: Tests for `QueryOperationStringExtension`, `QueryOperationExtension`, and `QueryOrderDirectionExtension`.&#10;    - `query_ordering_test.dart`: Tests for `ApiQueryOrdering` construction, `toMap`, and `cloneApiQueryOrdering`.&#10;    - `query_response_test.dart`: Tests for `ApiQueryResponse` construction, `empty` factory, and `toMap`.&#10;    - `query_paging_test.dart`: Tests for `ApiQueryPaging` construction, factories, `copyWith`, `toMap`, and `cloneApiQueryPaging`.&#10;    - `query_selections_test.dart`: Tests for `ApiQuerySelection` construction, cloning, `copyWith`, and `toMap` serialization.&#10;- Updated `packages/filterator/lib/src/core/core.dart` to remove the export of `field_types.dart`." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Organize tests into core directory and remove unused files&#10;&#10;This commit reorganizes the test files by moving them into a `core` subdirectory within the `test` folder. It also involves the following changes:&#10;&#10;- Deleted unused files:&#10;    - `packages/filterator/lib/src/core/field_types.dart`&#10;    - `packages/filterator/lib/src/core/selection.dart`&#10;    - `packages/filterator/test/query_tests/query_operators_test.dart` (functionality moved)&#10;    - `packages/filterator/test/query_tests/query_tests.dart`&#10;    - `packages/filterator/test/query_tests/query_tools_test.dart` (functionality moved)&#10;- Updated `packages/filterator/lib/src/core/query.dart` to remove the static `cast` method from `ApiQuery`.&#10;- Updated `packages/filterator/test/fiterator_test.dart` to import tests from the new `core` directory.&#10;- Created new test files in `packages/filterator/test/core/`:&#10;    - `converter_tests.dart`: Basic tests for `ApiStandardConverter`.&#10;    - `query_test.dart`: Tests for `ApiQuery` construction and `toMap` serialization.&#10;    - `paging_operators_test.dart`: (Renamed from `query_tests/paging_operators_test.dart`) Tests for paging helper functions and `ApiQuery` `toMap` with complex filtering.&#10;    - `query_filter_test.dart`: Tests for `ApiQueryFilter` construction and `toMap` serialization, including `cloneApiQueryFilter`.&#10;    - `query_metadata_test.dart`: Tests for `ApiQueryMetadata` construction, `empty` factory, and `toMap`.&#10;    - `query_filter_group_test.dart`: Tests for `ApiQueryFilteringGroup` construction, shortcut constructors, `toMap` serialization with nested groups, and `cloneApiQueryFilteringGroup`.&#10;    - `query_operators_test.dart`: Tests for helper functions for paging, filter groups, filters, ordering, and selections.&#10;    - `query_operation_test.dart`: Tests for `QueryOperationStringExtension`, `QueryOperationExtension`, and `QueryOrderDirectionExtension`.&#10;    - `query_ordering_test.dart`: Tests for `ApiQueryOrdering` construction, `toMap`, and `cloneApiQueryOrdering`.&#10;    - `query_response_test.dart`: Tests for `ApiQueryResponse` construction, `empty` factory, and `toMap`.&#10;    - `query_paging_test.dart`: Tests for `ApiQueryPaging` construction, factories, `copyWith`, `toMap`, and `cloneApiQueryPaging`.&#10;    - `query_selections_test.dart`: Tests for `ApiQuerySelection` construction, cloning, `copyWith`, and `toMap` serialization.&#10;- Updated `packages/filterator/lib/src/core/core.dart` to remove the export of `field_types.dart`." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/test/query_tests/query_operators_test.dart</url>
-          <line>3</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/example/test/supy_converter_example_tests.dart</url>
           <line>265</line>

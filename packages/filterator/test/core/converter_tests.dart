@@ -7,7 +7,6 @@ class DummyConverter extends ApiStandardConverter {
 
 void main() {
   group('ApiStandardConverter', () {
-
     test('toQueryParameters throws UnsupportedError', () {
       final converter = DummyConverter(const ApiQuery());
       expect(converter.toQueryParameters, throwsUnsupportedError);
