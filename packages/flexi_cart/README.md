@@ -43,7 +43,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-   flexi_cart: ^0.4.0
+   flexi_cart: ^0.4.0+1
    provider: ^6.0.0 
 ```
 

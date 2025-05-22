@@ -1,3 +1,9 @@
+
+## 0.4.0+1
+- update unit tests to use `CartCurrency` class
+- update README to include `CartCurrency` usage examples
+- update example app to demonstrate `CartCurrency` functionality
+
 ## 0.4.0
 New methods:
 - `applyExchangeRate(CartCurrency cartCurrency)`: Multiplies all item prices by the given exchange rate and sets the cart's currency.
