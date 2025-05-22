@@ -51,4 +51,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/flexi_cart/coverage/lcov.info
-
+          flags: flexi_cart
+          name: codecov-upload
+          verbose: true
