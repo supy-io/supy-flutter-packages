@@ -94,5 +94,8 @@ void main() {
       expect(() => ''.toQueryOrderDirection(), throwsArgumentError);
       expect(() => 'up'.toQueryOrderDirection(), throwsArgumentError);
     });
+    test('QueryOperation.toShortQueryOperation returns correct short form', () {
+      expect(QueryOperation.search.toShortQueryOperation(), 'search');
+    });
   });
 }

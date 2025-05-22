@@ -21,6 +21,15 @@ void main() {
       nestedGroup = ApiQueryFilteringGroup.and([filter2]);
     });
 
+    test('ApiQueryFilteringGroup.toMap serializes correctly', () {
+      final group = ApiQueryFilteringGroup.and([]);
+
+      final map = group.toMap();
+
+      expect(map, contains('filtering'));
+      expect(map['filtering'], contains('condition'));
+    });
+
     test('ApiQueryFilteringGroup toMap should handle empty group', () {
       final emptyGroup = ApiQueryFilteringGroup(
         condition: FilterConditionType.and,

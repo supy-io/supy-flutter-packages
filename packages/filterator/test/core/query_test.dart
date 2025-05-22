@@ -29,6 +29,19 @@ void main() {
       expect(copy.ordering, isNotNull);
       expect(copy.paging, isNotNull);
     });
+    test('ApiQuery.toMap serializes query components', () {
+      final query = ApiQuery(
+        filtering: ApiQueryFilteringGroup.and([]),
+        ordering: [],
+        paging: ApiQueryPaging.noLimit(),
+        selection: const ApiQuerySelection(includes: ['field1', 'field2']),
+      );
+
+      final map = query.toMap();
+
+      expect(map, contains('paging'));
+      expect(map, contains('selection'));
+    });
 
     test('private constructor _ initializes default values', () {
       final query = ApiQuery(
