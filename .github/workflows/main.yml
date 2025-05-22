@@ -43,10 +43,12 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: packages/flexi_cart/coverage/lcov.info
-          min_coverage: 80
+          min_coverage: 85
           # exclude: '**/*_observer.dart **/change.dart'
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/flexi_cart/coverage/lcov.info
+          flags: flexi_cart
