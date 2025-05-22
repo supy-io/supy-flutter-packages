@@ -104,6 +104,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Sets the cart to expire after the given duration from now.
   void setExpiration(Duration duration, {bool shouldNotifyListeners = false}) {
+    _checkDisposed();
     _expiresAt = DateTime.now().add(duration);
     _log(
       'Cart has been set to expire at: $_expiresAt',
@@ -118,6 +119,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     dynamic value, {
     bool shouldNotifyListeners = true,
   }) {
+    _checkDisposed();
+
     _metadata[key] = value;
     _log('Metadata set: $key = $value', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
@@ -128,6 +131,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Removes a metadata entry.
   void removeMetadata(String key, {bool shouldNotifyListeners = true}) {
+    _checkDisposed();
+
     if (_metadata.containsKey(key)) {
       _metadata.remove(key);
       _log('Metadata removed: $key', notified: shouldNotifyListeners);
@@ -137,6 +142,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Locks the cart from being edited.
   void lock({bool shouldNotifyListeners = false}) {
+    _checkDisposed();
+    if (_isLocked) return;
     _isLocked = true;
     _log('Cart has been locked', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
@@ -144,6 +151,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Unlocks the cart, allowing edits.
   void unlock({bool shouldNotifyListeners = false}) {
+    _checkDisposed();
+    if (!_isLocked) return;
     _isLocked = false;
     _log('Cart has been locked', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
@@ -164,7 +173,10 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }
 
   /// Registers a plugin to be notified on cart changes.
-  void registerPlugin(ICartPlugin<T> plugin) => _plugins.add(plugin);
+  void registerPlugin(ICartPlugin<T> plugin) {
+    _checkDisposed();
+    _plugins.add(plugin);
+  }
 
   /// Notifies all registered plugins about a cart change.
   void _notifyOnChangedPlugins() {
@@ -184,6 +196,16 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     }
   }
 
+  /// Throws an exception if the cart is disposed.
+  void _checkDisposed() {
+    if (disposed) {
+      final error =
+          CartDisposedException('Cannot perform action after dispose');
+      _notifyOnErrorPlugins(error, StackTrace.current);
+      throw error;
+    }
+  }
+
   /// Notifies all registered plugins about a cart close.
   void _notifyOnClosePlugins() {
     for (final plugin in _plugins) {
@@ -193,6 +215,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Sets a note for the cart.
   void setNote(String? note, {bool shouldNotifyListeners = false}) {
+    _checkDisposed();
     _note = note;
     _log('Set Note with: $note', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
@@ -211,6 +234,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     DateTime? deliveredAt, {
     bool shouldNotifyListeners = false,
   }) {
+    _checkDisposed();
     _deliveredAt = deliveredAt;
     _log('Set Delivered at: $deliveredAt', notified: shouldNotifyListeners);
     if (shouldNotifyListeners) notifyListeners();
@@ -250,12 +274,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool increment = false,
     bool shouldNotifyListeners = true,
   }) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException('Cannot add new item after calling close'),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
+
     _checkLock();
     _add(item, increment);
     emit(this);
@@ -277,12 +297,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool skipIfExist = false,
     bool shouldNotifyListeners = true,
   }) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException('Cannot add new items after calling close'),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
     _checkLock();
     for (final item in items) {
       if (skipIfExist && _items.containsKey(item.key)) continue;
@@ -301,14 +316,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     List<T> items, {
     bool shouldNotifyListeners = true,
   }) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException(
-          'Cannot remove items not in list after calling close',
-        ),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
     _checkLock();
     final keepKeys = items.map((e) => e.key).toSet();
     for (final item in itemsList) {
@@ -324,12 +332,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Deletes a single item from the cart.
   void delete(T item, {bool shouldNotifyListeners = true}) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException('Cannot delete item after calling close'),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
     _checkLock();
     _delete(item);
     emit(this);
@@ -342,12 +345,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Clears all items from the cart without affecting metadata.
   void resetItems({bool shouldNotifyListeners = true}) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException('Cannot reset items after calling close'),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
     _checkLock();
     _log(
       'Items have been reset: $itemsList',
@@ -361,12 +359,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Fully resets the cart and its metadata.
   void reset({bool shouldNotifyListeners = true}) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException('Cannot reset cart after calling close'),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
 
     try {
       groups.clear();
@@ -391,12 +384,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Clears a specific item group by ID.
   void clearItemsGroup(String groupId, {bool shouldNotifyListeners = true}) {
-    if (disposed) {
-      _notifyOnErrorPlugins(
-        CartDisposedException('Cannot clear items group after calling close'),
-        StackTrace.current,
-      );
-    }
+    _checkDisposed();
     _checkLock();
 
     groups.remove(groupId);
@@ -425,6 +413,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Returns a clone of the cart with copied items and metadata.
   FlexiCart<T> clone() {
+    _checkDisposed();
+
     return FlexiCart<T>(
       items: Map<String, T>.from(_items),
       groups: Map<String, CartItemsGroup<T>>.from(groups),
@@ -442,7 +432,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     return FlexiCart<G>(
       items: _items.cast<String, G>(),
       groups: groups.map((k, v) => MapEntry(k, v.cast<G>())),
-    );
+    )
+      ..addZeroQuantity = addZeroQuantity
+      .._note = _note
+      .._metadata.addAll(_metadata)
+      .._cartCurrency = _cartCurrency
+      .._deliveredAt = _deliveredAt;
   }
 
   /// Applies an exchange rate to all items based on the target currency.
@@ -450,9 +445,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     CartCurrency cartCurrency, {
     bool shouldNotifyListeners = true,
   }) {
+    _checkDisposed();
     _checkLock();
     if (cartCurrency == _cartCurrency) return;
-
     removeExchangeRate();
 
     _cartCurrency = cartCurrency;
@@ -481,6 +476,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void removeExchangeRate({
     bool shouldNotifyListeners = true,
   }) {
+    _checkDisposed();
     _checkLock();
     if (_cartCurrency == null) return;
 
@@ -510,11 +506,11 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Disposes of the cart and triggers [onDisposed].
   @override
   void dispose() {
+    super.dispose();
     _notifyOnClosePlugins();
     _log('Cart has been disposed');
     onDisposed?.call();
     disposeStream(); // call this if using the mixin's stream
-    super.dispose();
   }
 
   /// Internal method to add an item and notify plugins.
