@@ -1,8 +1,8 @@
 # Filterator
 [![Pub Version](https://img.shields.io/pub/v/filterator)](https://pub.dev/packages/filterator)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![codecov](https://codecov.io/gh/supy-io/supy-flutter-packages/branch/main/graph/badge.svg?flag=filterator&token=V5WF4C83K7)](https://app.codecov.io/gh/supy-io/supy-flutter-packages/flags/filterator) ![Null safety](https://img.shields.io/badge/null%20safety-true-brightgreen)
 
-[![codecov](https://codecov.io/gh/supy-io/supy-flutter-packages/branch/main/graph/badge.svg?flag=filterator&token=V5WF4C83K7)](https://app.codecov.io/gh/supy-io/supy-flutter-packages/flags/filterator) ![Null safety](https://img.shields.io/badge/null%20safety-true-brightgreen)
+
 
 
 API Query Builder for Dart, A powerful and flexible library for constructing structured API queries with support for filtering, ordering, paging, and seamless conversion to API-specific formats.
