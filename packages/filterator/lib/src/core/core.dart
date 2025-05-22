@@ -1,5 +1,4 @@
 export 'converter.dart';
-export 'field_types.dart';
 export 'paging_operators.dart';
 export 'query.dart';
 export 'query_filter.dart';

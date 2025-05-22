@@ -91,14 +91,6 @@ class ApiQuery implements IApiQuery {
   @override
   final IApiQuerySelection? selection;
 
-  /// Casts an API query instance to a specific type.
-  ///
-  /// This static method is used to cast an [IApiQuery] instance to [ApiQuery]
-  /// with a specific data type [T].
-  static ApiQuery cast<T>(IApiQuery query) {
-    return ApiQuery._(query: query);
-  }
-
   /// Creates a modified copy of the API query with specified changes.
   ///
   /// This method returns a new instance of [ApiQuery] with the specified

@@ -5,42 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="fix: linters issues">
-      <change afterPath="$PROJECT_DIR$/../../.github/workflows/filterator.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/native_assets/macos/native_assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/test_cache/build/cache.dill.track.dill" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/AssetManifest.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/AssetManifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/FontManifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/NOTICES.Z" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/NativeAssetsManifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/unit_test_assets/shaders/ink_sparkle.frag" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/coverage/lcov.info" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/converter_tests.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/core_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_filter_group_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_filter_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_metadata_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_operation_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_operators_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_ordering_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_paging_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/core/query_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_options.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/filterator_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/filterator_example.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/odata_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/odata_converter_example.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/reset_api_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/reset_api_converter_example.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/supy_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/supy_converter_example.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/test/odata_converter_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/odata_converter_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/converter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/field_types.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/field_types.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/interfaces/i_cloneable.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/interfaces/i_cloneable.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/interfaces/i_map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/interfaces/i_map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/field_types.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/core/query.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_metadata.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_metadata.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_operation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_operation.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_ordering.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_paging.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_paging.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_response.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/core/query_selections.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_selections.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_tools_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/paging_operators_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/core/paging_operators_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/query_tests/query_tests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/query_tests/query_tests.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,15 +104,23 @@
     "Dart Test.Selection with fields in supy_converter_tests.dart.executor": "Run",
     "Dart Test.Selection with include and exclude together in supy_converter_tests.dart.executor": "Run",
     "Dart Test.Tests in api_query_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in api_query_test.dart.executor": "Run",
     "Dart Test.Tests in api_query_tools_test.dart.executor": "Run",
     "Dart Test.Tests in composite_converter_test.dart.executor": "Run",
+    "Dart Test.Tests in converter_tests.dart.executor": "Run",
     "Dart Test.Tests in fiterator_test.dart.executor": "Run",
     "Dart Test.Tests in odata_converter_test.dart.executor": "Run",
     "Dart Test.Tests in paging_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in query_filter_group_test.dart.executor": "Run",
+    "Dart Test.Tests in query_filter_test.dart.executor": "Run",
+    "Dart Test.Tests in query_metadata_test.dart.executor": "Run",
+    "Dart Test.Tests in query_operation_test.dart.executor": "Run",
     "Dart Test.Tests in query_operators_test.dart.executor": "Run",
+    "Dart Test.Tests in query_tests.dart.executor": "Run",
     "Dart Test.Tests in supy_converter_tests.dart.executor": "Run",
     "Dart Test.formatValue handles all supported types in odata_converter_test.dart.executor": "Run",
     "Dart Test.gracefully handles unsupported operation in odata_converter_test.dart.executor": "Run",
+    "Dart Test.private constructor _ initializes default values in api_query_test.dart.executor": "Run",
     "Dart Test.throws on unsupported operation in ODataConverter in odata_converter_test.dart.executor": "Run",
     "Dart Test.throws on unsupported operation in odata_converter_test.dart.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -156,44 +144,45 @@
       <recent name="$PROJECT_DIR$/lib/src/core" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/core" />
       <recent name="$PROJECT_DIR$/example" />
       <recent name="$PROJECT_DIR$/example/test" />
       <recent name="$PROJECT_DIR$/test/converters_test" />
     </key>
   </component>
-  <component name="RunManager" selected="Dart Test.Tests in fiterator_test.dart">
-    <configuration name="filterator_example.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/example/filterator_example.dart" />
-      <option name="workingDirectory" value="$PROJECT_DIR$" />
+  <component name="RunManager" selected="Dart Test.Tests in query_selections_test.dart">
+    <configuration name="Tests in query_filter_group_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/core/query_filter_group_test.dart" />
+      <option name="testName" value="query_filter_group_test.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="odata_converter_test.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/example/test/odata_converter_test.dart" />
-      <option name="workingDirectory" value="$PROJECT_DIR$" />
+    <configuration name="Tests in query_metadata_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/core/query_metadata_test.dart" />
+      <option name="testName" value="query_metadata_test.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="supy_converter_example_tests.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" />
-      <option name="workingDirectory" value="$PROJECT_DIR$" />
+    <configuration name="Tests in query_operation_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/core/query_operation_test.dart" />
+      <option name="testName" value="query_operation_test.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="Tests in fiterator_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/fiterator_test.dart" />
-      <option name="testName" value="fiterator_test.dart" />
+    <configuration name="Tests in query_response_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/core/query_response_test.dart" />
+      <option name="testName" value="query_response_test.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="Tests in query_operators_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/query_tests/query_operators_test.dart" />
-      <option name="testName" value="query_operators_test.dart" />
+    <configuration name="Tests in query_selections_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/core/query_selections_test.dart" />
+      <option name="testName" value="query_selections_test.dart" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Dart Test.Tests in fiterator_test.dart" />
-        <item itemvalue="Dart Test.Tests in query_operators_test.dart" />
-        <item itemvalue="Dart Command Line App.supy_converter_example_tests.dart" />
-        <item itemvalue="Dart Command Line App.odata_converter_test.dart" />
-        <item itemvalue="Dart Command Line App.filterator_example.dart" />
+        <item itemvalue="Dart Test.Tests in query_selections_test.dart" />
+        <item itemvalue="Dart Test.Tests in query_response_test.dart" />
+        <item itemvalue="Dart Test.Tests in query_operation_test.dart" />
+        <item itemvalue="Dart Test.Tests in query_metadata_test.dart" />
+        <item itemvalue="Dart Test.Tests in query_filter_group_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -270,7 +259,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747738329929</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix: linters issues">
+      <option name="closed" value="true" />
+      <created>1747901911597</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1747901911597</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fix: linters issues">
+      <option name="closed" value="true" />
+      <created>1747902076526</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1747902076526</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
