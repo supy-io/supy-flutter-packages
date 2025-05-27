@@ -2,14 +2,14 @@ name: filterator
 description: API Query Builder for Dart – A powerful, flexible library for building structured API queries with filtering, sorting, pagination, and easy conversion to API-specific formats.
 
 
-version: 0.1.2-beta.2
+version: 0.1.3
 repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/filterator
 issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
 homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/filterator
 topics: [ query-builder, query-interface,filtering,pagination ]
 
 environment:
-  sdk: ^3.7.2
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   collection: ^1.19.1

@@ -24,9 +24,8 @@ class ODataConverter extends ApiStandardConverter {
     }
 
     if (query.ordering case final o? when o.isNotEmpty) {
-      params[r'$orderby'] = o
-          .map((e) => '${e.field} ${e.dir.name.toLowerCase()}')
-          .join(',');
+      params[r'$orderby'] =
+          o.map((e) => '${e.field} ${e.dir.name.toLowerCase()}').join(',');
     }
 
     if (query.paging case final p?) {
@@ -51,9 +50,8 @@ class ODataConverter extends ApiStandardConverter {
     }
 
     if (query.ordering case final o? when o.isNotEmpty) {
-      body[r'$orderby'] = o
-          .map((e) => '${e.field} ${e.dir.name.toLowerCase()}')
-          .join(',');
+      body[r'$orderby'] =
+          o.map((e) => '${e.field} ${e.dir.name.toLowerCase()}').join(',');
     }
 
     if (query.paging case final p?) {
@@ -102,46 +100,36 @@ class ODataConverter extends ApiStandardConverter {
     return switch (filter.operation) {
       QueryOperation.inList when version == ODataVersion.v4 =>
         "$field in (${filter.values!.map(_formatValue).join(',')})",
-
       QueryOperation.notIn when version == ODataVersion.v4 =>
         "not($field in (${filter.values!.map(_formatValue).join(',')}))",
-
       QueryOperation.length =>
         'length($field) eq ${_formatValue(filter.value)}',
-
-      QueryOperation.indexOf =>
-        'indexof($field, ${_formatValue(filter.value)})'
-            ' ${_getOperator(filter)}',
-
+      QueryOperation.indexOf => 'indexof($field, ${_formatValue(filter.value)})'
+          ' ${_getOperator(filter)}',
       QueryOperation.substring =>
         'substring($field, ${filter.values![0]}, ${filter.values![1]})'
             ' eq ${_formatValue(filter.value)}',
-
       QueryOperation.datePart =>
         '${filter.values![0]}($field) eq ${_formatValue(filter.value)}',
-
       QueryOperation.mathOp =>
         '${filter.values![0]}($field) eq ${_formatValue(filter.value)}',
-
       QueryOperation.any =>
         '$field/any(${filter.values![0]}: ${_convertLambda(filter)})',
-
       QueryOperation.all =>
         '$field/all(${filter.values![0]}: ${_convertLambda(filter)})',
-
       _ => _convertBasicFilter(filter, field),
     };
   }
 
   String _getOperator(IApiQueryFilter filter) => switch (filter.operation) {
-    QueryOperation.equals => 'eq',
-    QueryOperation.notEquals => 'ne',
-    QueryOperation.greaterThan => 'gt',
-    QueryOperation.greaterOrEqual => 'ge',
-    QueryOperation.lessThan => 'lt',
-    QueryOperation.lessOrEqual => 'le',
-    _ => 'eq',
-  };
+        QueryOperation.equals => 'eq',
+        QueryOperation.notEquals => 'ne',
+        QueryOperation.greaterThan => 'gt',
+        QueryOperation.greaterOrEqual => 'ge',
+        QueryOperation.lessThan => 'lt',
+        QueryOperation.lessOrEqual => 'le',
+        _ => 'eq',
+      };
 
   String _convertBasicFilter(IApiQueryFilter filter, String field) {
     final value = _formatValue(filter.value);
@@ -158,14 +146,11 @@ class ODataConverter extends ApiStandardConverter {
       QueryOperation.endsWith => 'endswith($field, $value)',
       QueryOperation.isNull => '$field eq null',
       QueryOperation.isNotNull => '$field ne null',
-      QueryOperation.inList => filter.values!
-          .map((v) => '$field eq ${_formatValue(v)}')
-          .join(' or '),
-      QueryOperation.notIn => filter.values!
-          .map((v) => '$field ne ${_formatValue(v)}')
-          .join(' and '),
-      _ =>
-        throw UnsupportedError(
+      QueryOperation.inList =>
+        filter.values!.map((v) => '$field eq ${_formatValue(v)}').join(' or '),
+      QueryOperation.notIn =>
+        filter.values!.map((v) => '$field ne ${_formatValue(v)}').join(' and '),
+      _ => throw UnsupportedError(
           'Unsupported filter operation: ${filter.operation}',
         ),
     };

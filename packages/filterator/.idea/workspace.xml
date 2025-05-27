@@ -4,7 +4,83 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="feat: add `toMap` serialization and update test coverage&#10;&#10;This commit introduces `toMap` methods to `ApiQuery` and `ApiQueryFilteringGroup` for serialization. It also includes:&#10;&#10;- New tests to verify the `toMap` serialization in `query_test.dart` and `query_filter_group_test.dart`.&#10;- A new test for `QueryOperation.toShortQueryOperation` in `query_operation_test.dart`.&#10;- Updates to `lcov.info` to reflect improved test coverage." />
+    <list default="true" id="f0029e3a-fe14-415b-8884-c975a8073cec" name="Changes" comment="chore: update Dart SDK constraint&#10;&#10;This commit updates the Dart SDK constraint in `pubspec.yaml` from `^3.7.2` to `&gt;=3.0.0 &lt;4.0.0`.&#10;&#10;It also includes an update to `.idea/workspace.xml` which appears to be related to local task tracking in the IDE and does not affect the package itself.">
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/example/lib/validator_cart_example.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/behavior_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/cart_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/discount_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/price_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/recommendation_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/session_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/shipping_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/tax_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_options/validator_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_contains_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_max_item_count_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_max_length_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_max_total_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_min_length_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_min_total_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_not_empty_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_required_field_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_validator_message.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/cart_validators.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_validators/i_cart_validator.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/cart_change_notifier_dispose_mixin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/cart_history_mixin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/cart_lock_mixin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/cart_metadata_mixin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/cart_plugins_mixin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/cart_stream_mixin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins/mixins.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/models/cart_currency.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/models/cart_hooks.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/models/cart_plugin.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/models/models.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_options/behavior_options_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_options/cart_options_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_options/discount_options_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_options/validator_options_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/odata_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/odata_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/reset_api_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/reset_api_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/supy_converter_example.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/supy_converter_example.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/supy_converter_example_tests.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_filter_group.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/core/query_paging.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/core/query_paging.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/analysis_options.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/build/unit_test_assets/NOTICES.Z" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/build/unit_test_assets/NOTICES.Z" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/build/unit_test_assets/shaders/ink_sparkle.frag" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/build/unit_test_assets/shaders/ink_sparkle.frag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/coverage/lcov.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/example/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/example/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/example/macos/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/example/macos/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/example/macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/example/macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/example/macos/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/example/macos/Runner/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/flexi_cart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/flexi_cart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/cart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_input_formatter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_input_formatter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_input_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_input_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_item.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/models/cart_item.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_items_group.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_items_group.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_theme.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/lib/src/cart_theme.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/lib/src/mixins.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_lock_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_lock_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_logs_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_history_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/test/cart/cart_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/test/flexi_cart_mixins_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/test/flexi_cart_mixins_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flexi_cart/test/helpers/mocks.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../flexi_cart/test/helpers/mocks.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -139,7 +215,7 @@
       <recent name="$PROJECT_DIR$/test/converters_test" />
     </key>
   </component>
-  <component name="RunManager" selected="Dart Test.QueryOperation.toShortQueryOperation returns correct short form in query_operation_test.dart">
+  <component name="RunManager" selected="Dart Test.Tests in fiterator_test.dart">
     <configuration name="ApiQueryFilteringGroup.toMap serializes correctly in query_filter_group_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/core/query_filter_group_test.dart" />
       <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
@@ -171,10 +247,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Dart Test.Tests in fiterator_test.dart" />
         <item itemvalue="Dart Test.QueryOperation.toShortQueryOperation returns correct short form in query_operation_test.dart" />
         <item itemvalue="Dart Test.ApiQueryFilteringGroup.toMap serializes correctly in query_filter_group_test.dart" />
         <item itemvalue="Dart Test.ApiQuery.toMap serializes query components in query_test.dart" />
-        <item itemvalue="Dart Test.Tests in fiterator_test.dart" />
         <item itemvalue="Dart Test.Selection helpers in query_operators_test.dart" />
       </list>
     </recent_temporary>
@@ -308,7 +384,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747908268322</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="feat: add `toMap` serialization and update test coverage&#10;&#10;This commit introduces `toMap` methods to `ApiQuery` and `ApiQueryFilteringGroup` for serialization. It also includes:&#10;&#10;- New tests to verify the `toMap` serialization in `query_test.dart` and `query_filter_group_test.dart`.&#10;- A new test for `QueryOperation.toShortQueryOperation` in `query_operation_test.dart`.&#10;- Updates to `lcov.info` to reflect improved test coverage.">
+      <option name="closed" value="true" />
+      <created>1747915243653</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1747915243653</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -324,7 +408,8 @@
     <MESSAGE value="refactor: Organize tests into core directory and remove unused files&#10;&#10;This commit reorganizes the test files by moving them into a `core` subdirectory within the `test` folder. It also involves the following changes:&#10;&#10;- Deleted unused files:&#10;    - `packages/filterator/lib/src/core/field_types.dart`&#10;    - `packages/filterator/lib/src/core/selection.dart`&#10;    - `packages/filterator/test/query_tests/query_operators_test.dart` (functionality moved)&#10;    - `packages/filterator/test/query_tests/query_tests.dart`&#10;    - `packages/filterator/test/query_tests/query_tools_test.dart` (functionality moved)&#10;- Updated `packages/filterator/lib/src/core/query.dart` to remove the static `cast` method from `ApiQuery`.&#10;- Updated `packages/filterator/test/fiterator_test.dart` to import tests from the new `core` directory.&#10;- Created new test files in `packages/filterator/test/core/`:&#10;    - `converter_tests.dart`: Basic tests for `ApiStandardConverter`.&#10;    - `query_test.dart`: Tests for `ApiQuery` construction and `toMap` serialization.&#10;    - `paging_operators_test.dart`: (Renamed from `query_tests/paging_operators_test.dart`) Tests for paging helper functions and `ApiQuery` `toMap` with complex filtering.&#10;    - `query_filter_test.dart`: Tests for `ApiQueryFilter` construction and `toMap` serialization, including `cloneApiQueryFilter`.&#10;    - `query_metadata_test.dart`: Tests for `ApiQueryMetadata` construction, `empty` factory, and `toMap`.&#10;    - `query_filter_group_test.dart`: Tests for `ApiQueryFilteringGroup` construction, shortcut constructors, `toMap` serialization with nested groups, and `cloneApiQueryFilteringGroup`.&#10;    - `query_operators_test.dart`: Tests for helper functions for paging, filter groups, filters, ordering, and selections.&#10;    - `query_operation_test.dart`: Tests for `QueryOperationStringExtension`, `QueryOperationExtension`, and `QueryOrderDirectionExtension`.&#10;    - `query_ordering_test.dart`: Tests for `ApiQueryOrdering` construction, `toMap`, and `cloneApiQueryOrdering`.&#10;    - `query_response_test.dart`: Tests for `ApiQueryResponse` construction, `empty` factory, and `toMap`.&#10;    - `query_paging_test.dart`: Tests for `ApiQueryPaging` construction, factories, `copyWith`, `toMap`, and `cloneApiQueryPaging`.&#10;    - `query_selections_test.dart`: Tests for `ApiQuerySelection` construction, cloning, `copyWith`, and `toMap` serialization.&#10;- Updated `packages/filterator/lib/src/core/core.dart` to remove the export of `field_types.dart`." />
     <MESSAGE value="refactor: organize tests into core directory and remove unused files" />
     <MESSAGE value="feat: add `toMap` serialization and update test coverage&#10;&#10;This commit introduces `toMap` methods to `ApiQuery` and `ApiQueryFilteringGroup` for serialization. It also includes:&#10;&#10;- New tests to verify the `toMap` serialization in `query_test.dart` and `query_filter_group_test.dart`.&#10;- A new test for `QueryOperation.toShortQueryOperation` in `query_operation_test.dart`.&#10;- Updates to `lcov.info` to reflect improved test coverage." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add `toMap` serialization and update test coverage&#10;&#10;This commit introduces `toMap` methods to `ApiQuery` and `ApiQueryFilteringGroup` for serialization. It also includes:&#10;&#10;- New tests to verify the `toMap` serialization in `query_test.dart` and `query_filter_group_test.dart`.&#10;- A new test for `QueryOperation.toShortQueryOperation` in `query_operation_test.dart`.&#10;- Updates to `lcov.info` to reflect improved test coverage." />
+    <MESSAGE value="chore: update Dart SDK constraint&#10;&#10;This commit updates the Dart SDK constraint in `pubspec.yaml` from `^3.7.2` to `&gt;=3.0.0 &lt;4.0.0`.&#10;&#10;It also includes an update to `.idea/workspace.xml` which appears to be related to local task tracking in the IDE and does not affect the package itself." />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: update Dart SDK constraint&#10;&#10;This commit updates the Dart SDK constraint in `pubspec.yaml` from `^3.7.2` to `&gt;=3.0.0 &lt;4.0.0`.&#10;&#10;It also includes an update to `.idea/workspace.xml` which appears to be related to local task tracking in the IDE and does not affect the package itself." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

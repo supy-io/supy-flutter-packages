@@ -320,16 +320,15 @@ void main() {
     );
 
     final expectedJson = {
-      'filtering':
-          '{"condition":"and","filtering":['
+      'filtering': '{"condition":"and","filtering":['
           '{"by":"name.en","op":"like","match":"apple"},'
           '{"by":"name.ar","op":"like","match":"apple"}]}',
       'groups':
           '[{"condition":"or","filtering":[{"by":"G1","op":"like","match":"G1"}'
-          ',{"by":"G1","op":"like","match":"G1"}],'
-          '"groups":[{"condition":"and","filtering":['
-          '{"by":"G2","op":"like","match":"G2"},'
-          '{"by":"G2","op":"like","match":"G2"}],"groups":[]}]}]',
+              ',{"by":"G1","op":"like","match":"G1"}],'
+              '"groups":[{"condition":"and","filtering":['
+              '{"by":"G2","op":"like","match":"G2"},'
+              '{"by":"G2","op":"like","match":"G2"}],"groups":[]}]}]',
       'paging': '{"offset":20,"limit":0}',
       'ordering': '[{"by":"name","dir":"asc"}]',
     };
@@ -366,8 +365,7 @@ void main() {
     );
 
     final expectedJson = {
-      'filtering':
-          '{"condition":"and","filtering":['
+      'filtering': '{"condition":"and","filtering":['
           '{"by":"field1","op":"eq","match":"value1"}]}',
     };
 
@@ -393,8 +391,7 @@ void main() {
       );
 
       final expectedJson = {
-        'filtering':
-            '{"condition":"and","filtering":['
+        'filtering': '{"condition":"and","filtering":['
             '{"by":"field1","op":"eq","match":"value1"}]}',
         'groups': '[]',
         'paging': '{"offset":0,"limit":-1}',
@@ -411,12 +408,10 @@ void main() {
     'ApiQueryFiltering with invalid operation should throw an exception',
     () {
       final expectedJson = {
-        'filtering':
-            '{"condition":"and","filtering":['
+        'filtering': '{"condition":"and","filtering":['
             '{"by":"field1","op":"eq","match":"value1"},'
             '{"by":"field2","op":"eq","match":"value2"}]}',
-        'groups':
-            '[{"condition":"or","filtering":['
+        'groups': '[{"condition":"or","filtering":['
             '{"by":"field3","op":"eq","match":"value3"},'
             '{"by":"field4","op":"eq","match":"value4"}],'
             '"groups":[]},'

@@ -68,15 +68,15 @@ class ApiQueryFilteringGroup implements IApiQueryFilteringGroup {
   ///
   /// Useful for writing: `ApiQueryFilteringGroup.and([...])`
   ApiQueryFilteringGroup.and(List<IApiQueryFilter> filters)
-    : this(condition: FilterConditionType.and, filters: filters);
+      : this(condition: FilterConditionType.and, filters: filters);
 
   /// Shortcut constructor for an `OR` filter group.
   ApiQueryFilteringGroup.or(List<IApiQueryFilter> filters)
-    : this(condition: FilterConditionType.or, filters: filters);
+      : this(condition: FilterConditionType.or, filters: filters);
 
   /// Shortcut constructor for a `NOT` filter group.
   ApiQueryFilteringGroup.not(List<IApiQueryFilter> filters)
-    : this(condition: FilterConditionType.not, filters: filters);
+      : this(condition: FilterConditionType.not, filters: filters);
 
   /// The logical condition that joins all filters and subgroups.
   @override

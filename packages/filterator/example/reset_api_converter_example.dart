@@ -112,21 +112,21 @@ class ResetApiConverter extends ApiStandardConverter {
   ///
   /// Throws [ArgumentError] for unsupported operators.
   String _operatorToString(QueryOperation op) => switch (op) {
-    QueryOperation.equals => 'eq',
-    QueryOperation.notEquals => 'ne',
-    QueryOperation.greaterThan => 'gt',
-    QueryOperation.greaterOrEqual => 'gte',
-    QueryOperation.lessThan => 'lt',
-    QueryOperation.lessOrEqual => 'lte',
-    QueryOperation.contains => 'contains',
-    QueryOperation.startsWith => 'startswith',
-    QueryOperation.endsWith => 'endswith',
-    QueryOperation.inList => 'in',
-    QueryOperation.notIn => 'nin',
-    QueryOperation.isNull => 'isnull',
-    QueryOperation.isNotNull => 'notnull',
-    _ => throw ArgumentError('Unsupported operator $op'),
-  };
+        QueryOperation.equals => 'eq',
+        QueryOperation.notEquals => 'ne',
+        QueryOperation.greaterThan => 'gt',
+        QueryOperation.greaterOrEqual => 'gte',
+        QueryOperation.lessThan => 'lt',
+        QueryOperation.lessOrEqual => 'lte',
+        QueryOperation.contains => 'contains',
+        QueryOperation.startsWith => 'startswith',
+        QueryOperation.endsWith => 'endswith',
+        QueryOperation.inList => 'in',
+        QueryOperation.notIn => 'nin',
+        QueryOperation.isNull => 'isnull',
+        QueryOperation.isNotNull => 'notnull',
+        _ => throw ArgumentError('Unsupported operator $op'),
+      };
 
   /// Converts the ordering direction enum to its string representation.
   /// Returns 'asc' for ascending and 'desc' for descending order.

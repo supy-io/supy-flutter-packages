@@ -55,36 +55,30 @@ class SupyConverter extends ApiStandardConverter {
 
     return {
       if (filtering != null) ...{
-        'filtering':
-            encode
-                ? jsonEncode(
-                  _transformFiltering(filtering, includeGroups: false),
-                )
-                : _transformFiltering(filtering, includeGroups: false),
-
+        'filtering': encode
+            ? jsonEncode(
+                _transformFiltering(filtering, includeGroups: false),
+              )
+            : _transformFiltering(filtering, includeGroups: false),
         if (filtering.groups != null)
-          'groups':
-              encode
-                  ? jsonEncode(
-                    filtering.groups!.map(_transformFiltering).toList(),
-                  )
-                  : filtering.groups!.map(_transformFiltering).toList(),
+          'groups': encode
+              ? jsonEncode(
+                  filtering.groups!.map(_transformFiltering).toList(),
+                )
+              : filtering.groups!.map(_transformFiltering).toList(),
       },
       if (query.paging != null)
-        'paging':
-            encode
-                ? jsonEncode(_transformPaging(query.paging!))
-                : _transformPaging(query.paging!),
+        'paging': encode
+            ? jsonEncode(_transformPaging(query.paging!))
+            : _transformPaging(query.paging!),
       if (query.ordering != null)
-        'ordering':
-            encode
-                ? jsonEncode(query.ordering!.map(_transformOrdering).toList())
-                : query.ordering!.map(_transformOrdering).toList(),
+        'ordering': encode
+            ? jsonEncode(query.ordering!.map(_transformOrdering).toList())
+            : query.ordering!.map(_transformOrdering).toList(),
       if (query.selection != null)
-        'selection':
-            encode
-                ? jsonEncode(query.selection!.toMap())
-                : query.selection!.toMap(),
+        'selection': encode
+            ? jsonEncode(query.selection!.toMap())
+            : query.selection!.toMap(),
     };
   }
 

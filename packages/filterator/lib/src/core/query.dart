@@ -69,16 +69,15 @@ class ApiQuery implements IApiQuery {
   /// This private constructor is used to create an instance of [ApiQuery]
   /// with default values when no query is provided.
   ApiQuery._({IApiQuery? query})
-    : filtering =
-          query?.filtering ??
-          ApiQueryFilteringGroup(
-            condition: FilterConditionType.and,
-            filters: [],
-            groups: [],
-          ),
-      ordering = query?.ordering ?? [],
-      paging = query?.paging ?? ApiQueryPaging.noLimit(),
-      selection = null;
+      : filtering = query?.filtering ??
+            ApiQueryFilteringGroup(
+              condition: FilterConditionType.and,
+              filters: [],
+              groups: [],
+            ),
+        ordering = query?.ordering ?? [],
+        paging = query?.paging ?? ApiQueryPaging.noLimit(),
+        selection = null;
 
   @override
   final IApiQueryFilteringGroup? filtering;

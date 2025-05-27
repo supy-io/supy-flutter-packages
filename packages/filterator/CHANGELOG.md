@@ -1,3 +1,6 @@
+## 0.1.3
+- updates the Dart SDK constraint in `pubspec.yaml` from `^3.7.2` to `>=3.0.0 <4.0.0`.
+
 ## 0.1.2-beta.2
 - Deleted unused files:
   - `packages/filterator/lib/src/core/field_types.dart`

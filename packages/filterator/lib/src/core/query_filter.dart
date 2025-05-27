@@ -44,9 +44,9 @@ class ApiQueryFilter implements IApiQueryFilter {
     this.value,
     this.values,
   }) : assert(
-         QueryOperation.values.contains(operation),
-         'QueryOperation Values is not containing your operator',
-       );
+          QueryOperation.values.contains(operation),
+          'QueryOperation Values is not containing your operator',
+        );
 
   /// The field to filter by in the API query.
   @override

@@ -45,7 +45,7 @@ class ApiQueryPaging implements IApiQueryPaging {
 
   /// Returns a paging configuration using cursor-based pagination.
   const ApiQueryPaging.cursorBased({required this.limit, required this.cursor})
-    : offset = null;
+      : offset = null;
 
   @override
   final int? offset;
