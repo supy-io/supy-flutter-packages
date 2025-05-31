@@ -1,7 +1,6 @@
 # FlexiCart 🛒
 
-
-[![pub package][pub_badge]][pub_badge_link] [![style: very good analysis][vgv_badge]][vgv_badge_link] [![License: MIT][license_badge]][license_badge_link]
+[![pub package][pub_badge]][pub_badge_link] [![License: MIT][license_badge]][license_badge_link]
 [![codecov](https://codecov.io/gh/supy-io/supy-flutter-packages/branch/main/graph/badge.svg?token=V5WF4C83K7)](https://codecov.io/gh/supy-io/supy-flutter-packages)
 ![Null safety](https://img.shields.io/badge/null%20safety-true-brightgreen)
 
@@ -11,10 +10,6 @@
 [vgv_badge_link]: https://pub.dev/packages/very_good_analysis
 [pub_badge]: https://img.shields.io/pub/v/flexi_cart
 [pub_badge_link]: https://pub.dartlang.org/packages/flexi_cart
-
-
-
-
 
 A flexible, feature-rich cart management system for Flutter applications. FlexiCart provides reactive cart management with support for item grouping, quantity control, notes, delivery tracking, and custom business rules.
 
@@ -27,6 +22,7 @@ A flexible, feature-rich cart management system for Flutter applications. FlexiC
 - **Delivery Tracking** - Set and manage delivery dates/times
 - **Notes/Comments** - Add cart-level notes
 - **Conditional Removal** - Custom rules for item removal
+- **Cart Validation** - Comprehensive validation system with custom validators and promo codes
 - **Type Safety** - Generic implementation for any item type
 - **Deep Copying** - Clone cart instances with complete state
 - **Mixins Support** - Prevent disposed state notifications
@@ -35,7 +31,7 @@ A flexible, feature-rich cart management system for Flutter applications. FlexiC
 - **Stream-based** state emission
 - **Plugin architecture** for extending behavior
 - **Internal logging** for debugging
-- **Exchange Rate Support**  for converting item prices
+- **Exchange Rate Support** for converting item prices
 
 ## Installation 📦
 
@@ -47,18 +43,23 @@ dependencies:
    provider: ^6.0.0 
 ```
 
+## Documentation 📖
+
+- **[Validator Guide](guides/flexi_cart_validator_guide.md)** - Complete guide for cart validation, custom validators, and promo code validation
+
 ## Screenshots 📸
 
 <div style="display: flex; gap: 10px;">
 
-  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="220" />
+  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="200" />
 
-  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="220" />
-  <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="220" />
+  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="200" />
+  <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="200" />
 
-  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="220" />
-  <img src="screenshots/multi_cart.png" alt="MultiCart" width="220" />
-  <img src="screenshots/currencies.png" alt="Exchanges" width="220" />
+  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="200" />
+  <img src="screenshots/multi_cart.png" alt="MultiCart" width="200" />
+  <img src="screenshots/currencies.png" alt="Exchanges" width="200" />
+  <img src="screenshots/validators_cart.png" alt="Exchanges" width="200" />
 
 </div>
 
@@ -146,6 +147,31 @@ cart.setMetadata('sessionId', 'abc-123');
 print(cart.metadata['couponCode']); // SUMMER25
 ```
 
+- #### Cart Validation
+```dart
+// Add custom validators
+cart.addValidator((cart) {
+  if (cart.totalQuantity > 10) {
+    return {'quantity': 'Maximum 10 items allowed'};
+  }
+  return null;
+});
+
+// Set promo code with validation
+cart.setPromoCodeValidator((code) {
+  return code == 'SAVE20' ? null : 'Invalid promo code';
+});
+cart.setPromoCode('SAVE20');
+
+// Validate cart
+final errors = cart.validate();
+if (errors.isNotEmpty) {
+  print('Validation errors: $errors');
+}
+```
+
+> 📋 **For comprehensive validation documentation**, see the [Validator Guide](guides/flexi_cart_validator_guide.md)
+
 - #### Currency Exchange Feature
 ```dart
 final cart=context.read<FlexiCart>();
@@ -187,8 +213,6 @@ final diff = calculateCartDiff(old, cart.items);
 print(diff.added); // List of added items
 ```
 
-
-
 ## 📚 API Reference
 
 ### FlexiCart Class
@@ -209,15 +233,16 @@ print(diff.added); // List of added items
 | `isEmpty()`           | Returns `true` if cart is empty  |
 | `setNote()`           | Add or change cart note          |
 | `setDeliveredAt()`    | Set delivery date/time           |
-| `lock()`    | Lock Cart           |
-| `unlock()`    | unLock Cart           |
-| `registerPlugin()`    | Register Plugin to cart           |
-| `setExpiration()`    | Set an Expiration date           |
-| `logs`    | Get Logs History           |
-| `applyExchangeRate()`    | multiplies item prices and updates internal cart currency.           |
-| `removeExchangeRate()`    | restores original prices by dividing using the last applied            |
-
-
+| `lock()`              | Lock Cart                        |
+| `unlock()`            | unLock Cart                      |
+| `registerPlugin()`    | Register Plugin to cart          |
+| `setExpiration()`     | Set an Expiration date           |
+| `logs`                | Get Logs History                 |
+| `applyExchangeRate()` | multiplies item prices and updates internal cart currency. |
+| `removeExchangeRate()` | restores original prices by dividing using the last applied rate |
+| `validate()`          | Validate cart and return errors  |
+| `addValidator()`      | Add custom validator function    |
+| `setPromoCode()`      | Set promotional code             |
 
 ### CartInput Widget
 
@@ -230,6 +255,9 @@ print(diff.added); // List of added items
 | `showZeroQty`   | Display 0 instead of empty (default: `false`) |
 | `axis`          | Set Axis of the Widget                        |
 
+## Advanced Guides 📖
 
-### 🙌 Contributions
+- **[Cart Validation Guide](guides/flexi_cart_validator_guide.md)** - Learn how to implement custom validators, promo code validation, and automatic validation
+
+## 🙌 Contributions
 Feel free to fork, contribute, or suggest features. PRs are welcome!

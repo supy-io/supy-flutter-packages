@@ -31,7 +31,9 @@ class CartInputTheme extends ThemeExtension<CartInputTheme> {
     ThemeExtension<CartInputTheme>? other,
     double t,
   ) {
-    if (other == null) return this;
+    if (other == null) {
+      return this;
+    }
     return t > 0.5 ? other : this;
   }
 }

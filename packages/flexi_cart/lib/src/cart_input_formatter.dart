@@ -67,7 +67,9 @@ class CartInputNumberFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    if (newValue.text.isEmpty) return newValue;
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
 
     final arabicNumbersRegx = RegExp('[٠-٩]');
     final dotOrCommaRegx = RegExp('[.,]');
@@ -81,10 +83,14 @@ class CartInputNumberFormatter extends TextInputFormatter {
       return oldValue;
     }
 
-    if (input.startsWith('.')) input = '0$input';
+    if (input.startsWith('.')) {
+      input = '0$input';
+    }
 
     final parsed = double.tryParse(input);
-    if (parsed == null || parsed > max) return oldValue;
+    if (parsed == null || parsed > max) {
+      return oldValue;
+    }
 
     final parts = input.split('.');
     if (parts.length == 2 && parts[1].length > fractionCount) {

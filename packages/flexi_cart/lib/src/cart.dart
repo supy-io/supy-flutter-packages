@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +13,13 @@ typedef RemoveCallBack<T> = bool Function(T item);
 /// This class is designed for flexibility and use in state management
 /// systems such as Provider, Riverpod, or GetX.
 class FlexiCart<T extends ICartItem> extends ChangeNotifier
-    with CartChangeNotifierDisposeMixin, CartStreamMixin<FlexiCart<T>> {
+    with
+        CartChangeNotifierDisposeMixin,
+        CartStreamMixin<FlexiCart<T>>,
+        CartPluginsMixin,
+        CartHistoryMixin,
+        CartLockMixin,
+        CartMetadataMixin {
   /// Constructs a [FlexiCart] instance.
   ///
   /// - [items] is an optional initial map of items.
@@ -22,29 +30,63 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   FlexiCart({
     Map<String, T>? items,
     Map<String, CartItemsGroup<T>>? groups,
+    this.hooks,
+    CartOptions? options,
+
+    /// Callbacks for various cart events
     this.onDisposed,
     this.onAddItem,
     this.onDeleteItem,
     this.removeItemCondition,
-  })  : _items = items ?? {},
-        groups = groups ?? {};
+  })  : _options = options ?? CartOptions(),
+        _items = items ?? {},
+        groups = groups ?? {},
+        _createdAt = DateTime.now(),
+        _lastActivity = DateTime.now() {
+    final validatorOptions = _options.validatorOptions;
 
-  /// Custom metadata storage.
-  final Map<String, dynamic> _metadata = {};
+    if (validatorOptions.autoValidate) {
+      // Automatically validate the cart if auto-validation is enabled
+      _validateIfNeeded();
+      addListener(_validateIfNeeded);
+    }
+    // Initialize session if options are provided
+    _initializeSession();
 
-  /// Returns a read-only view of the metadata.
-  Map<String, dynamic> get metadata => Map.unmodifiable(_metadata);
+    // Start session monitoring
+    _startSessionMonitoring();
+  }
+
+  /// Class have Callbacks
+  final CartHooks? hooks;
+
+  /// Options for the cart, including validation and discount options.
+  CartOptions _options;
+
+  /// Returns the current options for the cart.
+  CartOptions get options => _options;
 
   /// Callback triggered when the cart is disposed.
+  @Deprecated('use hooks:CartHooks(onDisposed:(){}) instead')
   final VoidCallback? onDisposed;
 
   /// Callback triggered when an item is added.
+  @Deprecated('use hooks:CartHooks(onAddItem:(item){}) instead')
   final VoidCallback? onAddItem;
 
   /// Callback triggered when an item is deleted.
+  @Deprecated('use hooks:CartHooks(onDeleteItem:(item){}) instead')
   final VoidCallback? onDeleteItem;
 
   /// Condition to determine whether an item should be removed.
+  @Deprecated(
+    'removeItemCondition is deprecated and will be removed'
+    ' in a future release. '
+    'Please use options.behaviorOptions.itemFilter instead. '
+    'Note: itemFilter returns true to keep the item, '
+    'while removeItemCondition returned true to remove it — '
+    'reverse the logic accordingly.',
+  )
   RemoveCallBack<T>? removeItemCondition;
 
   /// Internal storage for cart items.
@@ -65,17 +107,10 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Whether to allow items with quantity zero in the cart.
   bool addZeroQuantity = false;
 
-  /// Indicates if the cart is locked for editing.
-  bool _isLocked = false;
-
   /// Currency if needed for the cart.
   CartCurrency? _cartCurrency;
 
   /// Internal logs of cart events.
-  final List<String> _logs = [];
-
-  /// Registered plugins for cart event hooks.
-  final List<ICartPlugin<T>> _plugins = [];
 
   /// Returns all cart items as a map.
   Map<String, T> get items => _items;
@@ -89,9 +124,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Returns the delivery timestamp.
   DateTime? get deliveredAt => _deliveredAt;
 
-  /// Indicates whether the cart is currently locked.
-  bool get isLocked => _isLocked;
-
   /// Returns true if the cart has expired.
   bool get isExpired =>
       _expiresAt != null && DateTime.now().isAfter(_expiresAt!);
@@ -99,68 +131,1046 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Returns the CartCurrency.
   CartCurrency? get cartCurrency => _cartCurrency;
 
-  /// Returns the internal log entries.
-  List<String> get logs => List.unmodifiable(_logs);
-
-  /// Sets the cart to expire after the given duration from now.
-  void setExpiration(Duration duration, {bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    _expiresAt = DateTime.now().add(duration);
-    _log(
-      'Cart has been set to expire at: $_expiresAt',
-      notified: shouldNotifyListeners,
-    );
-    if (shouldNotifyListeners) notifyListeners();
-  }
-
-  /// Sets a metadata key-value pair.
-  void setMetadata(
-    String key,
-    dynamic value, {
+  // =============== VALIDATOR MANAGEMENT INTEGRATION ===============
+  /// set promo code for the cart.
+  void setPromoCode(
+    String? code, {
     bool shouldNotifyListeners = true,
-  }) {
-    _checkDisposed();
+  }) =>
+      _updateOptions(
+        _options = _options.copyWith(
+          validatorOptions: _options.validatorOptions.copyWith(
+            promoCode: code,
+          ),
+        ),
+        'Set promo code: $code',
+        shouldNotifyListeners,
+      );
 
-    _metadata[key] = value;
-    _log('Metadata set: $key = $value', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
+  /// Returns the current promo code.
+  String? get promoCode => _options.validatorOptions.promoCode;
+
+  /// Sets a custom validator for the promo code.
+  void setPromoCodeValidator(
+    String? Function(String code)? promoCodeValidator, {
+    bool shouldNotifyListeners = false,
+  }) =>
+      _updateOptions(
+        _options = _options.copyWith(
+          validatorOptions: _options.validatorOptions.copyWith(
+            promoCodeValidator: promoCodeValidator,
+          ),
+        ),
+        'Set promo code validator',
+        shouldNotifyListeners,
+      );
+
+  /// [ValidatorOptions] is used to validate the cart state
+
+  /// Returns true if the cart is locked.
+  Map<String, dynamic> validate() {
+    final validatorOptions = _options.validatorOptions;
+    return validatorOptions.validate(this);
   }
 
-  /// get metadata value by key
-  D? getMetadata<D>(String key) => _metadata[key] as D?;
+  /// Returns true if the cart has any validators.
+  bool get hasValidators => _options.validatorOptions.hasValidators;
 
-  /// Removes a metadata entry.
-  void removeMetadata(String key, {bool shouldNotifyListeners = true}) {
-    _checkDisposed();
+  /// Returns the list of validators.
+  List<ICartValidator> get validators {
+    return _options.validatorOptions.validators;
+  }
 
-    if (_metadata.containsKey(key)) {
-      _metadata.remove(key);
-      _log('Metadata removed: $key', notified: shouldNotifyListeners);
-      if (shouldNotifyListeners) notifyListeners();
+  /// add a validator to the validators.
+  void addValidator(ICartValidator validator) {
+    _options.validatorOptions.addValidator(validator);
+    _validateIfNeeded();
+  }
+
+  /// Removes a validator from the list.
+  void removeValidator(ICartValidator validator) {
+    _options.validatorOptions.removeValidator(validator);
+    _validateIfNeeded();
+  }
+
+  /// Adds multiple validators.
+  void addValidators(List<ICartValidator> validators) {
+    _options.validatorOptions.addValidators(validators);
+    _validateIfNeeded();
+  }
+
+  /// Clears all validators.
+  void clearValidators() {
+    _options.validatorOptions.clearValidators();
+    _validateIfNeeded();
+  }
+
+  /// Returns the current validation errors as a map.
+
+  Map<String, dynamic> validationErrors = {};
+
+  void _validateIfNeeded() {
+    final errors = validate();
+    validationErrors = errors;
+    if (errors.isNotEmpty) {
+      _log('Auto-validation errors: $errors');
+    } else {
+      _log('Auto-validation passed');
     }
   }
 
-  /// Locks the cart from being edited.
-  void lock({bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    if (_isLocked) return;
-    _isLocked = true;
-    _log('Cart has been locked', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
+  /// sets custom validator options for the cart.
+  void setValidatorOptions(
+    ValidatorOptions validatorOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        validatorOptions: validatorOptions,
+      ),
+      'Set custom validator options',
+      shouldNotifyListeners,
+    );
   }
 
-  /// Unlocks the cart, allowing edits.
-  void unlock({bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    if (!_isLocked) return;
-    _isLocked = false;
-    _log('Cart has been locked', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
+  // =============== END VALIDATOR MANAGEMENT INTEGRATION ===============
+
+  /// Sets custom behavior options for the cart.
+  void setBehaviorOptions(
+    BehaviorOptions behaviorOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        behaviorOptions: behaviorOptions,
+      ),
+      'Set custom behavior options',
+      shouldNotifyListeners,
+    );
+  }
+
+  // =============== SESSION MANAGEMENT INTEGRATION ===============
+
+  /// Session creation timestamp
+  final DateTime _createdAt;
+
+  /// Last activity timestamp
+  DateTime _lastActivity;
+
+  /// Session monitoring timer
+  Timer? _sessionTimer;
+
+  /// Whether session has been warned about expiration
+  bool _hasBeenWarned = false;
+
+  /// Session extension count for metrics
+  int _sessionExtensions = 0;
+
+  /// Total session duration for metrics
+  Duration get _totalSessionDuration => DateTime.now().difference(_createdAt);
+
+  /// Session ID - generated or custom
+  String get sessionId =>
+      _options.sessionOptions.sessionId ?? _generateSessionId();
+
+  /// Returns session creation time
+  DateTime get sessionCreatedAt => _createdAt;
+
+  /// Returns last activity time
+  DateTime get lastActivity => _lastActivity;
+
+  /// Returns session extension count
+  int get sessionExtensions => _sessionExtensions;
+
+  /// Returns total session duration
+  Duration get totalSessionDuration => _totalSessionDuration;
+
+  /// Sets custom session options for the cart.
+  void setSessionOptions(
+    SessionOptions sessionOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        sessionOptions: sessionOptions,
+      ),
+      'Set custom session options',
+      shouldNotifyListeners,
+    );
+
+    // Reinitialize session with new options
+    _initializeSession();
+    _restartSessionMonitoring();
+  }
+
+  /// Checks if the session has expired
+  bool get isSessionExpired {
+    final sessionOptions = _options.sessionOptions;
+
+    return sessionOptions.isExpired(
+      _createdAt,
+      lastActivity: _lastActivity,
+    );
+  }
+
+  /// Gets time remaining before session expires
+  Duration? getSessionTimeRemaining() {
+    final sessionOptions = _options.sessionOptions;
+
+    return sessionOptions.getTimeRemaining(
+      _createdAt,
+      lastActivity: _lastActivity,
+    );
+  }
+
+  /// Extends the session by updating last activity
+  void extendSession({bool shouldNotifyListeners = false}) {
+    final sessionOptions = _options.sessionOptions;
+
+    _performCartOperation(
+      operation: () {
+        _lastActivity = DateTime.now();
+        _sessionExtensions++;
+        _hasBeenWarned = false; // Reset warning flag
+
+        // Trigger extension callback
+        final timeRemaining = getSessionTimeRemaining();
+        if (timeRemaining != null) {
+          sessionOptions.onSessionExtend?.call(timeRemaining);
+        }
+      },
+      logMessage: 'Session extended - Extensions: $_sessionExtensions',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
+  }
+
+  /// Manually expire the session
+  void expireSession({bool shouldNotifyListeners = false}) {
+    final sessionOptions = _options.sessionOptions;
+
+    _performCartOperation(
+      operation: () {
+        // Set last activity to a time that would cause expiration
+        if (sessionOptions.expiresIn != null) {
+          _lastActivity = _createdAt.subtract(sessionOptions.expiresIn!);
+        }
+
+        _handleSessionExpiration();
+      },
+      logMessage: 'Session manually expired',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
+  }
+
+  /// Gets session metrics as a map
+  Map<String, dynamic> getSessionMetrics() {
+    final sessionOptions = _options.sessionOptions;
+    if (sessionOptions.enableSessionMetrics != true) {
+      return {};
+    }
+
+    return {
+      'sessionId': sessionId,
+      'createdAt': _createdAt.toIso8601String(),
+      'lastActivity': _lastActivity.toIso8601String(),
+      'totalDuration': _totalSessionDuration.inSeconds,
+      'extensions': _sessionExtensions,
+      'isExpired': isSessionExpired,
+      'timeRemaining': getSessionTimeRemaining()?.inSeconds,
+      'customMetadata': sessionOptions.customMetadata,
+    };
+  }
+
+  /// Initialize session when cart is created
+  void _initializeSession() {
+    final sessionOptions = _options.sessionOptions
+
+      // Generate session ID if not provided
+      ..sessionId ??= _generateSessionId();
+
+    // Trigger session start callback
+    sessionOptions.onSessionStart?.call(sessionId);
+
+    _log('Session initialized - ID: $sessionId');
+  }
+
+  /// Start monitoring session expiration
+  void _startSessionMonitoring() {
+    _sessionTimer?.cancel();
+
+    // Check every 30 seconds
+    _sessionTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      _checkSessionStatus();
+    });
+  }
+
+  /// Restart session monitoring with new options
+  void _restartSessionMonitoring() {
+    _sessionTimer?.cancel();
+    _hasBeenWarned = false;
+    _startSessionMonitoring();
+  }
+
+  /// Check session status and handle warnings/expiration
+  void _checkSessionStatus() {
+    final sessionOptions = _options.sessionOptions;
+
+    if (isSessionExpired) {
+      _handleSessionExpiration();
+      return;
+    }
+
+    // Check for warning
+    if (!_hasBeenWarned &&
+        sessionOptions.shouldWarn(_createdAt, lastActivity: _lastActivity)) {
+      final timeRemaining = getSessionTimeRemaining();
+      if (timeRemaining != null) {
+        sessionOptions.onSessionWarning?.call(timeRemaining);
+        _hasBeenWarned = true;
+        _log('Session warning triggered - Time remaining:'
+            ' ${timeRemaining.inMinutes} minutes');
+      }
+    }
+  }
+
+  /// Handle session expiration
+  void _handleSessionExpiration() {
+    final sessionOptions = _options.sessionOptions;
+
+    _sessionTimer?.cancel();
+
+    _log(
+      'Session expired - ID: $sessionId, Duration:'
+      ' ${_totalSessionDuration.inMinutes} minutes',
+    );
+
+    // Trigger expiration callback
+    sessionOptions.onSessionExpire?.call();
+
+    // Optionally clear cart data
+    // reset(shouldNotifyListeners: true);
+  }
+
+  /// Generate a unique session ID
+  String _generateSessionId() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final random = (timestamp * 1000 + (timestamp % 1000)).toString();
+    return 'cart_session_$random';
+  }
+
+  /// Update last activity timestamp (call this on user interactions)
+  // void _updateActivity() {
+  //   final sessionOptions = _options.sessionOptions;
+  //   if (sessionOptions.autoExtendOnActivity == true) {
+  //     extendSession();
+  //   } else {
+  //     _lastActivity = DateTime.now();
+  //   }
+  // }
+
+// =============== END SESSION MANAGEMENT INTEGRATION ===============
+
+// =============== SHIPPING OPTIONS INTEGRATION ===============
+  /// Shipping Integration Features Added:
+  ///
+  /// Core Shipping Methods:
+  /// - setShippingOptions() - Set complete shipping configuration
+  /// - getShippingCost() - Calculate shipping cost
+  /// - getSelectedShippingMethod() - Get currently selected method
+  /// - selectShippingMethod() - Select a shipping method
+  /// - addShippingMethod() - Add new shipping method
+  /// - removeShippingMethod() - Remove shipping method
+  ///
+  /// Convenience Methods:
+  /// - qualifiesForFreeShipping() - Check free shipping eligibility
+  /// - getAmountNeededForFreeShipping() - Amount needed for free shipping
+  /// - getFastestShippingMethod() - Get fastest delivery option
+  /// - getCheapestShippingMethod() - Get cheapest shipping option
+  /// - getShippingMethods() - Get all available methods
+  ///
+  /// Enhanced Total Calculations:
+  /// - getTotalWithShipping() - Total price including shipping
+  /// - getFinalTotalWithShipping() - Final total with tax, discount, and shipping
+
+  /// Sets custom shipping options for the cart.
+  void setShippingOptions(
+    ShippingOptions shippingOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        shippingOptions: shippingOptions,
+      ),
+      'Set custom shipping options',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns the calculated shipping cost.
+  double getShippingCost() => _options.shippingOptions.calculate(this);
+
+  /// Returns the label used for shipping display.
+  String get shippingLabel => _options.shippingOptions.shippingLabel;
+
+  /// Returns the currently selected shipping method.
+  ShippingMethod? getSelectedShippingMethod() =>
+      _options.shippingOptions.selectedMethod;
+
+  /// Returns the default shipping method.
+  ShippingMethod? getDefaultShippingMethod() =>
+      _options.shippingOptions.defaultMethod;
+
+  /// Selects a shipping method by ID.
+  bool selectShippingMethod(
+    String methodId, {
+    bool shouldNotifyListeners = false,
+  }) {
+    final success = _options.shippingOptions.selectMethod(methodId);
+    if (success) {
+      _updateOptions(
+        _options,
+        'Selected shipping method: $methodId',
+        shouldNotifyListeners,
+      );
+    }
+    return success;
+  }
+
+  /// Adds a new shipping method to available options.
+  void addShippingMethod(
+    ShippingMethod method, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _performCartOperation(
+      operation: () {
+        _options.shippingOptions.addMethod(method);
+      },
+      logMessage: 'Added shipping method: ${method.name} (${method.id})',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
+  }
+
+  /// Removes a shipping method by ID.
+  bool removeShippingMethod(
+    String methodId, {
+    bool shouldNotifyListeners = false,
+  }) {
+    var removed = false;
+    _performCartOperation(
+      operation: () {
+        removed = _options.shippingOptions.removeMethod(methodId);
+      },
+      logMessage: 'Removed shipping method: $methodId',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
+    return removed;
+  }
+
+  /// Returns all available shipping methods.
+  List<ShippingMethod> getShippingMethods() =>
+      _options.shippingOptions.availableMethods ?? [];
+
+  /// Returns shipping methods sorted by cost (cheapest first).
+  List<ShippingMethod> getShippingMethodsSortedByCost() =>
+      _options.shippingOptions.getMethodsSortedByCost();
+
+  /// Returns shipping methods sorted by delivery speed (fastest first).
+  List<ShippingMethod> getShippingMethodsSortedBySpeed() =>
+      _options.shippingOptions.getMethodsSortedBySpeed();
+
+  /// Returns the fastest available shipping method.
+  ShippingMethod? getFastestShippingMethod() =>
+      _options.shippingOptions.getFastestMethod();
+
+  /// Returns the cheapest available shipping method.
+  ShippingMethod? getCheapestShippingMethod() =>
+      _options.shippingOptions.getCheapestMethod();
+
+  /// Checks if the cart qualifies for free shipping.
+  bool qualifiesForFreeShipping() =>
+      _options.shippingOptions.qualifiesForFreeShipping(this);
+
+  /// Returns the amount needed to qualify for free shipping.
+  double getAmountNeededForFreeShipping() =>
+      _options.shippingOptions.amountNeededForFreeShipping(this);
+
+  /// Returns the free shipping promotional message.
+  String getFreeShippingMessage() =>
+      _options.shippingOptions.getFreeShippingMessage();
+
+  /// Sets the free shipping threshold.
+  void setFreeShippingThreshold(
+    double? threshold, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        shippingOptions: _options.shippingOptions.copyWith(
+          freeShippingThreshold: threshold,
+        ),
+      ),
+      'Set free shipping threshold: $threshold',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns the current free shipping threshold.
+  double? get freeShippingThreshold =>
+      _options.shippingOptions.freeShippingThreshold;
+
+  /// Sets a custom shipping cost calculator.
+  void setShippingCostCalculator(
+    double Function(FlexiCart cart, ShippingMethod? method)? calculator, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        shippingOptions: _options.shippingOptions.copyWith(
+          shippingCostCalculator: calculator,
+        ),
+      ),
+      'Set custom shipping cost calculator',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns the total price including shipping.
+  double getTotalWithShipping() {
+    final baseTotal = totalPrice();
+    final shippingCost = getShippingCost();
+    return baseTotal + shippingCost;
+  }
+
+  /// Returns the final total including tax, discount, and shipping.
+  double getFinalTotalWithShipping() {
+    final baseTotal = totalPrice();
+    final discountAmount = discount();
+    final tax = getTotalTax();
+    final shippingCost = getShippingCost();
+
+    if (_options.taxOptions.includeTaxInTotal) {
+      return baseTotal - discountAmount + tax + shippingCost;
+    }
+    return baseTotal - discountAmount + shippingCost;
+  }
+
+  /// Validates the shipping configuration and returns any errors.
+  List<String> validateShippingOptions() => _options.shippingOptions.validate();
+
+// =============== END SHIPPING OPTIONS INTEGRATION ===============
+
+  // =============== TAX OPTIONS INTEGRATION ===============
+  /// Tax Integration Features Added:
+  ///
+  /// Core Tax Methods:
+  ///
+  /// setTaxOptions() - Set complete tax configuration
+  /// getTotalTax() - Calculate total tax
+  /// getAllTaxes() - Get all taxes as a map (for multi-tax scenarios)
+  /// getFormattedTax() - Get formatted tax display
+  ///
+  ///
+  /// Convenience Methods:
+  ///
+  /// setTaxRate() - Set simple tax rate
+  /// setTaxCalculator() - Set custom tax calculation function
+  /// setTaxRegion() - Set tax region
+  /// setIncludeTaxInTotal() - Configure if tax is included in total
+  /// setTaxExemption() - Set tax exemption logic
+  ///
+  ///
+  /// Getters:
+  ///
+  /// taxLabel - Get tax display label
+  /// taxRegion - Get current tax region
+  /// includeTaxInTotal - Check if tax is included in total
+  /// isTaxExempt - Check if cart is tax exempt
+  ///
+  ///
+  /// Enhanced Total Calculations:
+  ///
+  /// getTotalWithTax() - Total price including tax (when configured)
+  /// getFinalTotal() - Final total
+
+  /// Sets custom tax options for the cart.
+  void setTaxOptions(
+    TaxOptions taxOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        taxOptions: taxOptions,
+      ),
+      'Set custom tax options',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns the total tax using the configured tax options.
+  double getTotalTax() => _options.taxOptions.calculate(this);
+
+  /// Returns all calculated taxes as a map (for multi-tax scenarios).
+  Map<String, double> getAllTaxes() => _options.taxOptions.calculateAll(this);
+
+  /// Returns the formatted tax amount.
+  String getFormattedTax() => _options.taxOptions.formatTax(getTotalTax());
+
+  /// Returns the label used for tax display.
+  String get taxLabel => _options.taxOptions.taxLabel;
+
+  /// Sets a simple tax rate for the cart.
+  void setTaxRate(
+    double taxRate, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        taxOptions: _options.taxOptions.copyWith(
+          taxRate: taxRate,
+        ),
+      ),
+      'Set tax rate: $taxRate',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Sets a custom tax calculator function.
+  void setTaxCalculator(
+    double Function(FlexiCart cart) taxCalculator, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        taxOptions: _options.taxOptions.copyWith(
+          taxCalculator: taxCalculator,
+        ),
+      ),
+      'Set custom tax calculator',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Sets the tax region for the cart.
+  void setTaxRegion(
+    String? taxRegion, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        taxOptions: _options.taxOptions.copyWith(
+          taxRegion: taxRegion,
+        ),
+      ),
+      'Set tax region: $taxRegion',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns the current tax region.
+  String? get taxRegion => _options.taxOptions.taxRegion;
+
+  /// Sets whether tax should be included in the total.
+  void setIncludeTaxInTotal({
+    bool includeTaxInTotal = false,
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        taxOptions: _options.taxOptions.copyWith(
+          includeTaxInTotal: includeTaxInTotal,
+        ),
+      ),
+      'Set include tax in total: $includeTaxInTotal',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns whether tax is included in the total.
+  bool get includeTaxInTotal => _options.taxOptions.includeTaxInTotal;
+
+  /// Sets a tax exemption function.
+  void setTaxExemption(
+    bool Function(FlexiCart cart)? isExempt, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        taxOptions: _options.taxOptions.copyWith(
+          isExempt: isExempt,
+        ),
+      ),
+      'Set tax exemption function',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Returns true if the cart is tax exempt.
+  bool get isTaxExempt => _options.taxOptions.isExempt?.call(this) ?? false;
+
+  /// Returns the total price including tax (if tax should be included).
+  double getTotalWithTax() {
+    final baseTotal = totalPrice();
+    final tax = getTotalTax();
+
+    if (_options.taxOptions.includeTaxInTotal) {
+      return baseTotal + tax;
+    }
+    return baseTotal;
+  }
+
+  // =============== END TAX OPTIONS INTEGRATION ===============
+  // flexi_cart_recommendations.dart
+
+  // =============== RECOMMENDATION OPTIONS INTEGRATION ===============
+  /// Recommendation Integration Features Added:
+  ///
+  /// Core Recommendation Methods:
+  /// - setRecommendationOptions() - Set complete recommendation configuration
+  /// - getRecommendations() - Get recommended products
+  /// - clearRecommendationCache() - Clear cached recommendations
+  /// - getRecommendationStats() - Get cache statistics
+  ///
+  /// Configuration Methods:
+  /// - setMaxRecommendations() - Set maximum number of recommendations
+  /// - setMinCartValue() - Set minimum cart value for recommendations
+  /// - setRecommendationStrategies() - Set recommendation strategies
+  /// - enableRecommendationCaching() - Enable/disable caching
+  ///
+  /// Custom Strategy Methods:
+  /// - setCustomRecommendationFunction() - Set custom recommendation logic
+  /// - setProductCategoryMapper() - Set category mapping function
+  /// - setPriceRangeCalculator() - Set price calculation function
+  ///
+  /// Callback Methods:
+  /// - setRecommendationCallbacks() - Set success/error callbacks
+
+  /// Sets custom recommendation options for the cart.
+  // void setRecommendationOptions(
+  //   RecommendationOptions recommendationOptions, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   _updateOptions(
+  //     options.copyWith(
+  //       recommendationOptions: recommendationOptions,
+  //     ),
+  //     'Set custom recommendation options',
+  //     shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Returns the current recommendation options.
+  // RecommendationOptions get recommendationOptions =>
+  //     options.recommendationOptions;
+  //
+  // /// Generates recommendations based on current cart contents.
+  // List<T> getRecommendations() {
+  //   final recOptions = recommendationOptions;
+  //
+  //   try {
+  //     final recommendations = recOptions.recommend(this as FlexiCart);
+  //     return recommendations.cast<T>();
+  //   } catch (e) {
+  //     debugPrint('Error generating recommendations: $e');
+  //     return [];
+  //   }
+  // }
+  //
+  // /// Sets the maximum number of recommendations to return.
+  // void setMaxRecommendations(
+  //   int maxRecommendations, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config.copyWith(
+  //         maxRecommendations: maxRecommendations,
+  //       ),
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets the minimum cart value required for recommendations.
+  // void setMinCartValueForRecommendations(
+  //   double minCartValue, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config.copyWith(
+  //         minCartValue: minCartValue,
+  //       ),
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets the recommendation strategies to use.
+  // void setRecommendationStrategies(
+  //   List<RecommendationStrategy> strategies, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config.copyWith(
+  //         strategies: strategies,
+  //       ),
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Enables or disables recommendation caching.
+  // void enableRecommendationCaching(
+  //   bool enabled, {
+  //   int? cacheExpirationMinutes,
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config.copyWith(
+  //         enableCaching: enabled,
+  //         cacheExpirationMinutes: cacheExpirationMinutes ??
+  //             currentOptions.config.cacheExpirationMinutes,
+  //       ),
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets a custom recommendation function.
+  // void setCustomRecommendationFunction(
+  //   List<ICartItem> Function(FlexiCart cart) suggestProducts, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config,
+  //       suggestProducts: suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets a product category mapper function.
+  // void setProductCategoryMapper(
+  //   String Function(ICartItem product) categoryMapper, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config,
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: categoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets a price range calculator function.
+  // void setPriceRangeCalculator(
+  //   double Function(ICartItem cartItem) priceCalculator, {
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config,
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: priceCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets recommendation callbacks for success and error handling.
+  // void setRecommendationCallbacks({
+  //   void Function(FlexiCart cart, List<ICartItem> recommendations)? onGenerated,
+  //   void Function(FlexiCart cart, Object error)? onError,
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config,
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: onGenerated,
+  //       onRecommendationError: onError,
+  //       filterRecommendations: currentOptions.filterRecommendations,
+  //       sortRecommendations: currentOptions.sortRecommendations,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Sets recommendation filter and sort functions.
+  // void setRecommendationFilters({
+  //   bool Function(ICartItem product, FlexiCart cart)? filter,
+  //   int Function(ICartItem a, ICartItem b)? sort,
+  //   bool shouldNotifyListeners = false,
+  // }) {
+  //   final currentOptions = recommendationOptions;
+  //   setRecommendationOptions(
+  //     RecommendationOptions(
+  //       config: currentOptions.config,
+  //       suggestProducts: currentOptions.suggestProducts,
+  //       onRecommendationGenerated: currentOptions.onRecommendationGenerated,
+  //       onRecommendationError: currentOptions.onRecommendationError,
+  //       filterRecommendations: filter,
+  //       sortRecommendations: sort,
+  //       productCategoryMapper: currentOptions.productCategoryMapper,
+  //       priceRangeCalculator: currentOptions.priceRangeCalculator,
+  //     ),
+  //     shouldNotifyListeners: shouldNotifyListeners,
+  //   );
+  // }
+  //
+  // /// Clears the recommendation cache.
+  // void clearRecommendationCache() {
+  //   recommendationOptions.clearCache();
+  // }
+  //
+  // /// Returns recommendation cache statistics.
+  // Map<String, dynamic> getRecommendationCacheStats() {
+  //   return recommendationOptions.getCacheStats();
+  // }
+  //
+  // /// Checks if recommendations are available for the current cart.
+  // bool hasRecommendations() {
+  //   return getRecommendations().isNotEmpty;
+  // }
+  //
+  // /// Gets the count of available recommendations.
+  // int getRecommendationCount() {
+  //   return getRecommendations().length;
+  // }
+  //
+  // /// Checks if the cart meets the minimum value for recommendations.
+  // bool meetsMinimumValueForRecommendations() {
+  //   return totalPrice() >= recommendationOptions.config.minCartValue;
+  // }
+  //
+  // /// Gets recommendations filtered by a specific strategy.
+  // List<T> getRecommendationsByStrategy(RecommendationStrategy strategy) {
+  //   final currentStrategies = recommendationOptions.config.strategies;
+  //
+  //   // Temporarily set single strategy
+  //   setRecommendationStrategies([strategy], shouldNotifyListeners: false);
+  //
+  //   final recommendations = getRecommendations();
+  //
+  //   // Restore original strategies
+  //   setRecommendationStrategies(currentStrategies,
+  //       shouldNotifyListeners: false);
+  //
+  //   return recommendations;
+  // }
+
+// =============== END RECOMMENDATION OPTIONS INTEGRATION ===============
+
+  /// Updates the cart options and logs the change.
+  void setDiscountOptions(
+    DiscountOptions discountOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        discountOptions: discountOptions,
+      ),
+      'Set custom discount options',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// discountOptions is used to calculate the discount for the cart.
+  double discount() {
+    return _options.discountOptions.calculate(this);
+  }
+
+  /// Returns the label used for the discount.
+  String get discountLabel => _options.discountOptions.discountLabel;
+
+  /// Returns the total price minus any discounts.
+  double getTotalAfterDiscount() => totalPrice() - discount();
+
+  /// Returns the final total including tax and discounts.
+  double getFinalTotal() {
+    final baseTotal = totalPrice();
+    final discountAmount = discount();
+    final tax = getTotalTax();
+
+    if (_options.taxOptions.includeTaxInTotal) {
+      return baseTotal - discountAmount + tax;
+    }
+    return baseTotal - discountAmount;
+  }
+
+  /// Sets the cart to expire after the given duration from now.
+  void setExpiration(Duration duration, {bool shouldNotifyListeners = false}) {
+    _performCartOperation(
+      operation: () {
+        _expiresAt = DateTime.now().add(duration);
+      },
+      logMessage: ' Set expiration to: ${DateTime.now().add(duration)}',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
   /// Throws an exception if the cart is locked.
   void _checkLock() {
-    if (_isLocked) {
+    if (isLocked) {
       final error = CartLockedException();
       _notifyOnErrorPlugins(error, StackTrace.current);
       throw error;
@@ -169,18 +1179,16 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Logs a message with a timestamp.
   void _log(String message, {bool notified = false}) {
-    _logs.add('$message - {notified: $notified}');
-  }
-
-  /// Registers a plugin to be notified on cart changes.
-  void registerPlugin(ICartPlugin<T> plugin) {
-    _checkDisposed();
-    _plugins.add(plugin);
+    addHistory('$message - {notified: $notified}');
+    final behaviorOptions = _options.behaviorOptions;
+    if (behaviorOptions.enableLogging) {
+      behaviorOptions.logger?.call(message);
+    }
   }
 
   /// Notifies all registered plugins about a cart change.
   void _notifyOnChangedPlugins() {
-    for (final plugin in _plugins) {
+    for (final plugin in plugins) {
       try {
         plugin.onChange(this);
       } on Exception catch (e, s) {
@@ -191,42 +1199,36 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Notifies all registered plugins about a cart error.
   void _notifyOnErrorPlugins(Object error, StackTrace stackTrace) {
-    for (final plugin in _plugins) {
+    for (final plugin in plugins) {
       plugin.onError(this, error, stackTrace);
     }
   }
 
   /// Throws an exception if the cart is disposed.
   void _checkDisposed() {
-    if (disposed) {
-      final error =
-          CartDisposedException('Cannot perform action after dispose');
-      _notifyOnErrorPlugins(error, StackTrace.current);
-      throw error;
-    }
+    checkIfDisposed(
+      (exception) {
+        _notifyOnErrorPlugins(exception, StackTrace.current);
+      },
+    );
   }
 
   /// Notifies all registered plugins about a cart close.
   void _notifyOnClosePlugins() {
-    for (final plugin in _plugins) {
+    for (final plugin in plugins) {
       plugin.onClose(this);
     }
   }
 
   /// Sets a note for the cart.
   void setNote(String? note, {bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    _note = note;
-    _log('Set Note with: $note', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
-  }
-
-  /// Deprecated. Use [setNote] instead.
-  @Deprecated('Use setNote() instead')
-  set note(String? note) {
-    _note = note;
-    _log('Set Note with: $note', notified: true);
-    notifyListeners();
+    _performCartOperation(
+      operation: () {
+        _note = note;
+      },
+      logMessage: 'Set Note with: $note',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
   /// Sets the delivery timestamp.
@@ -234,19 +1236,13 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     DateTime? deliveredAt, {
     bool shouldNotifyListeners = false,
   }) {
-    _checkDisposed();
-    _deliveredAt = deliveredAt;
-    _log('Set Delivered at: $deliveredAt', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
-  }
-
-  /// Deprecated. Use [setDeliveredAt] instead.
-  @Deprecated('Use setDeliveredAt() instead')
-  set deliveredAt(DateTime? deliveredAt) {
-    _deliveredAt = deliveredAt;
-
-    _log('Set Delivered at: $deliveredAt', notified: true);
-    notifyListeners();
+    _performCartOperation(
+      operation: () {
+        _deliveredAt = deliveredAt;
+      },
+      logMessage: 'Set Delivered at: $deliveredAt',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
   /// Calculates the total price of items in the cart.
@@ -274,16 +1270,13 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool increment = false,
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-
-    _checkLock();
-    _add(item, increment);
-    emit(this);
-    _log(
-      'Item added: ${item.key}',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        _add(item, increment);
+      },
+      logMessage: 'Item added: ${item.key}',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Adds multiple items to the cart.
@@ -297,18 +1290,18 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool skipIfExist = false,
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    for (final item in items) {
-      if (skipIfExist && _items.containsKey(item.key)) continue;
-      _add(item, increment);
-    }
-    emit(this);
-    _log(
-      'Items have been added: $items',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        for (final item in items) {
+          if (skipIfExist && _items.containsKey(item.key)) {
+            continue;
+          }
+          _add(item, increment);
+        }
+      },
+      logMessage: 'Items have been added: $items',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Removes all items not included in the provided list.
@@ -316,45 +1309,41 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     List<T> items, {
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    final keepKeys = items.map((e) => e.key).toSet();
-    for (final item in itemsList) {
-      if (!keepKeys.contains(item.key)) _delete(item);
-    }
-    emit(this);
-    _log(
-      'Items have been removed: $items',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        final keepKeys = items.map((e) => e.key).toSet();
+        for (final item in itemsList) {
+          if (!keepKeys.contains(item.key)) {
+            _delete(item);
+          }
+        }
+      },
+      logMessage: 'Items have been removed: $items',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Deletes a single item from the cart.
   void delete(T item, {bool shouldNotifyListeners = true}) {
-    _checkDisposed();
-    _checkLock();
-    _delete(item);
-    emit(this);
-    _log(
-      'Item has been removed: ${item.key}',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        _delete(item);
+      },
+      logMessage: 'Item has been removed: ${item.key}',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Clears all items from the cart without affecting metadata.
   void resetItems({bool shouldNotifyListeners = true}) {
-    _checkDisposed();
-    _checkLock();
-    _log(
-      'Items have been reset: $itemsList',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        groups.clear();
+        _items.clear();
+      },
+      logMessage: 'Items have been reset: $itemsList',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    groups.clear();
-    _items.clear();
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Fully resets the cart and its metadata.
@@ -368,14 +1357,16 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       _deliveredAt = null;
       _expiresAt = null;
       addZeroQuantity = false;
-      _metadata.clear();
-      _isLocked = false;
-      _logs.clear();
+      clearAllMetadata();
+      resetLock();
+      clearHistory();
       _cartCurrency = null;
       removeItemCondition = null;
 
       emit(this);
-      if (shouldNotifyListeners) notifyListeners();
+      if (shouldNotifyListeners) {
+        notifyListeners();
+      }
     } catch (error, stackTrace) {
       _notifyOnErrorPlugins(error, stackTrace);
       rethrow;
@@ -387,14 +1378,14 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     _checkDisposed();
     _checkLock();
 
-    groups.remove(groupId);
-    _items.removeWhere((_, item) => item.group == groupId);
-    _log(
-      'Group has been removed from the cart: $groupId',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        groups.remove(groupId);
+        _items.removeWhere((_, item) => item.group == groupId);
+      },
+      logMessage: 'Group has been removed from the cart: $groupId',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Returns true if the given group is empty.
@@ -422,7 +1413,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       ..removeItemCondition = removeItemCondition
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
-      .._metadata.addAll(_metadata)
+      ..addMetadataEntries(metadata)
       .._cartCurrency = _cartCurrency
       .._deliveredAt = _deliveredAt;
   }
@@ -435,7 +1426,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     )
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
-      .._metadata.addAll(_metadata)
+      ..addMetadataEntries(metadata)
       .._cartCurrency = _cartCurrency
       .._deliveredAt = _deliveredAt;
   }
@@ -445,62 +1436,59 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     CartCurrency cartCurrency, {
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    if (cartCurrency == _cartCurrency) return;
-    removeExchangeRate();
+    _performCartOperation(
+      operation: () {
+        if (cartCurrency == _cartCurrency) {
+          return;
+        }
+        removeExchangeRate();
 
-    _cartCurrency = cartCurrency;
-    final rate = cartCurrency.rate;
+        _cartCurrency = cartCurrency;
+        final rate = cartCurrency.rate;
 
-    _items.forEach((key, item) {
-      item.price *= rate;
+        _items.forEach((key, item) {
+          item.price *= rate;
 
-      // Update item in group if necessary
-      final groupId = item.group;
-      if (groups[groupId]?.items != null) {
-        groups[groupId]!.items[key] = item;
-      }
-    });
-
-    _log(
-      'Applied exchange rate for ${cartCurrency.code}: $rate',
-      notified: shouldNotifyListeners,
+          // Update item in group if necessary
+          final groupId = item.group;
+          if (groups[groupId]?.items != null) {
+            groups[groupId]!.items[key] = item;
+          }
+        });
+      },
+      logMessage: 'Applied exchange rate for ${cartCurrency.code}:'
+          ' ${cartCurrency.rate}',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Removes the applied exchange rate and reverts item prices.
   void removeExchangeRate({
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    if (_cartCurrency == null) return;
+    _performCartOperation(
+      operation: () {
+        if (_cartCurrency == null) {
+          return;
+        }
 
-    final rate = _cartCurrency!.rate;
+        final rate = _cartCurrency!.rate;
 
-    _items.forEach((key, item) {
-      item.price /= rate;
+        _items.forEach((key, item) {
+          item.price /= rate;
 
-      // Update item in group if necessary
-      final groupId = item.group;
-      if (groups[groupId]?.items != null) {
-        groups[groupId]!.items[key] = item;
-      }
-    });
+          // Update item in group if necessary
+          final groupId = item.group;
+          if (groups[groupId]?.items != null) {
+            groups[groupId]!.items[key] = item;
+          }
+        });
 
-    _log(
-      'Removed exchange rate for ${_cartCurrency!.code}: $rate',
-      notified: shouldNotifyListeners,
+        _cartCurrency = null;
+      },
+      logMessage: 'Removed exchange rate',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-
-    _cartCurrency = null;
-
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Disposes of the cart and triggers [onDisposed].
@@ -510,11 +1498,21 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     _notifyOnClosePlugins();
     _log('Cart has been disposed');
     onDisposed?.call();
+    _sessionTimer?.cancel();
+    hooks?.onDisposed?.call();
     disposeStream(); // call this if using the mixin's stream
   }
 
   /// Internal method to add an item and notify plugins.
   void _add(T item, bool increment) {
+    final behaviorOptions = _options.behaviorOptions;
+
+    /// Apply BehaviorOptions filters before proceeding
+    if (!behaviorOptions.canAdd(item)) {
+      behaviorOptions.log('Add blocked by behavior options: ${item.key}');
+      return;
+    }
+
     final shouldDeleteZeroQty = !addZeroQuantity && item.quantity == 0;
     final shouldRemoveItem = removeItemCondition?.call(item) ?? false;
 
@@ -524,6 +1522,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     }
 
     onAddItem?.call();
+    hooks?.onItemAdded?.call(item);
+
+    /// Override item price if resolver is provided on add only
+    if (behaviorOptions.priceResolver != null &&
+        !_items.containsKey(item.key)) {
+      final resolvedPrice = behaviorOptions.resolvePrice(item);
+      behaviorOptions.log('Resolved price for ${item.key}: $resolvedPrice');
+      item.price = resolvedPrice;
+    }
     _addToItems(item, increment: increment);
     _addToGroup(item);
     _notifyOnChangedPlugins();
@@ -557,6 +1564,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     _items.remove(item.key);
     _deleteFromGroup(item);
     onDeleteItem?.call();
+    hooks?.onItemDeleted?.call(item);
     _notifyOnChangedPlugins();
   }
 
@@ -565,66 +1573,44 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     final group = groups[item.group];
     if (group != null) {
       group.remove(item);
-      if (group.items.isEmpty) groups.remove(item.group);
+      if (group.items.isEmpty) {
+        groups.remove(item.group);
+      }
     }
   }
-}
 
-/// Interface for plugins that want to be notified when the cart changes.
-abstract class ICartPlugin<T extends ICartItem> {
-  /// Called whenever a [onChange] occurs in any [cart]
-  /// A [onChange] occurs when a new value is emitted.
-  /// [onChange] is called before a cart's state has been updated.
-  @protected
-  @mustCallSuper
-  void onChange(FlexiCart<T> cart) {}
+  /// --- Private Helpers ---
 
-  /// Called whenever an [error] is thrown in the cart.
-  /// The [stackTrace] argument may be [StackTrace.empty] if an error
-  /// was received without a stack trace.
-  @protected
-  @mustCallSuper
-  void onError(FlexiCart<T> cart, Object error, StackTrace stackTrace) {}
-
-  /// Called whenever a [cart] is closed.
-  /// [onClose] is called just before the [cart] is closed
-  /// and indicates that the particular instance will no longer
-  /// emit new states.
-  @protected
-  @mustCallSuper
-  void onClose(FlexiCart<T> cart) {}
-}
-
-/// Represents a currency with an exchange rate and currency code.
-///
-/// This class holds the exchange [rate] relative to a base currency
-/// and the [code] representing the currency (e.g., "USD", "EUR").
-@immutable
-class CartCurrency {
-  /// Creates a [CartCurrency] instance with the given [rate] and [code].
-  ///
-  /// Both [rate] and [code] are required.
-  const CartCurrency({required this.rate, required this.code});
-
-  /// The exchange rate relative to a base currency.
-  final num rate;
-
-  /// The currency code (e.g., "USD", "EUR").
-  final String code;
-
-  @override
-  String toString() {
-    return 'CartCurrency{rate: $rate, code: $code}';
+  void _updateOptions(
+    CartOptions newOptions,
+    String logMessage,
+    bool shouldNotifyListeners,
+  ) {
+    _performCartOperation(
+      operation: () {
+        _options = newOptions;
+        _validateIfNeeded();
+      },
+      logMessage: logMessage,
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
+  /// Performs a cart operation with proper error handling and notifications.
+  void _performCartOperation({
+    required VoidCallback operation,
+    required String logMessage,
+    required bool shouldNotifyListeners,
+  }) {
+    _checkDisposed();
+    _checkLock();
 
-    return other is CartCurrency && other.rate == rate && other.code == code;
+    operation();
+    emit(this);
+    _log(logMessage, notified: shouldNotifyListeners);
+
+    if (shouldNotifyListeners) {
+      notifyListeners();
+    }
   }
-
-  @override
-  int get hashCode => Object.hash(rate, code);
 }

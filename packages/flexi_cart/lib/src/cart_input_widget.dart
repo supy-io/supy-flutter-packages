@@ -441,12 +441,16 @@ extension on double {
 /// These avoid exceptions if provider is not available in the tree.
 extension on BuildContext {
   T? safeWatch<T>() {
-    if (hasProvider<T>()) return watch<T>();
+    if (hasProvider<T>()) {
+      return watch<T>();
+    }
     return null;
   }
 
   T? safeRead<T>() {
-    if (hasProvider<T>()) return read<T>();
+    if (hasProvider<T>()) {
+      return read<T>();
+    }
     return null;
   }
 

@@ -1,0 +1,14 @@
+<changelist name="Uncommitted_changes_before_Update_at_27_05_2025,_7_54 PM_[Changes]" date="1748361275220" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_05_2025,_7_54 PM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 27/05/2025, 7:54 PM [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="../flexi_cart/build/unit_test_assets/shaders/ink_sparkle.frag" />
+    <option name="AFTER_PATH" value="../flexi_cart/build/unit_test_assets/shaders/ink_sparkle.frag" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_05_2025,_7_54 PM_[Changes]/ink_sparkle.frag" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="../flexi_cart/build/unit_test_assets/NOTICES.Z" />
+    <option name="AFTER_PATH" value="../flexi_cart/build/unit_test_assets/NOTICES.Z" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_05_2025,_7_54 PM_[Changes]/NOTICES.Z" />
+  </binary>
+</changelist>

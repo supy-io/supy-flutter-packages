@@ -10,23 +10,16 @@ class MockItem extends ICartItem {
     required super.id,
     required super.name,
     required super.price,
-    this.quantityVal = 1,
+    super.quantity = 1,
     this.groupId = 'default',
     this.groupNameVal = 'Default Group',
   });
 
-  double quantityVal;
   final String groupId;
   final String groupNameVal;
 
   @override
   String get key => id;
-
-  @override
-  double? get quantity => quantityVal;
-
-  @override
-  set quantity(double? value) => quantityVal = value ?? 0;
 
   @override
   String get group => groupId;
@@ -35,10 +28,7 @@ class MockItem extends ICartItem {
   String get groupName => groupNameVal;
 
   @override
-  double totalPrice() => quantityVal * 10;
-
-  @override
-  double notNullQty() => quantityVal;
+  double totalPrice() => notNullQty() * price;
 }
 
 class MockCartItem extends Mock implements ICartItem {}
