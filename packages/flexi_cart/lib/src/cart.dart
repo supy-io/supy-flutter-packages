@@ -24,20 +24,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   ///
   /// - [items] is an optional initial map of items.
   /// - [groups] is an optional map of item groups.
-  /// - [onDisposed] is a callback called on disposal.
-  /// - [onAddItem] and [onDeleteItem] are callbacks for item operations.
-  /// - [removeItemCondition] defines a custom condition to remove items.
+
   FlexiCart({
     Map<String, T>? items,
     Map<String, CartItemsGroup<T>>? groups,
     this.hooks,
     CartOptions? options,
-
-    /// Callbacks for various cart events
-    this.onDisposed,
-    this.onAddItem,
-    this.onDeleteItem,
-    this.removeItemCondition,
   })  : _options = options ?? CartOptions(),
         _items = items ?? {},
         groups = groups ?? {},
@@ -65,29 +57,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Returns the current options for the cart.
   CartOptions get options => _options;
-
-  /// Callback triggered when the cart is disposed.
-  @Deprecated('use hooks:CartHooks(onDisposed:(){}) instead')
-  final VoidCallback? onDisposed;
-
-  /// Callback triggered when an item is added.
-  @Deprecated('use hooks:CartHooks(onAddItem:(item){}) instead')
-  final VoidCallback? onAddItem;
-
-  /// Callback triggered when an item is deleted.
-  @Deprecated('use hooks:CartHooks(onDeleteItem:(item){}) instead')
-  final VoidCallback? onDeleteItem;
-
-  /// Condition to determine whether an item should be removed.
-  @Deprecated(
-    'removeItemCondition is deprecated and will be removed'
-    ' in a future release. '
-    'Please use options.behaviorOptions.itemFilter instead. '
-    'Note: itemFilter returns true to keep the item, '
-    'while removeItemCondition returned true to remove it — '
-    'reverse the logic accordingly.',
-  )
-  RemoveCallBack<T>? removeItemCondition;
 
   /// Internal storage for cart items.
   final Map<String, T> _items;
@@ -490,7 +459,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   ///
   /// Enhanced Total Calculations:
   /// - getTotalWithShipping() - Total price including shipping
-  /// - getFinalTotalWithShipping() - Final total with tax, discount, and shipping
+  /// - getFinalTotalWithShipping() - Final total with tax, discount,
+  /// and shipping
 
   /// Sets custom shipping options for the cart.
   void setShippingOptions(
@@ -1361,7 +1331,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       resetLock();
       clearHistory();
       _cartCurrency = null;
-      removeItemCondition = null;
 
       emit(this);
       if (shouldNotifyListeners) {
@@ -1410,7 +1379,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       items: Map<String, T>.from(_items),
       groups: Map<String, CartItemsGroup<T>>.from(groups),
     )
-      ..removeItemCondition = removeItemCondition
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
       ..addMetadataEntries(metadata)
@@ -1491,13 +1459,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     );
   }
 
-  /// Disposes of the cart and triggers [onDisposed].
+  /// Disposes of the cart and triggers [dispose].
   @override
   void dispose() {
     super.dispose();
     _notifyOnClosePlugins();
     _log('Cart has been disposed');
-    onDisposed?.call();
     _sessionTimer?.cancel();
     hooks?.onDisposed?.call();
     disposeStream(); // call this if using the mixin's stream
@@ -1508,20 +1475,19 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     final behaviorOptions = _options.behaviorOptions;
 
     /// Apply BehaviorOptions filters before proceeding
-    if (!behaviorOptions.canAdd(item)) {
+    if (!behaviorOptions.canAdd(item) && !items.containsKey(item.key)) {
       behaviorOptions.log('Add blocked by behavior options: ${item.key}');
       return;
     }
 
     final shouldDeleteZeroQty = !addZeroQuantity && item.quantity == 0;
-    final shouldRemoveItem = removeItemCondition?.call(item) ?? false;
+    final shouldRemoveItem = !behaviorOptions.canAdd(item);
 
     if (shouldRemoveItem || item.quantity == null || shouldDeleteZeroQty) {
       _delete(item);
       return;
     }
 
-    onAddItem?.call();
     hooks?.onItemAdded?.call(item);
 
     /// Override item price if resolver is provided on add only
@@ -1563,7 +1529,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void _delete(T item) {
     _items.remove(item.key);
     _deleteFromGroup(item);
-    onDeleteItem?.call();
     hooks?.onItemDeleted?.call(item);
     _notifyOnChangedPlugins();
   }

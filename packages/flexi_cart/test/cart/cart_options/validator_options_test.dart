@@ -49,7 +49,7 @@ void main() {
       final item2 = CartItem(
         id: 'B',
         name: 'Test Item',
-        price: 10,
+        price: 50,
         quantity: 2,
         currency: 'USD',
       );
@@ -71,7 +71,7 @@ void main() {
         errors,
         equals(
           {
-            'minTotal': r'Minimum total price is $50.00',
+            'maxTotal': r'Maximum total price is $50.00',
             'promoCode': 'Promo code error',
           },
         ),
@@ -80,7 +80,7 @@ void main() {
         errors,
         equals(
           {
-            'minTotal': r'Minimum total price is $50.00',
+            'maxTotal': r'Maximum total price is $50.00',
             'promoCode': 'Promo code error',
           },
         ),

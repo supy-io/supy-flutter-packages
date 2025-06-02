@@ -47,17 +47,17 @@ cart.addValidator(CartValidators.cartMaxTotal(/*maximum price*/));
 - Or add a list of validators to the cart
 ```dart
 cart.addValidators(
-    [
-      CartValidators.cartMaxTotal(/*maximum price*/),
-      CartValidators.cartMinTotal(/*minimum price*/),
-      CartValidators.cartNotEmpty(),
-      CartValidators.cartMaxItemCount(/*maximum items quantities*/),
-      CartValidators.cartMinLength(/*minimum item length*/),
-      CartValidators.cartMaxLength(/*maximum item length*/),
-      CartValidators.cartContains(/*required item id*/),
-      CartValidators.cartRequiredField(/*required field name in metadata*/),
-    ],
-  );
+[
+CartValidators.cartMaxTotal(/*maximum price*/),
+CartValidators.cartMinTotal(/*minimum price*/),
+CartValidators.cartNotEmpty(),
+CartValidators.cartMaxItemCount(/*maximum items quantities*/),
+CartValidators.cartMinLength(/*minimum item length*/),
+CartValidators.cartMaxLength(/*maximum item length*/),
+CartValidators.cartContains(/*required item id*/),
+CartValidators.cartRequiredField(/*required field name in metadata*/),
+],
+);
 }
 ```
 
@@ -65,16 +65,16 @@ cart.addValidators(
 -  Check if cart has validators
 ```dart
   if (cart.hasValidators) {
-    print('Cart has ${cart.validators.length} validators');
-  }
+print('Cart has ${cart.validators.length} validators');
+}
 ```
 
 -  Get current validation errors
 ```dart
   final currentErrors = cart.validationErrors;
-  if (currentErrors.isNotEmpty) {
-    print('Current validation errors: $currentErrors');
-  }
+if (currentErrors.isNotEmpty) {
+print('Current validation errors: $currentErrors');
+}
 ```
 
 ## Validator Options
@@ -128,7 +128,7 @@ comprehensive cart validation rules.
 abstract class ICartValidator {
   /// Validates the given [cart].
   /// Returns a map of validation errors, or `null` if no errors are found.
- Map<String, dynamic>? validate(FlexiCart cart);
+  Map<String, dynamic>? validate(FlexiCart cart);
 }
 ```
 
@@ -137,21 +137,21 @@ abstract class ICartValidator {
 - Add a single validator
 ```dart
  cart.addValidator(
-    CartValidators.cartMaxTotal(/*maximum price*/),
-  );
+CartValidators.cartMaxTotal(/*maximum price*/),
+);
 ```
 - Add multiple validators
 ```dart
   cart.addValidators([
-    CartValidators.cartMaxTotal(/*maximum price*/),
-    CartValidators.cartMinTotal(/*minimum price*/),
-  ]);
+CartValidators.cartMaxTotal(/*maximum price*/),
+CartValidators.cartMinTotal(/*minimum price*/),
+]);
 ```
 - Remove a specific validator
 ```dart
   cart.removeValidator(
-    CartValidators.cartMinTotal(/*minimum price*/),
-  );
+CartValidators.cartMinTotal(/*minimum price*/),
+);
 ```
 - Clear all validators
 ```dart
@@ -161,7 +161,7 @@ abstract class ICartValidator {
 - Get current validators
 ```dart
   final currentValidators = cart.validators;
-  print('Number of validators: ${currentValidators.length}');
+print('Number of validators: ${currentValidators.length}');
 }
 ```
 
@@ -190,7 +190,7 @@ class ProductLimitValidator extends ICartValidator {
       // Check stock availability
       if (item.quantity > item.product.stock) {
         errors['stock_${item.product.id}'] =
-            '${item.product.name} only has ${item.product.stock} items in stock';
+        '${item.product.name} only has ${item.product.stock} items in stock';
       }
     }
 
@@ -229,51 +229,51 @@ class ShippingValidator extends ICartValidator {
 
 ```dart
 // Set promo code validator
-  cart.setPromoCodeValidator((String code) {
-    return switch (code.toUpperCase()) {
-      'SAVE10' => null, // Valid
-      'WELCOME' => null, // Valid
-      'EXPIRED20' => 'This promo code has expired', // Invalid
-      _ => 'Invalid promo code', // Default case
-    };
-  });
+cart.setPromoCodeValidator((String code) {
+return switch (code.toUpperCase()) {
+'SAVE10' => null, // Valid
+'WELCOME' => null, // Valid
+'EXPIRED20' => 'This promo code has expired', // Invalid
+_ => 'Invalid promo code', // Default case
+};
+});
 
 // Set a promo code
-  cart.setPromoCode('SAVE10');
+cart.setPromoCode('SAVE10');
 
 // Get current promo code
-  final currentPromo = cart.promoCode;
-  print('Current promo code: $currentPromo');
+final currentPromo = cart.promoCode;
+print('Current promo code: $currentPromo');
 
 // Validation will automatically check promo code
-  final errors = cart.validate();
-  if (errors.containsKey('promoCode')) {
-    print('Promo code error: ${errors['promoCode']}');
-  }
+final errors = cart.validate();
+if (errors.containsKey('promoCode')) {
+print('Promo code error: ${errors['promoCode']}');
+}
 ```
 
 ### Advanced Promo Code Validation
 
 ```dart
 // Complex promo code validator with business logic
-  String? advancedPromoValidator(String code) {
-    var isFirstTimeCustomer = false; // Simulate first-time customer check
-    final now = DateTime.now();
+String? advancedPromoValidator(String code) {
+  var isFirstTimeCustomer = false; // Simulate first-time customer check
+  final now = DateTime.now();
 
-    return switch (code.toUpperCase()) {
-      'FIRSTTIME' when !isFirstTimeCustomer =>
-        'This code is only for first-time customers',
-      'SUMMER2024' when now.isAfter(DateTime(2024, 8, 31)) =>
-        'This promotional code has expired',
-      'BULK50' when cart.totalQuantity() < 10 =>
-        'This code requires minimum 10 items',
-      'FLUTTER50' => null, // Valid code
-      'SAVE20' => null, // Valid code
-      _ => 'Invalid promotional code',
-    };
-  }
+  return switch (code.toUpperCase()) {
+    'FIRSTTIME' when !isFirstTimeCustomer =>
+    'This code is only for first-time customers',
+    'SUMMER2024' when now.isAfter(DateTime(2024, 8, 31)) =>
+    'This promotional code has expired',
+    'BULK50' when cart.totalQuantity() < 10 =>
+    'This code requires minimum 10 items',
+    'FLUTTER50' => null, // Valid code
+    'SAVE20' => null, // Valid code
+    _ => 'Invalid promotional code',
+  };
+}
 
-  cart.setPromoCodeValidator(advancedPromoValidator);
+cart.setPromoCodeValidator(advancedPromoValidator);
 ```
 
 ## Auto Validation
@@ -282,18 +282,18 @@ class ShippingValidator extends ICartValidator {
 
 ```dart
 // Enable auto validation during cart creation
-  final cart = FlexiCart(
-    options: CartOptions(
-      validatorOptions: ValidatorOptions(
-        autoValidate: true,
-      ),
+final cart = FlexiCart(
+  options: CartOptions(
+    validatorOptions: ValidatorOptions(
+      autoValidate: true,
     ),
-  );
+  ),
+);
 
 // Or set it later but it will override any validatorOptions 
-  cart.setValidatorOptions(
-    ValidatorOptions(autoValidate: true),
-  );
+cart.setValidatorOptions(
+ValidatorOptions(autoValidate: true),
+);
 ```
 
 ### How Auto Validation Works
@@ -305,15 +305,37 @@ When `autoValidate` is enabled, validation runs automatically whenever:
 
 ```dart
 // With auto validation enabled, this will trigger validation
-  cart.add(CartItem(id: id, name: name, price: price),shouldNotifyListeners: true)
+cart.add(CartItem(id: id, name: name, price: price),shouldNotifyListeners: true)
 /// shouldNotifyListeners is true by default
 
 // Check validation errors immediately
-  if (cart.validationErrors.isNotEmpty) {
-  print('Validation failed: ${cart.validationErrors}');
+if (cart.validationErrors.isNotEmpty) {
+print('Validation failed: ${cart.validationErrors}');
 }
 ```
+- When `autoValidate` is disabled, you need to call `cart.validate();` each time you do cart action
 
+
+```dart
+  final cart = FlexiCart<ProductItem>(
+    options: CartOptions(
+      validatorOptions: ValidatorOptions(
+        autoValidate: false,
+      ),
+    ),
+  );
+  // With auto validation enabled, this will trigger validation
+  cart.add(
+      CartItem(id: id, name: name, price: price), shouldNotifyListeners: true)
+
+  /// shouldNotifyListeners is true by default
+
+  final validationErrors = cart.validate();
+// Check validation errors immediately
+  if (validationErrors.isNotEmpty) {
+    print('Validation failed: ${cart.validationErrors}');
+  }
+```
 ## API Reference
 
 ### FlexiCart Validation Methods
@@ -468,9 +490,9 @@ class _CartScreenState extends State<CartScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: errors.entries
                     .map((e) => Text(
-                          e.value.toString(),
-                          style: TextStyle(color: Colors.red),
-                        ))
+                  e.value.toString(),
+                  style: TextStyle(color: Colors.red),
+                ))
                     .toList(),
               ),
             ),

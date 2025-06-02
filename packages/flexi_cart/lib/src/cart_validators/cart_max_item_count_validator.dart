@@ -11,7 +11,7 @@ class CartMaxItemCountValidator extends ICartValidator {
 
   @override
   Map<String, dynamic>? validate(FlexiCart cart) {
-    if (cart.totalQuantity() >= maxCount) {
+    if (cart.totalQuantity() > maxCount) {
       return {
         CartValidatorKeys.maxItems: 'Maximum allowed items is $maxCount',
       };

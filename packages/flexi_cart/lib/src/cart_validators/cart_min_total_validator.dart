@@ -10,7 +10,7 @@ class CartMinTotalValidator extends ICartValidator {
 
   @override
   Map<String, dynamic>? validate(FlexiCart cart) {
-    if (cart.totalPrice() <= minAmount) {
+    if (cart.totalPrice() < minAmount) {
       return {
         CartValidatorKeys.minTotal:
             'Minimum total price is \$${minAmount.toStringAsFixed(2)}',

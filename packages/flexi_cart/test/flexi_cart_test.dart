@@ -440,9 +440,13 @@ void main() {
         when(() => item.quantity).thenReturn(1);
 
         cart
-          ..removeItemCondition = (item) {
-            return item.price < 10.0;
-          }
+          ..setBehaviorOptions(
+            BehaviorOptions(
+              itemFilter: (item) {
+                return item.price < 10.0;
+              },
+            ),
+          )
           ..add(item);
 
         verify(mockCallback.call).called(1);
@@ -764,7 +768,6 @@ void main() {
           expect(cart.addZeroQuantity, isFalse);
           expect(cart.deliveredAt, isNull);
           expect(cart.note, isNull);
-          expect(cart.removeItemCondition, isNull);
         },
       );
     },

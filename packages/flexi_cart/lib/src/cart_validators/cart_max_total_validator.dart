@@ -10,7 +10,7 @@ class CartMaxTotalValidator extends ICartValidator {
 
   @override
   Map<String, dynamic>? validate(FlexiCart cart) {
-    if (cart.totalPrice() >= maxAmount) {
+    if (cart.totalPrice() > maxAmount) {
       return {
         CartValidatorKeys.maxTotal:
             'Maximum total price is \$${maxAmount.toStringAsFixed(2)}',

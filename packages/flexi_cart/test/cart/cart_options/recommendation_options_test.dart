@@ -222,7 +222,8 @@
 //     });
 //
 //     test('should provide cache statistics', () {
-//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1, price: 500.0));
+//       cart.addItem(CartItem(product: sampleProducts[0],
+//       quantity: 1, price: 500.0));
 //
 //       recommendationOptions = RecommendationOptions(
 //         suggestProducts: (cart) => [sampleProducts[1]],
