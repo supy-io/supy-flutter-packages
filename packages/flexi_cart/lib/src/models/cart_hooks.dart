@@ -19,5 +19,4 @@ class CartHooks {
 
   /// Callback for when an item is deleted from the cart.
   final void Function(ICartItem item)? onItemDeleted;
-
 }
