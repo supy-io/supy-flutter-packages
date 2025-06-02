@@ -21,7 +21,6 @@ void main() {
     price: 15,
     groupName: 'group',
     quantity: 1,
-
     image: 'img2',
     unit: 'pcs',
     currency: 'USD',

@@ -1,3 +1,7 @@
+## 1.0.0+1
+- Reduces the width of screenshots in `README.md` from `200` to `165` for better layout.
+- Minor code formatting changes include removing an extra newline in `cart_hooks_test.dart` and adjusting spacing in `cart_hooks.dart`.
+
 ## 1.0.0
 # Breaking changes:
 - Removed 'onDisposed' from flexi_cart.dart, use hooks.onDisposed instead.

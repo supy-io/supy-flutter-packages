@@ -51,15 +51,15 @@ dependencies:
 
 <div style="display: flex; gap: 10px;">
 
-  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="200" />
+  <img src="screenshots/shiny_eats.png" alt="Cart overview" width="165" />
 
-  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="200" />
-  <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="200" />
+  <img src="screenshots/fresh_market.png" alt="Switch CartInput" width="165" />
+  <img src="screenshots/fresh_market_vertical.png" alt="Vertical Style" width="165" />
 
-  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="200" />
-  <img src="screenshots/multi_cart.png" alt="MultiCart" width="200" />
-  <img src="screenshots/currencies.png" alt="Exchanges" width="200" />
-  <img src="screenshots/validators_cart.png" alt="Exchanges" width="200" />
+  <img src="screenshots/shine_beauty.png" alt="Dark Theme" width="165" />
+  <img src="screenshots/multi_cart.png" alt="MultiCart" width="165" />
+  <img src="screenshots/currencies.png" alt="Exchanges" width="165" />
+  <img src="screenshots/validators_cart.png" alt="Exchanges" width="165" />
 
 </div>
 

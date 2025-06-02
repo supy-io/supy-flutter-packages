@@ -5,9 +5,9 @@ import 'package:flexi_cart/flexi_cart.dart';
 class CartHooks {
   /// Creates a [CartHooks] instance with the provided callbacks.
   CartHooks({
-     this.onDisposed,
-     this.onItemAdded,
-     this.onItemDeleted,
+    this.onDisposed,
+    this.onItemAdded,
+    this.onItemDeleted,
   });
 
   /// Creates a [CartHooks] instance with no callbacks.
