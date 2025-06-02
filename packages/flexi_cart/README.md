@@ -39,7 +39,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-   flexi_cart: ^0.4.0+2
+   flexi_cart: latest
    provider: ^6.0.0 
 ```
 
@@ -140,34 +140,11 @@ try {
 cart.unlock(); // Now it's safe to mutate
 ```
 
-- #### Set Metadata
+- #### Set Metadata Entry
 ```dart
-cart.setMetadata('couponCode', 'SUMMER25');
-cart.setMetadata('sessionId', 'abc-123');
+cart.setMetadataEntry('couponCode', 'SUMMER25');
+cart.setMetadataEntry('sessionId', 'abc-123');
 print(cart.metadata['couponCode']); // SUMMER25
-```
-
-- #### Cart Validation
-```dart
-// Add custom validators
-cart.addValidator((cart) {
-  if (cart.totalQuantity > 10) {
-    return {'quantity': 'Maximum 10 items allowed'};
-  }
-  return null;
-});
-
-// Set promo code with validation
-cart.setPromoCodeValidator((code) {
-  return code == 'SAVE20' ? null : 'Invalid promo code';
-});
-cart.setPromoCode('SAVE20');
-
-// Validate cart
-final errors = cart.validate();
-if (errors.isNotEmpty) {
-  print('Validation errors: $errors');
-}
 ```
 
 > 📋 **For comprehensive validation documentation**, see the [Validator Guide](guides/flexi_cart_validator_guide.md)
