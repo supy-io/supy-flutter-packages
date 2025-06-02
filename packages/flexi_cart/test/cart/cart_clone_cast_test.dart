@@ -11,7 +11,7 @@ void main() {
     setUp(() {
       originalCart = FlexiCart<MockItem>()
         ..add(item)
-        ..setMetadata('key', 'value')
+        ..setMetadataEntry('key', 'value')
         ..setNote('note');
     });
 
@@ -114,7 +114,6 @@ void main() {
           ..addZeroQuantity = true
           ..setDeliveredAt(DateTime.now())
           ..setNote('note')
-
           ..add(item);
 
         final clonedCart = cart.clone();

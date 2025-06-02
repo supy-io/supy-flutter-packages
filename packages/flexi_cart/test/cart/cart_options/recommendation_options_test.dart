@@ -10,18 +10,24 @@
 //
 //     setUp(() {
 //       sampleProducts = [
-//         Product(id: '1', name: 'Phone', price: 500.0, category: 'Electronics'),
-//         Product(id: '2', name: 'Case', price: 20.0, category: 'Accessories'),
-//         Product(id: '3', name: 'Charger', price: 30.0, category: 'Accessories'),
-//         Product(id: '4', name: 'Tablet', price: 300.0, category: 'Electronics'),
-//         Product(id: '5', name: 'Headphones', price: 100.0, category: 'Audio'),
+//         Product(id: '1', name: 'Phone', price: 500.0, category:
+//         'Electronics'),
+//         Product(id: '2', name: 'Case', price: 20.0,
+//         category: 'Accessories'),
+//         Product(id: '3', name: 'Charger', price: 30.0,
+//         category: 'Accessories'),
+//         Product(id: '4', name: 'Tablet', price: 300.0,
+//         category: 'Electronics'),
+//         Product(id: '5', name: 'Headphones', price: 100.0,
+//         category: 'Audio'),
 //       ];
 //
 //       cart = FlexiCart();
 //       recommendationOptions = RecommendationOptions();
 //     });
 //
-//     test('should return empty list when no suggestion function is provided', () {
+//     test('should return empty list when no suggestion function is provided',
+//     () {
 //       final recommendations = recommendationOptions.recommend(cart);
 //       expect(recommendations, isEmpty);
 //     });
@@ -29,7 +35,8 @@
 //     test('should return recommendations from custom function', () {
 //       recommendationOptions = RecommendationOptions(
 //         suggestProducts: (cart) => [sampleProducts[1], sampleProducts[2]],
-//         config: const RecommendationConfig(strategies: [RecommendationStrategy.custom]),
+//         config: const RecommendationConfig(strategies:
+//         [RecommendationStrategy.custom]),
 //       );
 //
 //       final recommendations = recommendationOptions.recommend(cart);
@@ -39,7 +46,8 @@
 //     });
 //
 //     test('should respect minimum cart value requirement', () {
-//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1, price: 500.0));
+//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1,
+//       price: 500.0));
 //
 //       recommendationOptions = RecommendationOptions(
 //         suggestProducts: (cart) => [sampleProducts[1]],
@@ -67,7 +75,8 @@
 //     });
 //
 //     test('should exclude cart items when configured', () {
-//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1, price: 500.0));
+//       cart.addItem(CartItem(product: sampleProducts[0],
+//       quantity: 1, price: 500.0));
 //
 //       recommendationOptions = RecommendationOptions(
 //         suggestProducts: (cart) => sampleProducts,
@@ -82,7 +91,8 @@
 //     });
 //
 //     test('should include cart items when configured to do so', () {
-//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1, price: 500.0));
+//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1,
+//       price: 500.0));
 //
 //       recommendationOptions = RecommendationOptions(
 //         suggestProducts: (cart) => [sampleProducts[0]],
@@ -101,12 +111,14 @@
 //         suggestProducts: (cart) => sampleProducts,
 //         filterRecommendations: (product, cart) =>
 //         (product as Product).category == 'Electronics',
-//         config: const RecommendationConfig(strategies: [RecommendationStrategy.custom]),
+//         config: const RecommendationConfig(strategies:
+//         [RecommendationStrategy.custom]),
 //       );
 //
 //       final recommendations = recommendationOptions.recommend(cart);
 //       expect(recommendations, hasLength(2));
-//       expect(recommendations.every((p) => (p as Product).category == 'Electronics'), isTrue);
+//       expect(recommendations.every((p) => (p as Product).category ==
+//       'Electronics'), isTrue);
 //     });
 //
 //     test('should apply custom sorting', () {
@@ -114,7 +126,8 @@
 //         suggestProducts: (cart) => sampleProducts,
 //         sortRecommendations: (a, b) =>
 //             (a as Product).price.compareTo((b as Product).price),
-//         config: const RecommendationConfig(strategies: [RecommendationStrategy.custom]),
+//         config: const RecommendationConfig(strategies:
+//         [RecommendationStrategy.custom]),
 //       );
 //
 //       final recommendations = recommendationOptions.recommend(cart);
@@ -138,7 +151,8 @@
 //           callbackCart = cart;
 //           callbackRecommendations = recommendations;
 //         },
-//         config: const RecommendationConfig(strategies: [RecommendationStrategy.custom]),
+//         config: const RecommendationConfig(strategies:
+//         [RecommendationStrategy.custom]),
 //       );
 //
 //       recommendationOptions.recommend(cart);
@@ -158,7 +172,8 @@
 //           callbackCart = cart;
 //           callbackError = error;
 //         },
-//         config: const RecommendationConfig(strategies: [RecommendationStrategy.custom]),
+//         config: const RecommendationConfig(strategies:
+//         [RecommendationStrategy.custom]),
 //       );
 //
 //       final recommendations = recommendationOptions.recommend(cart);
@@ -169,7 +184,8 @@
 //     });
 //
 //     test('should cache recommendations when enabled', () {
-//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1, price: 500.0));
+//       cart.addItem(CartItem(product: sampleProducts[0],
+//       quantity: 1, price: 500.0));
 //
 //       int callCount = 0;
 //       recommendationOptions = RecommendationOptions(
@@ -195,7 +211,8 @@
 //     });
 //
 //     test('should clear cache', () {
-//       cart.addItem(CartItem(product: sampleProducts[0], quantity: 1, price: 500.0));
+//       cart.addItem(CartItem(product: sampleProducts[0],
+//       quantity: 1, price: 500.0));
 //
 //       int callCount = 0;
 //       recommendationOptions = RecommendationOptions(
@@ -250,7 +267,8 @@
 //           sampleProducts[0], // Duplicate
 //           sampleProducts[1], // Duplicate
 //         ],
-//         config: const RecommendationConfig(strategies: [RecommendationStrategy.custom]),
+//         config: const RecommendationConfig(strategies:
+//         [RecommendationStrategy.custom]),
 //       );
 //
 //       final recommendations = recommendationOptions.recommend(cart);
@@ -284,7 +302,8 @@
 //       expect(config.excludeCartItems, isTrue);
 //       expect(config.enableCaching, isTrue);
 //       expect(config.cacheExpirationMinutes, equals(30));
-//       expect(config.strategies, equals([RecommendationStrategy.similarCategories]));
+//       expect(config.strategies,
+//       equals([RecommendationStrategy.similarCategories]));
 //     });
 //
 //     test('should accept custom values', () {
@@ -294,7 +313,8 @@
 //         excludeCartItems: false,
 //         enableCaching: false,
 //         cacheExpirationMinutes: 60,
-//         strategies: [RecommendationStrategy.custom, RecommendationStrategy.priceRange],
+//         strategies: [RecommendationStrategy.custom,
+//         RecommendationStrategy.priceRange],
 //       );
 //
 //       expect(config.maxRecommendations, equals(10));

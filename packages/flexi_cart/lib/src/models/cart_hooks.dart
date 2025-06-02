@@ -8,7 +8,6 @@ class CartHooks {
     required this.onDisposed,
     required this.onItemAdded,
     required this.onItemDeleted,
-    required this.onCheckout,
   });
 
   /// Creates a [CartHooks] instance with no callbacks.
@@ -21,6 +20,4 @@ class CartHooks {
   /// Callback for when an item is deleted from the cart.
   final void Function(ICartItem item)? onItemDeleted;
 
-  /// Callback for when the checkout process is initiated.
-  final void Function(List<ICartItem> items)? onCheckout;
 }

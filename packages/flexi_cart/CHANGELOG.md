@@ -1,6 +1,16 @@
-## 0.5.0
-
-
+## 1.0.0
+# Breaking changes:
+- Removed 'onDisposed' from flexi_cart.dart, use hooks.onDisposed instead.
+- Removed 'onAddItem' from flexi_cart.dart, use hooks.onItemAdded instead.
+- Removed 'onDeleteItem' from flexi_cart.dart, use hooks.onItemDeleted instead.
+- Removed 'removeItemCondition' from flexi_cart.dart, use options.behaviorOptions.itemFilter instead.
+- Removed 'setMetadata' from flexi_cart.dart, use setMetadataEntry instead.
+- Removed 'getMetadata' from flexi_cart.dart, use getMetadataEntry instead.
+- Removed 'removeMetadata' from flexi_cart.dart, use removeMetadataEntry instead.
+# Features:
+- Added 'options' to flexi_cart.dart, which includes all previous options and more.
+- Added 'options.validatorOptions' to CartOptions.
+- Added 'options.behaviorOptions' to CartOptions.
 
 ## 0.4.0+2
 updates the following screenshots with improved image quality and file size:

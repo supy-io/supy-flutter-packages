@@ -436,7 +436,7 @@ void main() {
         when(() => item.key).thenReturn('key');
         when(() => item.group).thenReturn('group');
         when(() => item.groupName).thenReturn('groupName');
-        when(() => item.price).thenReturn(9);
+        when(() => item.price).thenReturn(15);
         when(() => item.quantity).thenReturn(1);
 
         cart
@@ -448,7 +448,6 @@ void main() {
             ),
           )
           ..add(item);
-
         verify(mockCallback.call).called(1);
         expect(cart.items, isNot(contains(item.key)));
         expect(cart.groups, isNot(contains(item.group)));

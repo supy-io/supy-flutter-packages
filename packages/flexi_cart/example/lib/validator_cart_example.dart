@@ -475,7 +475,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         childCount: items.length,
                       ),
                     ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 24),
+                  ),
                 ],
               ),
             ),
@@ -487,8 +489,12 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Subtotal:',
-                            style: TextStyle(fontWeight: FontWeight.w600)),
+                        const Text(
+                          'Subtotal:',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         Text('\$${totalPrice.toStringAsFixed(2)}'),
                       ],
                     ),
@@ -497,26 +503,33 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                              'Discount (${(discountPercent * 100).toInt()}%):',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green.shade700)),
+                            'Discount (${(discountPercent * 100).toInt()}%):',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.green.shade700,
+                            ),
+                          ),
                           Text(
-                              '-\$${(totalPrice * discountPercent).toStringAsFixed(2)}',
-                              style: TextStyle(color: Colors.green.shade700)),
+                            '-\$${(totalPrice * discountPercent).toStringAsFixed(2)}',
+                            style: TextStyle(color: Colors.green.shade700),
+                          ),
                         ],
                       ),
                     const SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Total:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)),
+                        const Text(
+                          'Total:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
                         Text(
                           '\$${discountedPrice.toStringAsFixed(2)}',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                       ],
                     ),

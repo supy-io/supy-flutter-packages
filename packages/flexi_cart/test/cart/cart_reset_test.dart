@@ -13,7 +13,7 @@ void main() {
       mockCallback = MockCallbackFunction();
       cart = FlexiCart<MockItem>()
         ..add(item)
-        ..setMetadata('test', 'value')
+        ..setMetadataEntry('test', 'value')
         ..setNote('note');
     });
 
