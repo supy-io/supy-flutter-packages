@@ -34,14 +34,14 @@ void main() {
         ..unlock();
       expect(() => cart.add(item), returnsNormally);
     });
-    test('Allows Locking multiple', () {
+    test('lock() is idempotent', () {
       cart
         ..lock()
         ..lock()
         ..lock();
       expect(cart.isLocked, isTrue);
     });
-    test('Allows unLocking twice', () {
+    test('unlock() is idempotent', () {
       cart
         ..lock()
         ..unlock()
@@ -55,6 +55,35 @@ void main() {
         ..lock()
         ..reset();
       expect(cart.isLocked, isFalse);
+    });
+    test('toggleLock() locks and unlocks correctly', () {
+      cart.toggleLock();
+      expect(cart.isLocked, isTrue);
+      expect(cart.history.last, contains('Cart locked'));
+
+      cart.toggleLock();
+      expect(cart.isLocked, isFalse);
+      expect(cart.history.last, contains('Cart unlocked'));
+    });
+
+    test('toggleLock() with shouldNotifyListeners = true', () {
+      cart.toggleLock(shouldNotifyListeners: true);
+      expect(cart.history.last, contains('notified: true'));
+    });
+
+    test('resetLock() forces unlock regardless of state', () {
+      cart
+        ..lock()
+        ..resetLock();
+      expect(cart.isLocked, isFalse);
+      expect(cart.history.last, contains('Cart lock reset'));
+    });
+
+    test('resetLock() with shouldNotifyListeners = true', () {
+      cart
+        ..lock()
+        ..resetLock(shouldNotifyListeners: true);
+      expect(cart.history.last, contains('notified: true'));
     });
   });
 }

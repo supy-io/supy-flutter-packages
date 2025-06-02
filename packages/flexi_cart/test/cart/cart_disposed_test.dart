@@ -1,27 +1,16 @@
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import '../helpers/mocks.dart';
 
 void main() {
   group('Cart Disposed', () {
     late FlexiCart<MockItem> cart;
-    late MockCallbackFunction mockCallback;
     setUp(() {
       cart = FlexiCart<MockItem>()
         ..add(MockItem(name: 'item', price: 10, id: '1'))
         ..dispose();
-
-      mockCallback = MockCallbackFunction();
     });
 
-    test(
-      'on dispose callback',
-      () {
-        cart = FlexiCart(onDisposed: mockCallback.call)..dispose();
-        verify(mockCallback.call).called(1);
-      },
-    );
     test('add does not modify items after dispose', () {
       expect(
         () => cart.add(MockItem(name: 'another', price: 5, id: '1')),

@@ -471,13 +471,13 @@ class _ExampleState extends State<Example> {
 final class CartPrintPlugin extends ICartPlugin {
   @override
   void onChange(FlexiCart<ICartItem> cart) {
-    debugPrint('Cart logs: ${cart.logs}');
+    debugPrint('Cart History: ${cart.history}');
     super.onChange(cart);
   }
 
   @override
   void onClose(FlexiCart<ICartItem> cart) {
-    debugPrint('Cart closed: ${cart.logs}');
+    debugPrint('Cart closed: ${cart.history}');
     super.onClose(cart);
   }
 

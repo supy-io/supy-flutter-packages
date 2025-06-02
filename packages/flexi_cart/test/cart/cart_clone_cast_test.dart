@@ -11,7 +11,7 @@ void main() {
     setUp(() {
       originalCart = FlexiCart<MockItem>()
         ..add(item)
-        ..setMetadata('key', 'value')
+        ..setMetadataEntry('key', 'value')
         ..setNote('note');
     });
 
@@ -114,9 +114,6 @@ void main() {
           ..addZeroQuantity = true
           ..setDeliveredAt(DateTime.now())
           ..setNote('note')
-          ..removeItemCondition = (item) {
-            return false;
-          }
           ..add(item);
 
         final clonedCart = cart.clone();
@@ -128,7 +125,6 @@ void main() {
         expect(clonedCart.addZeroQuantity, isTrue);
         expect(clonedCart.deliveredAt, isNotNull);
         expect(clonedCart.note, equals('note'));
-        expect(clonedCart.removeItemCondition, isNotNull);
       },
     );
 

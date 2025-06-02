@@ -436,15 +436,18 @@ void main() {
         when(() => item.key).thenReturn('key');
         when(() => item.group).thenReturn('group');
         when(() => item.groupName).thenReturn('groupName');
-        when(() => item.price).thenReturn(9);
+        when(() => item.price).thenReturn(15);
         when(() => item.quantity).thenReturn(1);
 
         cart
-          ..removeItemCondition = (item) {
-            return item.price < 10.0;
-          }
+          ..setBehaviorOptions(
+            BehaviorOptions(
+              itemFilter: (item) {
+                return item.price < 10.0;
+              },
+            ),
+          )
           ..add(item);
-
         verify(mockCallback.call).called(1);
         expect(cart.items, isNot(contains(item.key)));
         expect(cart.groups, isNot(contains(item.group)));
@@ -764,7 +767,6 @@ void main() {
           expect(cart.addZeroQuantity, isFalse);
           expect(cart.deliveredAt, isNull);
           expect(cart.note, isNull);
-          expect(cart.removeItemCondition, isNull);
         },
       );
     },

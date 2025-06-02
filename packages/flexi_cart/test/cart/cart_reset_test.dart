@@ -13,7 +13,7 @@ void main() {
       mockCallback = MockCallbackFunction();
       cart = FlexiCart<MockItem>()
         ..add(item)
-        ..setMetadata('test', 'value')
+        ..setMetadataEntry('test', 'value')
         ..setNote('note');
     });
 
@@ -81,9 +81,6 @@ void main() {
           ..addZeroQuantity = true
           ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
           ..setNote('note', shouldNotifyListeners: true)
-          ..removeItemCondition = (item) {
-            return true;
-          }
           ..add(item)
           ..reset();
 
@@ -95,15 +92,11 @@ void main() {
         expect(cart.addZeroQuantity, isFalse);
         expect(cart.deliveredAt, isNull);
         expect(cart.note, isNull);
-        expect(cart.removeItemCondition, isNull);
 
         cart
           ..addZeroQuantity = true
           ..setDeliveredAt(DateTime.now(), shouldNotifyListeners: true)
           ..setNote('note', shouldNotifyListeners: true)
-          ..removeItemCondition = (item) {
-            return true;
-          }
           ..add(item)
           ..reset(shouldNotifyListeners: false);
 
@@ -115,7 +108,6 @@ void main() {
         expect(cart.addZeroQuantity, isFalse);
         expect(cart.deliveredAt, isNull);
         expect(cart.note, isNull);
-        expect(cart.removeItemCondition, isNull);
       },
     );
   });

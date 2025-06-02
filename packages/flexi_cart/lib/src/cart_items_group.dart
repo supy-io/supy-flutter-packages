@@ -1,4 +1,4 @@
-import 'package:flexi_cart/src/cart_item.dart';
+import 'package:flexi_cart/src/models/cart_item.dart';
 
 /// A group of cart items of type [T], each identified by a unique key.
 ///

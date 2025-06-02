@@ -1,51 +1,48 @@
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter/material.dart';
 
-/// A callback function that determines whether an
-/// item should be removed from the cart.
-typedef RemoveCallBack<T> = bool Function(T item);
-
 /// A reactive and extensible shopping cart that supports item grouping,
 /// custom metadata, locking, expiration, and plugin extensions.
 ///
 /// This class is designed for flexibility and use in state management
 /// systems such as Provider, Riverpod, or GetX.
 class FlexiCart<T extends ICartItem> extends ChangeNotifier
-    with CartChangeNotifierDisposeMixin, CartStreamMixin<FlexiCart<T>> {
+    with
+        CartChangeNotifierDisposeMixin,
+        CartStreamMixin<FlexiCart<T>>,
+        CartPluginsMixin,
+        CartHistoryMixin,
+        CartLockMixin,
+        CartMetadataMixin {
   /// Constructs a [FlexiCart] instance.
   ///
   /// - [items] is an optional initial map of items.
   /// - [groups] is an optional map of item groups.
-  /// - [onDisposed] is a callback called on disposal.
-  /// - [onAddItem] and [onDeleteItem] are callbacks for item operations.
-  /// - [removeItemCondition] defines a custom condition to remove items.
   FlexiCart({
     Map<String, T>? items,
     Map<String, CartItemsGroup<T>>? groups,
-    this.onDisposed,
-    this.onAddItem,
-    this.onDeleteItem,
-    this.removeItemCondition,
-  })  : _items = items ?? {},
-        groups = groups ?? {};
+    this.hooks,
+    CartOptions? options,
+  })  : _options = options ?? CartOptions(),
+        _items = items ?? {},
+        groups = groups ?? {} {
+    final validatorOptions = _options.validatorOptions;
 
-  /// Custom metadata storage.
-  final Map<String, dynamic> _metadata = {};
+    if (validatorOptions.autoValidate) {
+      // Automatically validate the cart if auto-validation is enabled
+      _validateIfNeeded();
+      addListener(_validateIfNeeded);
+    }
+  }
 
-  /// Returns a read-only view of the metadata.
-  Map<String, dynamic> get metadata => Map.unmodifiable(_metadata);
+  /// Class have Callbacks
+  final CartHooks? hooks;
 
-  /// Callback triggered when the cart is disposed.
-  final VoidCallback? onDisposed;
+  /// Options for the cart, including validation and discount options.
+  CartOptions _options;
 
-  /// Callback triggered when an item is added.
-  final VoidCallback? onAddItem;
-
-  /// Callback triggered when an item is deleted.
-  final VoidCallback? onDeleteItem;
-
-  /// Condition to determine whether an item should be removed.
-  RemoveCallBack<T>? removeItemCondition;
+  /// Returns the current options for the cart.
+  CartOptions get options => _options;
 
   /// Internal storage for cart items.
   final Map<String, T> _items;
@@ -65,17 +62,10 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Whether to allow items with quantity zero in the cart.
   bool addZeroQuantity = false;
 
-  /// Indicates if the cart is locked for editing.
-  bool _isLocked = false;
-
   /// Currency if needed for the cart.
   CartCurrency? _cartCurrency;
 
   /// Internal logs of cart events.
-  final List<String> _logs = [];
-
-  /// Registered plugins for cart event hooks.
-  final List<ICartPlugin<T>> _plugins = [];
 
   /// Returns all cart items as a map.
   Map<String, T> get items => _items;
@@ -89,9 +79,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Returns the delivery timestamp.
   DateTime? get deliveredAt => _deliveredAt;
 
-  /// Indicates whether the cart is currently locked.
-  bool get isLocked => _isLocked;
-
   /// Returns true if the cart has expired.
   bool get isExpired =>
       _expiresAt != null && DateTime.now().isAfter(_expiresAt!);
@@ -99,68 +86,138 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Returns the CartCurrency.
   CartCurrency? get cartCurrency => _cartCurrency;
 
-  /// Returns the internal log entries.
-  List<String> get logs => List.unmodifiable(_logs);
-
-  /// Sets the cart to expire after the given duration from now.
-  void setExpiration(Duration duration, {bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    _expiresAt = DateTime.now().add(duration);
-    _log(
-      'Cart has been set to expire at: $_expiresAt',
-      notified: shouldNotifyListeners,
-    );
-    if (shouldNotifyListeners) notifyListeners();
-  }
-
-  /// Sets a metadata key-value pair.
-  void setMetadata(
-    String key,
-    dynamic value, {
+  // =============== VALIDATOR MANAGEMENT INTEGRATION ===============
+  /// set promo code for the cart.
+  void setPromoCode(
+    String? code, {
     bool shouldNotifyListeners = true,
-  }) {
-    _checkDisposed();
+  }) =>
+      _updateOptions(
+        _options = _options.copyWith(
+          validatorOptions: _options.validatorOptions.copyWith(
+            promoCode: code,
+          ),
+        ),
+        'Set promo code: $code',
+        shouldNotifyListeners,
+      );
 
-    _metadata[key] = value;
-    _log('Metadata set: $key = $value', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
+  /// Returns the current promo code.
+  String? get promoCode => _options.validatorOptions.promoCode;
+
+  /// Sets a custom validator for the promo code.
+  void setPromoCodeValidator(
+    String? Function(String code)? promoCodeValidator, {
+    bool shouldNotifyListeners = false,
+  }) =>
+      _updateOptions(
+        _options = _options.copyWith(
+          validatorOptions: _options.validatorOptions.copyWith(
+            promoCodeValidator: promoCodeValidator,
+          ),
+        ),
+        'Set promo code validator',
+        shouldNotifyListeners,
+      );
+
+  /// [ValidatorOptions] is used to validate the cart state
+
+  /// Returns true if the cart is locked.
+  Map<String, dynamic> validate() {
+    final validatorOptions = _options.validatorOptions;
+    return validatorOptions.validate(this);
   }
 
-  /// get metadata value by key
-  D? getMetadata<D>(String key) => _metadata[key] as D?;
+  /// Returns true if the cart has any validators.
+  bool get hasValidators => _options.validatorOptions.hasValidators;
 
-  /// Removes a metadata entry.
-  void removeMetadata(String key, {bool shouldNotifyListeners = true}) {
-    _checkDisposed();
+  /// Returns the list of validators.
+  List<ICartValidator> get validators {
+    return _options.validatorOptions.validators;
+  }
 
-    if (_metadata.containsKey(key)) {
-      _metadata.remove(key);
-      _log('Metadata removed: $key', notified: shouldNotifyListeners);
-      if (shouldNotifyListeners) notifyListeners();
+  /// add a validator to the validators.
+  void addValidator(ICartValidator validator) {
+    _options.validatorOptions.addValidator(validator);
+    _validateIfNeeded();
+  }
+
+  /// Removes a validator from the list.
+  void removeValidator(ICartValidator validator) {
+    _options.validatorOptions.removeValidator(validator);
+    _validateIfNeeded();
+  }
+
+  /// Adds multiple validators.
+  void addValidators(List<ICartValidator> validators) {
+    _options.validatorOptions.addValidators(validators);
+    _validateIfNeeded();
+  }
+
+  /// Clears all validators.
+  void clearValidators() {
+    _options.validatorOptions.clearValidators();
+    _validateIfNeeded();
+  }
+
+  /// Returns the current validation errors as a map.
+
+  Map<String, dynamic> validationErrors = {};
+
+  void _validateIfNeeded() {
+    final errors = validate();
+    validationErrors = errors;
+    if (errors.isNotEmpty) {
+      _log('Auto-validation errors: $errors');
+    } else {
+      _log('Auto-validation passed');
     }
   }
 
-  /// Locks the cart from being edited.
-  void lock({bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    if (_isLocked) return;
-    _isLocked = true;
-    _log('Cart has been locked', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
+  /// sets custom validator options for the cart.
+  void setValidatorOptions(
+    ValidatorOptions validatorOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        validatorOptions: validatorOptions,
+      ),
+      'Set custom validator options',
+      shouldNotifyListeners,
+    );
   }
 
-  /// Unlocks the cart, allowing edits.
-  void unlock({bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    if (!_isLocked) return;
-    _isLocked = false;
-    _log('Cart has been locked', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
+  // =============== END VALIDATOR MANAGEMENT INTEGRATION ===============
+
+  /// Sets custom behavior options for the cart.
+  void setBehaviorOptions(
+    BehaviorOptions behaviorOptions, {
+    bool shouldNotifyListeners = false,
+  }) {
+    _updateOptions(
+      _options = _options.copyWith(
+        behaviorOptions: behaviorOptions,
+      ),
+      'Set custom behavior options',
+      shouldNotifyListeners,
+    );
+  }
+
+  /// Sets the cart to expire after the given duration from now.
+  void setExpiration(Duration duration, {bool shouldNotifyListeners = false}) {
+    _performCartOperation(
+      operation: () {
+        _expiresAt = DateTime.now().add(duration);
+      },
+      logMessage: ' Set expiration to: ${DateTime.now().add(duration)}',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
   /// Throws an exception if the cart is locked.
   void _checkLock() {
-    if (_isLocked) {
+    if (isLocked) {
       final error = CartLockedException();
       _notifyOnErrorPlugins(error, StackTrace.current);
       throw error;
@@ -169,18 +226,16 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Logs a message with a timestamp.
   void _log(String message, {bool notified = false}) {
-    _logs.add('$message - {notified: $notified}');
-  }
-
-  /// Registers a plugin to be notified on cart changes.
-  void registerPlugin(ICartPlugin<T> plugin) {
-    _checkDisposed();
-    _plugins.add(plugin);
+    addHistory('$message - {notified: $notified}');
+    final behaviorOptions = _options.behaviorOptions;
+    if (behaviorOptions.enableLogging) {
+      behaviorOptions.logger?.call(message);
+    }
   }
 
   /// Notifies all registered plugins about a cart change.
   void _notifyOnChangedPlugins() {
-    for (final plugin in _plugins) {
+    for (final plugin in plugins) {
       try {
         plugin.onChange(this);
       } on Exception catch (e, s) {
@@ -191,42 +246,36 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
 
   /// Notifies all registered plugins about a cart error.
   void _notifyOnErrorPlugins(Object error, StackTrace stackTrace) {
-    for (final plugin in _plugins) {
+    for (final plugin in plugins) {
       plugin.onError(this, error, stackTrace);
     }
   }
 
   /// Throws an exception if the cart is disposed.
   void _checkDisposed() {
-    if (disposed) {
-      final error =
-          CartDisposedException('Cannot perform action after dispose');
-      _notifyOnErrorPlugins(error, StackTrace.current);
-      throw error;
-    }
+    checkIfDisposed(
+      (exception) {
+        _notifyOnErrorPlugins(exception, StackTrace.current);
+      },
+    );
   }
 
   /// Notifies all registered plugins about a cart close.
   void _notifyOnClosePlugins() {
-    for (final plugin in _plugins) {
+    for (final plugin in plugins) {
       plugin.onClose(this);
     }
   }
 
   /// Sets a note for the cart.
   void setNote(String? note, {bool shouldNotifyListeners = false}) {
-    _checkDisposed();
-    _note = note;
-    _log('Set Note with: $note', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
-  }
-
-  /// Deprecated. Use [setNote] instead.
-  @Deprecated('Use setNote() instead')
-  set note(String? note) {
-    _note = note;
-    _log('Set Note with: $note', notified: true);
-    notifyListeners();
+    _performCartOperation(
+      operation: () {
+        _note = note;
+      },
+      logMessage: 'Set Note with: $note',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
   /// Sets the delivery timestamp.
@@ -234,19 +283,13 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     DateTime? deliveredAt, {
     bool shouldNotifyListeners = false,
   }) {
-    _checkDisposed();
-    _deliveredAt = deliveredAt;
-    _log('Set Delivered at: $deliveredAt', notified: shouldNotifyListeners);
-    if (shouldNotifyListeners) notifyListeners();
-  }
-
-  /// Deprecated. Use [setDeliveredAt] instead.
-  @Deprecated('Use setDeliveredAt() instead')
-  set deliveredAt(DateTime? deliveredAt) {
-    _deliveredAt = deliveredAt;
-
-    _log('Set Delivered at: $deliveredAt', notified: true);
-    notifyListeners();
+    _performCartOperation(
+      operation: () {
+        _deliveredAt = deliveredAt;
+      },
+      logMessage: 'Set Delivered at: $deliveredAt',
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
   /// Calculates the total price of items in the cart.
@@ -274,16 +317,13 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool increment = false,
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-
-    _checkLock();
-    _add(item, increment);
-    emit(this);
-    _log(
-      'Item added: ${item.key}',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        _add(item, increment);
+      },
+      logMessage: 'Item added: ${item.key}',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Adds multiple items to the cart.
@@ -297,18 +337,18 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     bool skipIfExist = false,
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    for (final item in items) {
-      if (skipIfExist && _items.containsKey(item.key)) continue;
-      _add(item, increment);
-    }
-    emit(this);
-    _log(
-      'Items have been added: $items',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        for (final item in items) {
+          if (skipIfExist && _items.containsKey(item.key)) {
+            continue;
+          }
+          _add(item, increment);
+        }
+      },
+      logMessage: 'Items have been added: $items',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Removes all items not included in the provided list.
@@ -316,45 +356,41 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     List<T> items, {
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    final keepKeys = items.map((e) => e.key).toSet();
-    for (final item in itemsList) {
-      if (!keepKeys.contains(item.key)) _delete(item);
-    }
-    emit(this);
-    _log(
-      'Items have been removed: $items',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        final keepKeys = items.map((e) => e.key).toSet();
+        for (final item in itemsList) {
+          if (!keepKeys.contains(item.key)) {
+            _delete(item);
+          }
+        }
+      },
+      logMessage: 'Items have been removed: $items',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Deletes a single item from the cart.
   void delete(T item, {bool shouldNotifyListeners = true}) {
-    _checkDisposed();
-    _checkLock();
-    _delete(item);
-    emit(this);
-    _log(
-      'Item has been removed: ${item.key}',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        _delete(item);
+      },
+      logMessage: 'Item has been removed: ${item.key}',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Clears all items from the cart without affecting metadata.
   void resetItems({bool shouldNotifyListeners = true}) {
-    _checkDisposed();
-    _checkLock();
-    _log(
-      'Items have been reset: $itemsList',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        groups.clear();
+        _items.clear();
+      },
+      logMessage: 'Items have been reset: $itemsList',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    groups.clear();
-    _items.clear();
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Fully resets the cart and its metadata.
@@ -368,14 +404,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       _deliveredAt = null;
       _expiresAt = null;
       addZeroQuantity = false;
-      _metadata.clear();
-      _isLocked = false;
-      _logs.clear();
+      clearAllMetadata();
+      resetLock();
+      clearHistory();
       _cartCurrency = null;
-      removeItemCondition = null;
 
       emit(this);
-      if (shouldNotifyListeners) notifyListeners();
+      if (shouldNotifyListeners) {
+        notifyListeners();
+      }
     } catch (error, stackTrace) {
       _notifyOnErrorPlugins(error, stackTrace);
       rethrow;
@@ -387,14 +424,14 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     _checkDisposed();
     _checkLock();
 
-    groups.remove(groupId);
-    _items.removeWhere((_, item) => item.group == groupId);
-    _log(
-      'Group has been removed from the cart: $groupId',
-      notified: shouldNotifyListeners,
+    _performCartOperation(
+      operation: () {
+        groups.remove(groupId);
+        _items.removeWhere((_, item) => item.group == groupId);
+      },
+      logMessage: 'Group has been removed from the cart: $groupId',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Returns true if the given group is empty.
@@ -419,10 +456,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       items: Map<String, T>.from(_items),
       groups: Map<String, CartItemsGroup<T>>.from(groups),
     )
-      ..removeItemCondition = removeItemCondition
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
-      .._metadata.addAll(_metadata)
+      ..addMetadataEntries(metadata)
       .._cartCurrency = _cartCurrency
       .._deliveredAt = _deliveredAt;
   }
@@ -435,7 +471,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     )
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
-      .._metadata.addAll(_metadata)
+      ..addMetadataEntries(metadata)
       .._cartCurrency = _cartCurrency
       .._deliveredAt = _deliveredAt;
   }
@@ -445,85 +481,99 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     CartCurrency cartCurrency, {
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    if (cartCurrency == _cartCurrency) return;
-    removeExchangeRate();
+    _performCartOperation(
+      operation: () {
+        if (cartCurrency == _cartCurrency) {
+          return;
+        }
+        removeExchangeRate();
 
-    _cartCurrency = cartCurrency;
-    final rate = cartCurrency.rate;
+        _cartCurrency = cartCurrency;
+        final rate = cartCurrency.rate;
 
-    _items.forEach((key, item) {
-      item.price *= rate;
+        _items.forEach((key, item) {
+          item.price *= rate;
 
-      // Update item in group if necessary
-      final groupId = item.group;
-      if (groups[groupId]?.items != null) {
-        groups[groupId]!.items[key] = item;
-      }
-    });
-
-    _log(
-      'Applied exchange rate for ${cartCurrency.code}: $rate',
-      notified: shouldNotifyListeners,
+          // Update item in group if necessary
+          final groupId = item.group;
+          if (groups[groupId]?.items != null) {
+            groups[groupId]!.items[key] = item;
+          }
+        });
+      },
+      logMessage: 'Applied exchange rate for ${cartCurrency.code}:'
+          ' ${cartCurrency.rate}',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
   /// Removes the applied exchange rate and reverts item prices.
   void removeExchangeRate({
     bool shouldNotifyListeners = true,
   }) {
-    _checkDisposed();
-    _checkLock();
-    if (_cartCurrency == null) return;
+    _performCartOperation(
+      operation: () {
+        if (_cartCurrency == null) {
+          return;
+        }
 
-    final rate = _cartCurrency!.rate;
+        final rate = _cartCurrency!.rate;
 
-    _items.forEach((key, item) {
-      item.price /= rate;
+        _items.forEach((key, item) {
+          item.price /= rate;
 
-      // Update item in group if necessary
-      final groupId = item.group;
-      if (groups[groupId]?.items != null) {
-        groups[groupId]!.items[key] = item;
-      }
-    });
+          // Update item in group if necessary
+          final groupId = item.group;
+          if (groups[groupId]?.items != null) {
+            groups[groupId]!.items[key] = item;
+          }
+        });
 
-    _log(
-      'Removed exchange rate for ${_cartCurrency!.code}: $rate',
-      notified: shouldNotifyListeners,
+        _cartCurrency = null;
+      },
+      logMessage: 'Removed exchange rate',
+      shouldNotifyListeners: shouldNotifyListeners,
     );
-
-    _cartCurrency = null;
-
-    emit(this);
-    if (shouldNotifyListeners) notifyListeners();
   }
 
-  /// Disposes of the cart and triggers [onDisposed].
+  /// Disposes of the cart and triggers [dispose].
   @override
   void dispose() {
-    super.dispose();
+    if (disposed) return;
     _notifyOnClosePlugins();
     _log('Cart has been disposed');
-    onDisposed?.call();
+    hooks?.onDisposed?.call();
     disposeStream(); // call this if using the mixin's stream
+    super.dispose();
   }
 
   /// Internal method to add an item and notify plugins.
   void _add(T item, bool increment) {
+    final behaviorOptions = _options.behaviorOptions;
+
+    /// Apply BehaviorOptions filters before proceeding
+    if (!behaviorOptions.canAdd(item) && !items.containsKey(item.key)) {
+      behaviorOptions.log('Add blocked by behavior options: ${item.key}');
+      return;
+    }
+
     final shouldDeleteZeroQty = !addZeroQuantity && item.quantity == 0;
-    final shouldRemoveItem = removeItemCondition?.call(item) ?? false;
+    final shouldRemoveItem = !behaviorOptions.canAdd(item);
 
     if (shouldRemoveItem || item.quantity == null || shouldDeleteZeroQty) {
       _delete(item);
       return;
     }
 
-    onAddItem?.call();
+    hooks?.onItemAdded?.call(item);
+
+    /// Override item price if resolver is provided on add only
+    if (behaviorOptions.priceResolver != null &&
+        !_items.containsKey(item.key)) {
+      final resolvedPrice = behaviorOptions.resolvePrice(item);
+      behaviorOptions.log('Resolved price for ${item.key}: $resolvedPrice');
+      item.price = resolvedPrice;
+    }
     _addToItems(item, increment: increment);
     _addToGroup(item);
     _notifyOnChangedPlugins();
@@ -556,7 +606,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void _delete(T item) {
     _items.remove(item.key);
     _deleteFromGroup(item);
-    onDeleteItem?.call();
+    hooks?.onItemDeleted?.call(item);
     _notifyOnChangedPlugins();
   }
 
@@ -565,66 +615,44 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     final group = groups[item.group];
     if (group != null) {
       group.remove(item);
-      if (group.items.isEmpty) groups.remove(item.group);
+      if (group.items.isEmpty) {
+        groups.remove(item.group);
+      }
     }
   }
-}
 
-/// Interface for plugins that want to be notified when the cart changes.
-abstract class ICartPlugin<T extends ICartItem> {
-  /// Called whenever a [onChange] occurs in any [cart]
-  /// A [onChange] occurs when a new value is emitted.
-  /// [onChange] is called before a cart's state has been updated.
-  @protected
-  @mustCallSuper
-  void onChange(FlexiCart<T> cart) {}
+  /// --- Private Helpers ---
 
-  /// Called whenever an [error] is thrown in the cart.
-  /// The [stackTrace] argument may be [StackTrace.empty] if an error
-  /// was received without a stack trace.
-  @protected
-  @mustCallSuper
-  void onError(FlexiCart<T> cart, Object error, StackTrace stackTrace) {}
-
-  /// Called whenever a [cart] is closed.
-  /// [onClose] is called just before the [cart] is closed
-  /// and indicates that the particular instance will no longer
-  /// emit new states.
-  @protected
-  @mustCallSuper
-  void onClose(FlexiCart<T> cart) {}
-}
-
-/// Represents a currency with an exchange rate and currency code.
-///
-/// This class holds the exchange [rate] relative to a base currency
-/// and the [code] representing the currency (e.g., "USD", "EUR").
-@immutable
-class CartCurrency {
-  /// Creates a [CartCurrency] instance with the given [rate] and [code].
-  ///
-  /// Both [rate] and [code] are required.
-  const CartCurrency({required this.rate, required this.code});
-
-  /// The exchange rate relative to a base currency.
-  final num rate;
-
-  /// The currency code (e.g., "USD", "EUR").
-  final String code;
-
-  @override
-  String toString() {
-    return 'CartCurrency{rate: $rate, code: $code}';
+  void _updateOptions(
+    CartOptions newOptions,
+    String logMessage,
+    bool shouldNotifyListeners,
+  ) {
+    _performCartOperation(
+      operation: () {
+        _options = newOptions;
+        _validateIfNeeded();
+      },
+      logMessage: logMessage,
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
+  /// Performs a cart operation with proper error handling and notifications.
+  void _performCartOperation({
+    required VoidCallback operation,
+    required String logMessage,
+    required bool shouldNotifyListeners,
+  }) {
+    _checkDisposed();
+    _checkLock();
 
-    return other is CartCurrency && other.rate == rate && other.code == code;
+    operation();
+    emit(this);
+    _log(logMessage, notified: shouldNotifyListeners);
+
+    if (shouldNotifyListeners) {
+      notifyListeners();
+    }
   }
-
-  @override
-  int get hashCode => Object.hash(rate, code);
 }
