@@ -182,6 +182,41 @@ void main() {
 
       expect(errors, isNull);
     });
+    test('cartMaxLength returns null when item count within max', () {
+      final cart = FlexiCart();
+      final item1 = CartItem(
+        id: 'A',
+        name: 'Test Item',
+        price: 50,
+        quantity: 10,
+        currency: 'USD',
+      );
+      cart.add(item1);
+      final validator = CartValidators.cartMaxLength(2);
+      final errors = validator.validate(cart);
+
+      expect(errors, isNull);
+    });
+
+    test('cartMaxLength returns error when items exceed max', () {
+      final cart = FlexiCart();
+      for (var i = 0; i < 3; i++) {
+        final item = CartItem(
+          id: 'item$i',
+          name: 'Test Item $i',
+          price: 10,
+          quantity: 1,
+          currency: 'USD',
+        );
+        cart.add(item);
+      }
+
+      final validator = CartValidators.cartMaxLength(1);
+      final errors = validator.validate(cart);
+
+      expect(errors, isNotNull);
+      expect(errors!.containsKey(CartValidatorKeys.maxLength), isTrue);
+    });
 
     test('cartRequiredField returns null when required field present', () {
       final cart = FlexiCart()..setMetadataEntry('email', 'user@example.com');

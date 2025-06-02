@@ -30,6 +30,7 @@ mixin CartChangeNotifierDisposeMixin on ChangeNotifier {
   @override
   void dispose() {
     disposed = true;
+
     super.dispose();
   }
 }

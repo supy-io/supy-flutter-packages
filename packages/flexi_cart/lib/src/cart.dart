@@ -539,11 +539,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Disposes of the cart and triggers [dispose].
   @override
   void dispose() {
-    super.dispose();
+    if (disposed) return;
     _notifyOnClosePlugins();
     _log('Cart has been disposed');
     hooks?.onDisposed?.call();
     disposeStream(); // call this if using the mixin's stream
+    super.dispose();
   }
 
   /// Internal method to add an item and notify plugins.
