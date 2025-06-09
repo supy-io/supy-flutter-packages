@@ -1,3 +1,8 @@
+## 1.0.1
+- introduced a new `throwWhenDisposed` boolean option to `BehaviorOptions`.
+When set to `true` (default), the cart will throw a `CartDisposedException` if an attempt is made to modify it after it has been disposed.
+When set to `false`, such attempts will be silently ignored.
+
 ## 1.0.0+1
 - Reduces the width of screenshots in `README.md` from `200` to `165` for better layout.
 - Minor code formatting changes include removing an extra newline in `cart_hooks_test.dart` and adjusting spacing in `cart_hooks.dart`.

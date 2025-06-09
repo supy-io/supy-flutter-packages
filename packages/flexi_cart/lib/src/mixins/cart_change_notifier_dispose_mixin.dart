@@ -18,12 +18,17 @@ mixin CartChangeNotifierDisposeMixin on ChangeNotifier {
   }
 
   /// Checks if the object has been disposed before performing an action.
-  void checkIfDisposed(ValueChanged<Exception> beforeThrow) {
+  void checkIfDisposed(
+    ValueChanged<Exception> beforeThrow, {
+    bool throwIfDisposed = true,
+  }) {
     if (disposed) {
       final exception =
           CartDisposedException('Cannot perform action after dispose');
       beforeThrow(exception);
-      throw exception;
+      if (throwIfDisposed) {
+        throw exception;
+      }
     }
   }
 

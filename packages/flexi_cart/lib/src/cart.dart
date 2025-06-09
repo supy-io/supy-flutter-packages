@@ -257,6 +257,7 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       (exception) {
         _notifyOnErrorPlugins(exception, StackTrace.current);
       },
+      throwIfDisposed: _options.behaviorOptions.throwWhenDisposed,
     );
   }
 

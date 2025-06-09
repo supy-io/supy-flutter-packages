@@ -9,10 +9,14 @@ class BehaviorOptions {
     this.logger,
     this.itemFilter,
     this.priceResolver,
+    this.throwWhenDisposed = true,
   });
 
   /// Enable or disable debug logging.
   bool enableLogging;
+
+  /// Whether to throw an exception when trying to add items to a disposed cart.
+  bool throwWhenDisposed;
 
   /// Function to log custom messages when logging is enabled.
   void Function(String message)? logger;

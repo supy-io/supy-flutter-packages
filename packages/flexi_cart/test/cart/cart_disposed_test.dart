@@ -1,5 +1,6 @@
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import '../helpers/mocks.dart';
 
 void main() {
@@ -90,13 +91,19 @@ void main() {
       );
       expect(cart.cartCurrency, isNull);
     });
-
-    // test('read operations still work after dispose', () {
-    //   expect(cart.items.length, 1);
-    //   expect(cart.totalPrice(), 10);
-    //   expect(cart.items.('1'), isTrue);
-    //   expect(cart.getQuantity('1'), 1);
-    //   expect(cart.getItem('1')?.name, 'item');
-    // });
+    test('disable throw on disposed', () {
+      final cart = FlexiCart<MockItem>(
+        options: CartOptions(
+          behaviorOptions: BehaviorOptions(throwWhenDisposed: false),
+        ),
+      )..dispose();
+      expect(
+        () => cart.add(
+          MockItem(name: 'item', price: 10, id: '1'),
+        ),
+        isA<void>(),
+      );
+      expect(cart.items, isEmpty);
+    });
   });
 }
