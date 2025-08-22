@@ -1,3 +1,6 @@
+## 1.0.2
+- Added `keepZeroOrNullQuantityItems` option to behavior options
+
 ## 1.0.1
 - introduced a new `throwWhenDisposed` boolean option to `BehaviorOptions`.
 When set to `true` (default), the cart will throw a `CartDisposedException` if an attempt is made to modify it after it has been disposed.

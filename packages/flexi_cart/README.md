@@ -40,7 +40,7 @@ Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
    flexi_cart: latest
-   provider: ^6.0.0 
+   provider: latest
 ```
 
 ## Documentation 📖
