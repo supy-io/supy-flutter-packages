@@ -558,14 +558,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       return;
     }
 
-    final shouldDeleteZeroQty = !addZeroQuantity && item.quantity == 0;
-    final shouldRemoveItem = !behaviorOptions.canAdd(item);
+    if (!behaviorOptions.keepZeroOrNullQuantityItems) {
+      final shouldDeleteZeroQty = !addZeroQuantity && item.quantity == 0;
+      final shouldRemoveItem = !behaviorOptions.canAdd(item);
 
-    if (shouldRemoveItem || item.quantity == null || shouldDeleteZeroQty) {
-      _delete(item);
-      return;
+      if (shouldRemoveItem || item.quantity == null || shouldDeleteZeroQty) {
+        _delete(item);
+        return;
+      }
     }
-
     hooks?.onItemAdded?.call(item);
 
     /// Override item price if resolver is provided on add only

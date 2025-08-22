@@ -176,4 +176,93 @@ void main() {
       );
     });
   });
+
+  test(
+      'should delete item when quantity is null and'
+      ' retainNullQuantityItems=false', () {
+    final cart = FlexiCart<CartItem>(
+      options: CartOptions(
+        behaviorOptions: BehaviorOptions(),
+      ),
+    );
+
+    final item = CartItem(
+      id: 'nullQty',
+      name: 'Null Quantity',
+      price: 50,
+      currency: 'USD',
+      quantity: null,
+    );
+
+    cart.add(item, shouldNotifyListeners: false);
+
+    expect(cart.items.containsKey('nullQty'), isFalse);
+  });
+
+  test(
+      'should keep item when quantity is null and retainNullQuantityItems=true',
+      () {
+    final cart = FlexiCart<CartItem>(
+      options: CartOptions(
+        behaviorOptions: BehaviorOptions(
+          keepZeroOrNullQuantityItems: true,
+        ),
+      ),
+    );
+
+    final item = CartItem(
+      id: 'nullQty',
+      name: 'Null Quantity',
+      price: 50,
+      currency: 'USD',
+      quantity: null,
+    );
+
+    cart.add(item, shouldNotifyListeners: false);
+
+    expect(cart.items.containsKey('nullQty'), isTrue);
+  });
+
+  test(
+      'should delete item with zero quantity'
+      ' when retainNullQuantityItems=false', () {
+    final cart = FlexiCart<CartItem>(
+      options: CartOptions(
+        behaviorOptions: BehaviorOptions(),
+      ),
+    );
+
+    final item = CartItem(
+      id: 'zeroQty',
+      name: 'Zero Quantity',
+      price: 30,
+      currency: 'USD',
+    );
+
+    cart.add(item, shouldNotifyListeners: false);
+
+    expect(cart.items.containsKey('zeroQty'), isFalse);
+  });
+
+  test('should keep item with zero quantity when retainNullQuantityItems=true',
+      () {
+    final cart = FlexiCart<CartItem>(
+      options: CartOptions(
+        behaviorOptions: BehaviorOptions(
+          keepZeroOrNullQuantityItems: true,
+        ),
+      ),
+    );
+
+    final item = CartItem(
+      id: 'zeroQty',
+      name: 'Zero Quantity',
+      price: 30,
+      currency: 'USD',
+    );
+
+    cart.add(item, shouldNotifyListeners: false);
+
+    expect(cart.items.containsKey('zeroQty'), isTrue);
+  });
 }

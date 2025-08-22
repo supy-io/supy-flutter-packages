@@ -10,6 +10,7 @@ class BehaviorOptions {
     this.itemFilter,
     this.priceResolver,
     this.throwWhenDisposed = true,
+    this.keepZeroOrNullQuantityItems = false,
   });
 
   /// Enable or disable debug logging.
@@ -17,6 +18,9 @@ class BehaviorOptions {
 
   /// Whether to throw an exception when trying to add items to a disposed cart.
   bool throwWhenDisposed;
+
+  /// Whether to throw an exception when trying to add items to a disposed cart.
+  bool keepZeroOrNullQuantityItems;
 
   /// Function to log custom messages when logging is enabled.
   void Function(String message)? logger;
