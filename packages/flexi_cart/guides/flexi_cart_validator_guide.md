@@ -46,26 +46,26 @@ cart.addValidator(CartValidators.cartMaxTotal(/*maximum price*/));
 
 - Or add a list of validators to the cart
 ```dart
-cart.addValidators(
-[
-CartValidators.cartMaxTotal(/*maximum price*/),
-CartValidators.cartMinTotal(/*minimum price*/),
-CartValidators.cartNotEmpty(),
-CartValidators.cartMaxItemCount(/*maximum items quantities*/),
-CartValidators.cartMinLength(/*minimum item length*/),
-CartValidators.cartMaxLength(/*maximum item length*/),
-CartValidators.cartContains(/*required item id*/),
-CartValidators.cartRequiredField(/*required field name in metadata*/),
-],
-);
-}
+    cart.addValidators(
+      [
+        CartValidators.cartMaxTotal(/*maximum price*/),
+        CartValidators.cartMinTotal(/*minimum price*/),
+        CartValidators.cartNotEmpty(),
+        CartValidators.cartMaxItemCount(/*maximum items quantities*/),
+        CartValidators.cartMinLength(/*minimum item length*/),
+        CartValidators.cartMaxLength(/*maximum item length*/),
+        CartValidators.cartContains(/*required item id*/),
+        CartValidators.cartRequiredField(/*required field name in metadata*/),
+      ],
+    );
+  }
 ```
 
 ### Checking Validation Status
 -  Check if cart has validators
 ```dart
   if (cart.hasValidators) {
-print('Cart has ${cart.validators.length} validators');
+  print('Cart has ${cart.validators.length} validators');
 }
 ```
 
@@ -142,16 +142,16 @@ CartValidators.cartMaxTotal(/*maximum price*/),
 ```
 - Add multiple validators
 ```dart
-  cart.addValidators([
-CartValidators.cartMaxTotal(/*maximum price*/),
-CartValidators.cartMinTotal(/*minimum price*/),
-]);
+    cart.addValidators(
+      [
+        CartValidators.cartMaxTotal(/*maximum price*/),
+        CartValidators.cartMinTotal(/*minimum price*/),
+      ],
+    );
 ```
 - Remove a specific validator
 ```dart
-  cart.removeValidator(
-CartValidators.cartMinTotal(/*minimum price*/),
-);
+  cart.removeValidator(CartValidators.cartMinTotal(/*minimum price*/));
 ```
 - Clear all validators
 ```dart
@@ -229,14 +229,14 @@ class ShippingValidator extends ICartValidator {
 
 ```dart
 // Set promo code validator
-cart.setPromoCodeValidator((String code) {
-return switch (code.toUpperCase()) {
-'SAVE10' => null, // Valid
-'WELCOME' => null, // Valid
-'EXPIRED20' => 'This promo code has expired', // Invalid
-_ => 'Invalid promo code', // Default case
-};
-});
+    cart.setPromoCodeValidator((String code) {
+      return switch (code.toUpperCase()) {
+        'SAVE10' => null, // Valid
+        'WELCOME' => null, // Valid
+        'EXPIRED20' => 'This promo code has expired', // Invalid
+        _ => 'Invalid promo code', // Default case
+      };
+    });
 
 // Set a promo code
 cart.setPromoCode('SAVE10');
