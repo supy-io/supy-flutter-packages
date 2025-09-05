@@ -41,6 +41,7 @@ import 'package:provider/provider.dart';
 /// - `stepper`: Increment/decrement step value
 /// - `keyboardType`: Optional keyboard input type
 /// - `elevation`: Elevation of the container
+/// - `autoFocus`: Automatically focuses the input field on build
 ///
 /// ### Example:
 /// ```dart
@@ -99,6 +100,7 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
     this.stepper = 1,
     this.elevation,
     this.keyboardType,
+    this.autoFocus = false,
   });
 
   /// The cart item to be edited.
@@ -151,6 +153,9 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
 
   /// Container elevation shadow.
   final double? elevation;
+
+  /// If true, focuses the input field when the widget is built.
+  final bool autoFocus;
 
   @override
   State<CartInput<T>> createState() => _CartInputState<T>();
@@ -311,6 +316,7 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
       child: TextField(
         key: ValueKey(widget.item.key),
         controller: _controller,
+        autofocus: widget.autoFocus,
         enabled: widget.enabled,
         cursorColor: style.activeForegroundColor,
         keyboardType: widget.keyboardType ??
