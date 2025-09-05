@@ -103,6 +103,7 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
     this.autoFocus = false,
     this.textInputAction,
     this.onSubmitted,
+    this.focusNode,
   });
 
   /// The cart item to be edited.
@@ -164,6 +165,9 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
 
   /// Callback when the user submits the input (e.g., presses "done" on keyboard).
   final ValueChanged<String>? onSubmitted;
+
+  /// Optional focus node for the input field.
+  final FocusNode? focusNode;
 
   @override
   State<CartInput<T>> createState() => _CartInputState<T>();
@@ -325,6 +329,7 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
         key: ValueKey(widget.item.key),
         controller: _controller,
         autofocus: widget.autoFocus,
+        focusNode: widget.focusNode,
         enabled: widget.enabled,
         cursorColor: style.activeForegroundColor,
         textInputAction: widget.textInputAction,

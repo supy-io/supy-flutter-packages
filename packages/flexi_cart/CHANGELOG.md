@@ -1,3 +1,6 @@
+## 1.0.2+3
+- Added optional focusNode parameter to CartInput widget
+
 ## 1.0.2+2
 - Added textInputAction and onSubmitted callbacks to CartInput widget
 
