@@ -1,3 +1,6 @@
+## 1.0.2+2
+- Added textInputAction and onSubmitted callbacks to CartInput widget
+
 ## 1.0.2+1
 - Added AutoFocus to `CartInput` widget.
 
