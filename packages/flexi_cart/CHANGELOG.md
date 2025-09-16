@@ -1,3 +1,15 @@
+
+## 1.0.3
+- Added cart persistence with `saveToCache`, `restoreFromCache` and `deleteFromCache`
+- Added functionality to save, restore, and delete cart state using a `CartCacheProvider`.
+This includes:
+- `FlexiCartPersistence` extension with `toMap`, `toJsonString`, `saveToCache`, `restoreFromCache`, and `deleteFromCache` methods.
+- `CartCacheProvider` abstract class for custom cache implementations.
+- `restoreFrom` method in `FlexiCart` to restore state from another cart instance.
+- Serialization support for `CartOptions`, `BehaviorOptions`, and `ValidatorOptions`.
+- New tests for cart persistence using `shared_preferences`.
+- Example app demonstrating cart caching.
+
 ## 1.0.2+3
 - Added optional focusNode parameter to CartInput widget
 

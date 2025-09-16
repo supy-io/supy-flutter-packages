@@ -1,7 +1,7 @@
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
@@ -161,7 +161,7 @@ class CurrencyDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<CartCurrency>(
-      value: selected,
+      initialValue: selected,
       isDense: true,
       isExpanded: true,
       decoration: InputDecoration(

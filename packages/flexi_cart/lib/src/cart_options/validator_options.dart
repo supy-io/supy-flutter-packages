@@ -108,4 +108,14 @@ class ValidatorOptions {
       promoCodeValidator: promoCodeValidator ?? this.promoCodeValidator,
     );
   }
+
+  /// Convert to Map
+  Map<String, dynamic> toMap() {
+    return {
+      'autoValidate': autoValidate,
+      'promoCode': promoCode,
+      'hasPromoCodeValidator': promoCodeValidator != null,
+      'validatorsCount': _validators.length,
+    };
+  }
 }

@@ -1,8 +1,7 @@
 import 'package:flexi_cart/flexi_cart.dart';
 
-part 'validator_options.dart';
-
 part 'behavior_options.dart';
+part 'validator_options.dart';
 
 /// A configuration class that bundles all customizable options for a
 /// [FlexiCart] instance.
@@ -36,5 +35,13 @@ class CartOptions {
       validatorOptions: validatorOptions ?? this.validatorOptions,
       behaviorOptions: behaviorOptions ?? this.behaviorOptions,
     );
+  }
+
+  /// Converts the cart options to a Map for serialization.
+  Map<String, dynamic> toMap() {
+    return {
+      'validatorOptions': validatorOptions.toMap(),
+      'behaviorOptions': behaviorOptions.toMap(),
+    };
   }
 }

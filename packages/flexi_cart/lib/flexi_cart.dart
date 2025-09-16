@@ -1,4 +1,5 @@
 export 'src/cart.dart';
+export 'src/cart_cache/cart_cache.dart';
 export 'src/cart_diff.dart';
 export 'src/cart_exception.dart';
 export 'src/cart_input_formatter.dart';

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:flutter/material.dart';
 
@@ -636,6 +638,134 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
         _validateIfNeeded();
       },
       logMessage: logMessage,
+      shouldNotifyListeners: shouldNotifyListeners,
+    );
+  }
+
+  /// Restores the cart state from cached JSON data.
+  Future<FlexiCart<T>?> restoreFromCache({
+    required String key,
+    required T Function(Map<String, dynamic> map) itemFromJson,
+    CartItemsGroup<T> Function(Map<String, dynamic> map)? groupFromMap,
+    CartOptions? options,
+    CartCacheProvider? provider,
+    bool overrideThis = false,
+  }) async {
+    String? json;
+    if (provider != null) {
+      json = await provider.read(key);
+    }
+    if (json == null) return null;
+
+    final map = jsonDecode(json) as Map<String, dynamic>;
+
+    // parse items
+    final itemsRaw = (map['items'] as Map?)?.cast<String, dynamic>() ?? {};
+    final items = <String, T>{};
+    itemsRaw.forEach((k, v) {
+      if (v is Map<String, dynamic>) {
+        items[k] = itemFromJson(v);
+      } else if (v is String) {
+        // If items were encoded as JSON strings for some reason, try decode
+        try {
+          final decoded = jsonDecode(v) as Map<String, dynamic>;
+          items[k] = itemFromJson(decoded);
+        } on Exception catch (_) {}
+      }
+    });
+
+    // parse groups (we'll reconstruct group membership using items'
+    // .group field if available)
+    final groupsRaw = (map['groups'] as Map?)?.cast<String, dynamic>() ?? {};
+    final groups = <String, CartItemsGroup<T>>{};
+    groupsRaw.forEach((id, g) {
+      if (g is Map<String, dynamic>) {
+        final groupId = g['id'] as String? ?? id;
+        final groupName = g['name'] as String? ?? id;
+        final group = CartItemsGroup<T>(id: groupId, name: groupName);
+        // if groupFromMap provided, prefer it:
+        if (groupFromMap != null) {
+          try {
+            final built = groupFromMap(g);
+            groups[groupId] = built;
+            return;
+          } on Exception catch (_) {}
+        }
+        // otherwise add members by reading listed item keys if present
+        final listed =
+            (g['items'] as Map?)?.keys.map((e) => e.toString()).toList() ?? [];
+        for (final key in listed) {
+          final item = items[key];
+          if (item != null) {
+            group.add(item);
+          }
+        }
+        groups[groupId] = group;
+      }
+    });
+
+    final cart = FlexiCart<T>(
+      items: items,
+      groups: groups,
+      options: options,
+    )
+
+      // hydrate other fields
+      ..addZeroQuantity = map['addZeroQuantity'] as bool? ?? false
+      ..setNote(map['note'] as String?);
+    if (map['deliveredAt'] != null) {
+      try {
+        cart.setDeliveredAt(DateTime.parse(map['deliveredAt'] as String));
+      } on Exception catch (_) {}
+    }
+
+    // currency
+    if (map['cartCurrency'] is Map<String, dynamic>) {
+      final cc = map['cartCurrency'] as Map<String, dynamic>;
+      try {
+        cart.applyExchangeRate(CartCurrency(
+            code: cc['code'] as String, rate: (cc['rate'] as num).toDouble()));
+      } on Exception catch (_) {}
+    }
+
+    // metadata (if stored)
+    if (map['metadata'] is Map<String, dynamic>) {
+      try {
+        cart.addMetadataEntries(
+            (map['metadata'] as Map).cast<String, dynamic>());
+      } on Exception catch (_) {}
+    }
+    if (overrideThis) {
+      restoreFrom(cart);
+    }
+
+    return cart;
+  }
+
+  /// Restores the cart state from another [FlexiCart] instance.
+  void restoreFrom(FlexiCart<T> otherCart,
+      {bool shouldNotifyListeners = true}) {
+    _performCartOperation(
+      operation: () {
+        groups = Map<String, CartItemsGroup<T>>.from(otherCart.groups);
+        _items
+          ..clear()
+          ..addAll(Map<String, T>.from(otherCart.items));
+        _note = otherCart._note;
+        _deliveredAt = otherCart._deliveredAt;
+        _expiresAt = otherCart._expiresAt;
+        addZeroQuantity = otherCart.addZeroQuantity;
+        _cartCurrency = otherCart._cartCurrency;
+        clearAllMetadata();
+        addMetadataEntries(otherCart.metadata);
+        validationErrors =
+            Map<String, dynamic>.from(otherCart.validationErrors);
+        _options = otherCart._options;
+        resetLock();
+        clearHistory();
+        addHistory('Restored from another cart instance');
+      },
+      logMessage: 'Restored cart from another instance',
       shouldNotifyListeners: shouldNotifyListeners,
     );
   }

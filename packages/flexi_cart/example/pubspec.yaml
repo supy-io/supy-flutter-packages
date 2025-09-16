@@ -39,6 +39,7 @@ dependencies:
   uuid: ^4.5.1
   random_name_generator: ^1.5.0
   lucide_icons: ^0.257.0
+  shared_preferences: ^2.5.3
   flexi_cart:
     path: ../../flexi_cart
   iconsax: 0.0.8

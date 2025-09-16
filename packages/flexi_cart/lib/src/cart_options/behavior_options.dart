@@ -51,4 +51,16 @@ class BehaviorOptions {
   double resolvePrice(ICartItem item) {
     return priceResolver?.call(item) ?? item.price;
   }
+
+  /// Convert to Map
+  Map<String, dynamic> toMap() {
+    return {
+      'enableLogging': enableLogging,
+      'throwWhenDisposed': throwWhenDisposed,
+      'keepZeroOrNullQuantityItems': keepZeroOrNullQuantityItems,
+      'hasLogger': logger != null,
+      'hasItemFilter': itemFilter != null,
+      'hasPriceResolver': priceResolver != null,
+    };
+  }
 }

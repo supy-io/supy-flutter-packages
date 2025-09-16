@@ -11,6 +11,7 @@ import 'cart_metadata_test.dart' as cart_metadata_test;
 import 'cart_options/cart_options_test.dart' as cart_options_test;
 import 'cart_plugins_test.dart' as cart_plugins_test;
 import 'cart_reset_test.dart' as cart_reset_test;
+import 'cart_shared_prefs_test.dart' as cart_shared_prefs_test;
 
 void main() {
   cart_reset_test.main();
@@ -26,4 +27,5 @@ void main() {
   cart_core_test.main();
   cart_history_test.main();
   cart_options_test.main();
+  cart_shared_prefs_test.main();
 }

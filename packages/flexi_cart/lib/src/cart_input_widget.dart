@@ -163,7 +163,8 @@ class CartInput<T extends ICartItem> extends StatefulWidget {
   /// Action button on the keyboard, defaults to 'done'.
   final TextInputAction? textInputAction;
 
-  /// Callback when the user submits the input (e.g., presses "done" on keyboard).
+  /// Callback when the user submits the input (e.g., presses "done"
+  /// on keyboard).
   final ValueChanged<String>? onSubmitted;
 
   /// Optional focus node for the input field.
