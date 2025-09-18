@@ -642,19 +642,67 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     );
   }
 
+  Map<String, dynamic> toMap({
+    required Map<String, dynamic> Function(T item) itemToJson,
+  }) {
+    return {
+      'items': items.map((key, item) => MapEntry(key, itemToJson(item))),
+      // groups serialized as id -> { id, name, items: {key: itemKey} }
+      'groups': groups.map((id, group) {
+        final groupItemsMap = group.items.map((k, v) => MapEntry(k, k));
+        return MapEntry(id, {
+          'id': group.id,
+          'name': group.name,
+          'items': groupItemsMap,
+        });
+      }),
+      'note': note,
+      'deliveredAt': deliveredAt?.toIso8601String(),
+      'addZeroQuantity': addZeroQuantity,
+      'cartCurrency': cartCurrency != null
+          ? {
+              'code': cartCurrency!.code,
+              'rate': cartCurrency!.rate,
+            }
+          : null,
+      'options': options.toMap.call(),
+      'metadata': metadata,
+    };
+  }
+
+  /// Saves the cart state to cache using the provided [provider].
+
+  Future<void> saveToCache({
+    required String key,
+    required Map<String, dynamic> Function(T item) itemToJson,
+    required ICartCacheProvider provider,
+  }) async {
+    final map = toMap(itemToJson: itemToJson);
+    final json = jsonEncode(map);
+    await provider.write(key, json);
+    return;
+  }
+
+  /// Deletes the cart state from cache using the provided [provider].
+  Future<void> deleteFromCache({
+    required String key,
+    required ICartCacheProvider provider,
+  }) async {
+    await provider.delete(key);
+    return;
+  }
+
   /// Restores the cart state from cached JSON data.
   Future<FlexiCart<T>?> restoreFromCache({
     required String key,
     required T Function(Map<String, dynamic> map) itemFromJson,
     CartItemsGroup<T> Function(Map<String, dynamic> map)? groupFromMap,
     CartOptions? options,
-    CartCacheProvider? provider,
+    required ICartCacheProvider provider,
     bool overrideThis = false,
   }) async {
     String? json;
-    if (provider != null) {
-      json = await provider.read(key);
-    }
+    json = await provider.read(key);
     if (json == null) return null;
 
     final map = jsonDecode(json) as Map<String, dynamic>;

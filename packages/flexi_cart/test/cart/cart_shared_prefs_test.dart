@@ -405,7 +405,7 @@ void main() {
   });
 }
 
-class SharedPrefsProvider extends CartCacheProvider {
+class SharedPrefsProvider extends ICartCacheProvider {
   SharedPrefsProvider(this.prefs);
 
   final SharedPreferences prefs;

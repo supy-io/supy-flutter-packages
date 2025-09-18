@@ -1,6 +1,6 @@
 /// Optional: an abstraction over
 /// storage so users can provide their own provider
-abstract class CartCacheProvider {
+abstract class ICartCacheProvider {
   /// Writes a key-value pair to the cache.
   Future<void> write(String key, String value);
 

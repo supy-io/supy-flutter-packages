@@ -1,3 +1,8 @@
+## 1.0.3+1
+- refactor: move cart persistence methods to FlexiCart and rename CartCacheProvider
+- Moves `toMap`, `saveToCache`, and `deleteFromCache` methods from the `FlexiCartPersistence` extension directly into the `FlexiCart` class.
+- Renames `CartCacheProvider` to `ICartCacheProvider` and updates all usages.
+- The `provider` parameter in `saveToCache`, `deleteFromCache`, and `restoreFromCache` is now required.
 
 ## 1.0.3
 - Added cart persistence with `saveToCache`, `restoreFromCache` and `deleteFromCache`

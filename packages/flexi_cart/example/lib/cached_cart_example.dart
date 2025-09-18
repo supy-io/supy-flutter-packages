@@ -189,7 +189,7 @@ class MyCartItem extends ICartItem {
       'MyCartItem(key:$key, group:$group, price:$price, qty:$quantity)';
 }
 
-class SharedPrefsProvider extends CartCacheProvider {
+class SharedPrefsProvider extends ICartCacheProvider {
   SharedPrefsProvider(this.prefs);
 
   final SharedPreferences prefs;
