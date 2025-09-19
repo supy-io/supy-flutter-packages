@@ -642,12 +642,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     );
   }
 
+  /// Creates a map representation of the cart for serialization.
   Map<String, dynamic> toMap({
     required Map<String, dynamic> Function(T item) itemToJson,
   }) {
     return {
       'items': items.map((key, item) => MapEntry(key, itemToJson(item))),
-      // groups serialized as id -> { id, name, items: {key: itemKey} }
       'groups': groups.map((id, group) {
         final groupItemsMap = group.items.map((k, v) => MapEntry(k, k));
         return MapEntry(id, {
@@ -671,7 +671,6 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }
 
   /// Saves the cart state to cache using the provided [provider].
-
   Future<void> saveToCache({
     required String key,
     required Map<String, dynamic> Function(T item) itemToJson,
@@ -696,10 +695,11 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   Future<FlexiCart<T>?> restoreFromCache({
     required String key,
     required T Function(Map<String, dynamic> map) itemFromJson,
+    required ICartCacheProvider provider,
     CartItemsGroup<T> Function(Map<String, dynamic> map)? groupFromMap,
     CartOptions? options,
-    required ICartCacheProvider provider,
     bool overrideThis = false,
+    bool shouldNotifyListeners = true,
   }) async {
     String? json;
     json = await provider.read(key);
@@ -784,7 +784,10 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       } on Exception catch (_) {}
     }
     if (overrideThis) {
-      restoreFrom(cart);
+      restoreFrom(
+        cart,
+        shouldNotifyListeners: shouldNotifyListeners,
+      );
     }
 
     return cart;
@@ -798,7 +801,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
         groups = Map<String, CartItemsGroup<T>>.from(otherCart.groups);
         _items
           ..clear()
-          ..addAll(Map<String, T>.from(otherCart.items));
+          ..addAll(
+            Map<String, T>.from(otherCart.items),
+          );
         _note = otherCart._note;
         _deliveredAt = otherCart._deliveredAt;
         _expiresAt = otherCart._expiresAt;

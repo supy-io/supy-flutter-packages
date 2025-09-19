@@ -1,3 +1,6 @@
+## 1.0.3+2
+- feat: add shouldNotifyListeners option to restoreFromCache
+
 ## 1.0.3+1
 - refactor: move cart persistence methods to FlexiCart and rename CartCacheProvider
 - Moves `toMap`, `saveToCache`, and `deleteFromCache` methods from the `FlexiCartPersistence` extension directly into the `FlexiCart` class.
