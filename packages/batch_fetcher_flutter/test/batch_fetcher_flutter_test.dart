@@ -9,7 +9,7 @@ void main() {
   group('BatchFetchNotifier', () {
     test('notifies when an entry changes', () async {
       final clock = FakeClock();
-      final notifier = BatchFetchNotifier<String, int, BatchKey>.from(
+      final notifier = BatchFetchNotifier<String, int, BatchKey>(
         request: (ids, key) async => BatchOutcome.resolved(<String, int>{
           for (final id in ids) id: id.length,
         }),
@@ -32,7 +32,7 @@ void main() {
 
     test('forwards the read surface', () async {
       final clock = FakeClock();
-      final notifier = BatchFetchNotifier<String, int, BatchKey>.from(
+      final notifier = BatchFetchNotifier<String, int, BatchKey>(
         request: (ids, key) async => BatchOutcome.resolved(<String, int>{
           for (final id in ids) id: id.length,
         }),
@@ -58,7 +58,7 @@ void main() {
       final script = ScriptedRequest<String, int, BatchKey>.always(
         (id) => id.length,
       );
-      final notifier = BatchFetchNotifier<String, int, BatchKey>.from(
+      final notifier = BatchFetchNotifier<String, int, BatchKey>(
         request: script.call,
         clock: clock,
       );
@@ -81,7 +81,7 @@ void main() {
     });
 
     test('disposes the fetcher it created', () async {
-      final notifier = BatchFetchNotifier<String, int, BatchKey>.from(
+      final notifier = BatchFetchNotifier<String, int, BatchKey>(
         request: (ids, key) async => const BatchOutcome.resolved({}),
       );
       final fetcher = notifier.fetcher;
@@ -98,7 +98,10 @@ void main() {
       );
       addTearDown(fetcher.dispose);
 
-      BatchFetchNotifier<String, int, BatchKey>(fetcher, owns: false).dispose();
+      BatchFetchNotifier<String, int, BatchKey>.wrapping(
+        fetcher,
+        owns: false,
+      ).dispose();
       await Future<void>.delayed(Duration.zero);
 
       expect(fetcher.isDisposed, isFalse);
@@ -108,7 +111,7 @@ void main() {
   group('BatchFetchBuilder', () {
     testWidgets('rebuilds only for the id it renders', (tester) async {
       final clock = FakeClock();
-      final notifier = BatchFetchNotifier<String, int, BatchKey>.from(
+      final notifier = BatchFetchNotifier<String, int, BatchKey>(
         request: (ids, key) async => BatchOutcome.resolved(<String, int>{
           for (final id in ids) id: id.length,
         }),
@@ -146,7 +149,7 @@ void main() {
         (ids, key) => const BatchOutcome<String, int>(absent: {'gone'}),
         (ids, key) => throw Exception('boom'),
       ]);
-      final notifier = BatchFetchNotifier<String, int, BatchKey>.from(
+      final notifier = BatchFetchNotifier<String, int, BatchKey>(
         request: script.call,
         clock: clock,
         retry: const NoRetry(),
@@ -178,11 +181,11 @@ void main() {
 
     testWidgets('follows a changed id or source', (tester) async {
       final clock = FakeClock();
-      final first = BatchFetchNotifier<String, int, BatchKey>.from(
+      final first = BatchFetchNotifier<String, int, BatchKey>(
         request: (ids, key) async => const BatchOutcome.resolved({'a': 7}),
         clock: clock,
       );
-      final second = BatchFetchNotifier<String, int, BatchKey>.from(
+      final second = BatchFetchNotifier<String, int, BatchKey>(
         request: (ids, key) async => const BatchOutcome.resolved({'a': 9}),
         clock: clock,
       );

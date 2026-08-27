@@ -18,7 +18,7 @@ class _AppState extends State<_App> {
   @override
   void initState() {
     super.initState();
-    _costs = BatchFetchNotifier<String, double, BatchKey>.from(
+    _costs = BatchFetchNotifier<String, double, BatchKey>(
       request: _fetchCosts,
       settle: const SettleWhen<double>(_isPriced, maxAttempts: 2),
     );
@@ -69,7 +69,8 @@ class _AppState extends State<_App> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       ),
                     FetchFailed<double>() => const Icon(Icons.refresh),
-                    FetchAbsent<double>() || FetchIdle<double>() =>
+                    FetchAbsent<double>() ||
+                    FetchIdle<double>() =>
                       const Text('—'),
                   },
                 ),

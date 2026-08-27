@@ -31,7 +31,8 @@ void main() {
     });
 
     test('is not equal to a non-key', () {
-      expect(BatchKey(const ['a']) == 'a', isFalse);
+      const Object notAKey = 'a';
+      expect(BatchKey(const ['a']) == notAKey, isFalse);
     });
   });
 

@@ -21,25 +21,20 @@ abstract interface class BatchFetchListenable<TId, TValue>
 /// on its own, and so the same fetcher can also drive a bloc.
 class BatchFetchNotifier<TId, TValue, TKey> extends ChangeNotifier
     implements BatchFetchListenable<TId, TValue> {
-  /// Wraps an existing [fetcher].
+  /// Builds a fetcher from [request] and owns it: disposing this notifier
+  /// disposes the fetcher.
   ///
-  /// Set [owns] to false when the fetcher outlives this notifier and something
-  /// else is responsible for disposing it.
-  BatchFetchNotifier(this.fetcher, {bool owns = true}) : _owns = owns {
-    _subscription = fetcher.changes.listen((_) => notifyListeners());
-  }
-
-  /// Builds the fetcher and wraps it in one step — the usual case.
-  factory BatchFetchNotifier.from({
+  /// Generative on purpose — a feature-specific provider is expected to
+  /// subclass this and pass its own request, which a factory constructor
+  /// cannot support.
+  BatchFetchNotifier({
     required BatchRequest<TId, TValue, TKey> request,
     BatchFetcherConfig config = const BatchFetcherConfig(),
     RetryPolicy retry = const ExponentialBackoff(),
     SettlePolicy<TValue>? settle,
     Clock clock = const SystemClock(),
     BatchFetcherObserver<TId>? observer,
-  }) =>
-      BatchFetchNotifier<TId, TValue, TKey>(
-        BatchFetcher<TId, TValue, TKey>(
+  })  : fetcher = BatchFetcher<TId, TValue, TKey>(
           request: request,
           config: config,
           retry: retry,
@@ -47,7 +42,17 @@ class BatchFetchNotifier<TId, TValue, TKey> extends ChangeNotifier
           clock: clock,
           observer: observer,
         ),
-      );
+        _owns = true {
+    _subscription = fetcher.changes.listen((_) => notifyListeners());
+  }
+
+  /// Wraps an existing [fetcher].
+  ///
+  /// Set [owns] to false when the fetcher outlives this notifier — it is
+  /// registered in a service locator, say — and something else disposes it.
+  BatchFetchNotifier.wrapping(this.fetcher, {bool owns = true}) : _owns = owns {
+    _subscription = fetcher.changes.listen((_) => notifyListeners());
+  }
 
   /// The engine this notifier reports on.
   final BatchFetcher<TId, TValue, TKey> fetcher;

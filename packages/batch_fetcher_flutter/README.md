@@ -8,7 +8,7 @@ The engine is pure Dart on purpose, so it can drive a bloc without a
 one.
 
 ```dart
-final costs = BatchFetchNotifier<String, double, BatchKey>.from(
+final costs = BatchFetchNotifier<String, double, BatchKey>(
   request: (ids, key) async =>
       BatchOutcome.resolved(await api.costs(ids, at: key)),
 );
@@ -38,12 +38,12 @@ Entries have value equality precisely so this works.
 
 ## Ownership
 
-`BatchFetchNotifier.from(...)` builds the fetcher and owns it: disposing the
+`BatchFetchNotifier(...)` builds the fetcher and owns it: disposing the
 notifier disposes the fetcher. When the fetcher outlives the notifier — it is
 registered in a service locator, say — wrap it instead and say so:
 
 ```dart
-BatchFetchNotifier(sharedFetcher, owns: false);
+BatchFetchNotifier.wrapping(sharedFetcher, owns: false);
 ```
 
 ## `BatchFetchListenable`
