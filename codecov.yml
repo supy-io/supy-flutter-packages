@@ -9,3 +9,6 @@ flag_management:
     - name: unsaved_changes
       paths:
         - packages/unsaved_changes/**
+    - name: unsaved_changes_forms
+      paths:
+        - packages/unsaved_changes_forms/**

@@ -13,6 +13,7 @@
 | [![pub package][cerbos_http_client_badge]][cerbos_http_client_pub] | [`packages/cerbos_http_client`][cerbos_http_client_code] |
 | [![pub package][opentelemetry_dart_badge]][opentelemetry_dart_pub] | [`packages/opentelemetry_dart`][opentelemetry_dart_code] |
 | [![pub package][unsaved_changes_badge]][unsaved_changes_pub] | [`packages/unsaved_changes`][unsaved_changes_code] |
+| [![pub package][unsaved_changes_forms_badge]][unsaved_changes_forms_pub] | [`packages/unsaved_changes_forms`][unsaved_changes_forms_code] |
 
 
 [flexi_cart_pub]: https://pub.dev/packages/flexi_cart
@@ -35,3 +36,7 @@
 [unsaved_changes_pub]: https://pub.dev/packages/unsaved_changes
 [unsaved_changes_code]: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/unsaved_changes
 [unsaved_changes_badge]: https://img.shields.io/pub/v/unsaved_changes
+
+[unsaved_changes_forms_pub]: https://pub.dev/packages/unsaved_changes_forms
+[unsaved_changes_forms_code]: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/unsaved_changes_forms
+[unsaved_changes_forms_badge]: https://img.shields.io/pub/v/unsaved_changes_forms

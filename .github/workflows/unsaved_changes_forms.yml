@@ -1,0 +1,66 @@
+name: unsaved_changes_forms
+
+concurrency:
+  group: $-$
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/unsaved_changes_forms/**'
+      - 'packages/unsaved_changes/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/unsaved_changes_forms/**'
+      - 'packages/unsaved_changes/**'
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2.19.0
+
+      - name: Resolve against the in-repo unsaved_changes
+        run: |
+          cat > pubspec_overrides.yaml <<'YAML'
+          dependency_overrides:
+            unsaved_changes:
+              path: ../unsaved_changes
+          YAML
+        working-directory: packages/unsaved_changes_forms
+
+      - name: Install Dependencies
+        run: flutter packages get
+        working-directory: packages/unsaved_changes_forms
+
+      - name: Format
+        run: dart format --set-exit-if-changed .
+        working-directory: packages/unsaved_changes_forms
+
+      - name: Analyze
+        run: flutter analyze lib test example
+        working-directory: packages/unsaved_changes_forms
+
+      - name: Run tests
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+        working-directory: packages/unsaved_changes_forms
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: packages/unsaved_changes_forms/coverage/lcov.info
+          min_coverage: 85
+          # exclude: '**/*_observer.dart **/change.dart'
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/unsaved_changes_forms/coverage/lcov.info
+          flags: unsaved_changes_forms

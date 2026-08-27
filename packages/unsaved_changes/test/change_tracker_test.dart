@@ -24,7 +24,7 @@ void main() {
 
   group('baseline capture', () {
     test('captures immediately when there is no baseline source', () {
-      final detector = ScriptedDetector('a');
+      final detector = Scripted('a');
       final tracker = build([detector]);
       addTearDown(tracker.dispose);
 
@@ -36,7 +36,7 @@ void main() {
     test('waits for the baseline source to produce saved state', () {
       final signal = Ticker();
       Doc? saved;
-      final detector = ScriptedDetector('a');
+      final detector = Scripted('a');
       final tracker = build(
         [detector],
         baseline: BaselineSource<Object>(read: () => saved, signal: signal),
@@ -56,7 +56,7 @@ void main() {
     test('does not re-baseline when the same revision is re-read', () {
       final signal = Ticker();
       final saved = Doc(title: 'saved');
-      final detector = ScriptedDetector('a');
+      final detector = Scripted('a');
       final tracker = build(
         [detector],
         baseline: BaselineSource<Object>(read: () => saved, signal: signal),
@@ -79,7 +79,7 @@ void main() {
     test('re-baselines when a new revision arrives', () {
       final signal = Ticker();
       var saved = Doc(title: 'saved');
-      final detector = ScriptedDetector('a');
+      final detector = Scripted('a');
       final tracker = build(
         [detector],
         baseline: BaselineSource<Object>(read: () => saved, signal: signal),
@@ -95,7 +95,7 @@ void main() {
     test('revisionOf lets equal-but-not-identical state share a baseline', () {
       final signal = Ticker();
       var saved = Doc(title: 'saved');
-      final detector = ScriptedDetector('a');
+      final detector = Scripted('a');
       final tracker = build(
         [detector],
         baseline: BaselineSource<Object>(
@@ -118,12 +118,12 @@ void main() {
     test('captureBaseline(detectorId:) re-baselines only that detector',
         () async {
       final ticker = Ticker();
-      final a = ScriptedDetector(
+      final a = Scripted(
         'a',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title, subject: 'a')],
       );
-      final b = ScriptedDetector(
+      final b = Scripted(
         'b',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title, subject: 'b')],
@@ -144,7 +144,7 @@ void main() {
     });
 
     test('rejects an unknown detectorId', () {
-      final tracker = build([ScriptedDetector('a')]);
+      final tracker = build([Scripted('a')]);
       addTearDown(tracker.dispose);
 
       expect(
@@ -155,7 +155,7 @@ void main() {
 
     test('asserts detector ids are unique', () {
       expect(
-        () => build([ScriptedDetector('a'), ScriptedDetector('a')]),
+        () => build([Scripted('a'), Scripted('a')]),
         throwsA(isA<AssertionError>()),
       );
     });
@@ -165,8 +165,8 @@ void main() {
     test('subscribes to a listenable shared by two detectors only once',
         () async {
       final ticker = Ticker();
-      final a = ScriptedDetector('a', listenable: ticker);
-      final b = ScriptedDetector('b', listenable: ticker);
+      final a = Scripted('a', listenable: ticker);
+      final b = Scripted('b', listenable: ticker);
       final tracker = build([a, b]);
       addTearDown(tracker.dispose);
 
@@ -185,7 +185,7 @@ void main() {
 
     test('coalesces a burst of notifications into one diff', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector('a', listenable: ticker);
+      final detector = Scripted('a', listenable: ticker);
       final tracker = build([detector]);
       addTearDown(tracker.dispose);
 
@@ -200,7 +200,7 @@ void main() {
     test('recomputes from a stream event', () async {
       final controller = StreamController<Object?>.broadcast();
       addTearDown(controller.close);
-      final detector = ScriptedDetector('a', stream: controller.stream);
+      final detector = Scripted('a', stream: controller.stream);
       final tracker = build([detector]);
       addTearDown(tracker.dispose);
 
@@ -212,7 +212,7 @@ void main() {
 
     test('releases every subscription on dispose', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector('a', listenable: ticker);
+      final detector = Scripted('a', listenable: ticker);
       build([detector]).dispose();
 
       expect(ticker.isSubscribed, isFalse);
@@ -226,7 +226,7 @@ void main() {
   group('publishing', () {
     test('does not notify when the change list is unchanged', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector(
+      final detector = Scripted(
         'a',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title, subject: 'Tomatoes')],
@@ -252,7 +252,7 @@ void main() {
 
     test('notifies when the change list actually changes', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector('a', listenable: ticker);
+      final detector = Scripted('a', listenable: ticker);
       final tracker = build([detector]);
       addTearDown(tracker.dispose);
 
@@ -273,7 +273,7 @@ void main() {
 
     test('tags each change with the detector that produced it', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector(
+      final detector = Scripted(
         'documents',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title)],
@@ -300,12 +300,12 @@ void main() {
     test('fallback changes are dropped when a describing detector fired',
         () async {
       final ticker = Ticker();
-      final named = ScriptedDetector(
+      final named = Scripted(
         'named',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title)],
       );
-      final digest = ScriptedDetector(
+      final digest = Scripted(
         'digest',
         listenable: ticker,
         role: DetectorRole.fallback,
@@ -323,8 +323,8 @@ void main() {
 
     test('fallback changes surface when nothing else fired', () async {
       final ticker = Ticker();
-      final named = ScriptedDetector('named', listenable: ticker);
-      final digest = ScriptedDetector(
+      final named = Scripted('named', listenable: ticker);
+      final digest = Scripted(
         'digest',
         listenable: ticker,
         role: DetectorRole.fallback,
@@ -345,12 +345,12 @@ void main() {
     test('a detector that throws on start is skipped, others keep working',
         () async {
       final ticker = Ticker();
-      final broken = ScriptedDetector(
+      final broken = Scripted(
         'broken',
         listenable: ticker,
         throwOnStart: true,
       );
-      final healthy = ScriptedDetector(
+      final healthy = Scripted(
         'healthy',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title)],
@@ -373,12 +373,12 @@ void main() {
     test('a detector that throws on diff is dropped, others keep working',
         () async {
       final ticker = Ticker();
-      final broken = ScriptedDetector(
+      final broken = Scripted(
         'broken',
         listenable: ticker,
         throwOnDiff: true,
       );
-      final healthy = ScriptedDetector(
+      final healthy = Scripted(
         'healthy',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title)],
@@ -397,7 +397,7 @@ void main() {
   group('observer', () {
     test('reports baseline captures and published changes', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector('a', listenable: ticker);
+      final detector = Scripted('a', listenable: ticker);
       final observer = RecordingObserver();
       final tracker = build(
         [detector],
@@ -405,7 +405,9 @@ void main() {
       );
       addTearDown(tracker.dispose);
 
-      expect(observer.baselines, ['a']);
+      expect(observer.baselines, [
+        ['a'],
+      ]);
 
       detector.changes = const [TrackedChange(Kind.title)];
       ticker.tick();
@@ -418,7 +420,7 @@ void main() {
   group('describe', () {
     test('names each detector, its role, and what it reported', () async {
       final ticker = Ticker();
-      final detector = ScriptedDetector(
+      final detector = Scripted(
         'documents',
         listenable: ticker,
         changes: const [TrackedChange(Kind.title, subject: 'Invoice no.')],

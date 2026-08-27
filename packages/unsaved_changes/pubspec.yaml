@@ -1,6 +1,6 @@
 name: unsaved_changes
 description: Detects unsaved changes on editable Flutter surfaces by diffing live state against a captured baseline, and reports what changed.
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/unsaved_changes
 issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
 homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/unsaved_changes

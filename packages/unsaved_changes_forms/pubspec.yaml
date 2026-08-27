@@ -1,0 +1,24 @@
+name: unsaved_changes_forms
+description: reactive_forms adapter for unsaved_changes — track a whole FormGroup for unsaved edits with no per-field configuration.
+version: 0.0.1
+repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/unsaved_changes_forms
+issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
+homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/unsaved_changes_forms
+topics: [unsaved-changes, dirty-checking, forms, reactive-forms, diff]
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  reactive_forms: ^17.0.1
+  unsaved_changes: ^0.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  test: ^1.25.15
+  very_good_analysis: ^9.0.0
+
+example: example/main.dart

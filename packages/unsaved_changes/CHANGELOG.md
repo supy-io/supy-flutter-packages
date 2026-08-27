@@ -1,3 +1,9 @@
+## 0.0.3
+
+- Add the `unsaved_changes_testing` library: `ScriptedDetector`, `TestTicker`,
+  `RecordingObserver`, and `settle()`. No new dependencies — it works under
+  both `test` and `flutter_test`.
+
 ## 0.0.2
 
 - Add the detector library: `FieldGroupDetector`, `CollectionDetector`,
