@@ -6,3 +6,9 @@ flag_management:
     - name: filterator
       paths:
         - packages/filterator/**
+    - name: unsaved_changes
+      paths:
+        - packages/unsaved_changes/**
+    - name: unsaved_changes_forms
+      paths:
+        - packages/unsaved_changes_forms/**
