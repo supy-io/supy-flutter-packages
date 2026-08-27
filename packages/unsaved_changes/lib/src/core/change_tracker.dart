@@ -261,6 +261,7 @@ class ChangeTracker<C, K extends Object> extends ChangeNotifier {
   void dispose() {
     _debounceTimer?.cancel();
     _baselineSource?.signal.removeListener(_syncWithBaselineSource);
+    _baselineSource?.onDispose?.call();
     _unsubscribeAll();
     _sessions.clear();
     super.dispose();

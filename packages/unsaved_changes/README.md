@@ -60,6 +60,58 @@ final tracker = ChangeTracker<ProfileForm, ProfileChange>(
 if (tracker.hasChanges) { /* warn before leaving */ }
 ```
 
+## Ready-made detectors
+
+Most surfaces never write a detector class — they configure one.
+
+| Detector | Use it for |
+|---|---|
+| `FieldGroupDetector` | Scalar fields grouped by what they mean to a user. Several fields moving in one group report **one** change. |
+| `CollectionDetector` | A keyed collection: additions, removals, and per-`Facet` edits, each named by item. |
+| `MembershipDetector` | Keys entering or leaving a set — staged resolutions, selected rows. |
+| `PayloadDigestDetector` | A `fallback` safety net over the whole request payload, for edits no named detector knows. |
+| `ValueStreamDetector` | A single value read from a bloc or view model, compared by `Facet`. |
+
+```dart
+FieldGroupDetector<Sources, Kind>(
+  id: 'settings',
+  listenablesOf: (s) => [s.stepThree],
+  groups: [
+    FieldGroup(
+      kind: Kind.remarks,
+      fields: {'remarks': (s) => s.remarks},
+      equals: nullableStringEquals,   // a field cleared to '' was never edited
+    ),
+    FieldGroup(
+      kind: Kind.flags,
+      fields: {
+        'dispute': (s) => s.dispute,
+        'relock': (s) => s.relock,
+        'closeOrder': (s) => s.closeOrder,
+      },
+    ),
+  ],
+)
+```
+
+A `Facet` groups the fields that mean one thing: quantity and received-quantity
+are one facet, because "the quantity changed" is one thing to tell someone, not
+two.
+
+```dart
+CollectionDetector<Sources, Kind, Line>(
+  id: 'items',
+  itemsOf: (s) => s.lines,          // Map<Object, Line>
+  subjectOf: (line) => line.name,
+  addedKind: Kind.itemsAdded,
+  removedKind: Kind.itemsRemoved,
+  facets: [
+    Facet(kind: Kind.quantity, values: (l) => [l.qty, l.receivedQty]),
+    Facet(kind: Kind.price,    values: (l) => [l.price, l.expectedPrice]),
+  ],
+)
+```
+
 ## Concepts
 
 | Type | Role |

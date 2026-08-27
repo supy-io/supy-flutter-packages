@@ -9,6 +9,7 @@ class BaselineSource<T extends Object> {
     required this.read,
     required this.signal,
     this.revisionOf,
+    this.onDispose,
   });
 
   /// Reads the current saved state, or `null` before it has loaded.
@@ -23,6 +24,10 @@ class BaselineSource<T extends Object> {
   /// discard the user's in-progress edits while a successful save does.
   /// Defaults to object identity.
   final Object? Function(T value)? revisionOf;
+
+  /// Releases anything this source owns. Called by the tracker on dispose —
+  /// this is how a signal adapted from a stream gets cleaned up.
+  final VoidCallback? onDispose;
 
   /// The revision of [value] under this source's policy.
   Object? revisionFor(T value) => revisionOf?.call(value) ?? value;
