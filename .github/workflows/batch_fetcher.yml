@@ -1,0 +1,63 @@
+name: batch_fetcher
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/batch_fetcher/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/batch_fetcher/**'
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2.19.0
+
+      - name: Install Dependencies
+        run: dart pub get
+        working-directory: packages/batch_fetcher
+
+      - name: Format
+        run: dart format --set-exit-if-changed .
+        working-directory: packages/batch_fetcher
+
+      - name: Analyze
+        run: dart analyze lib test example
+        working-directory: packages/batch_fetcher
+
+      - name: Run tests
+        run: dart test --coverage=coverage --test-randomize-ordering-seed random
+        working-directory: packages/batch_fetcher
+
+      - name: Format coverage
+        run: |
+          dart pub global activate coverage
+          dart pub global run coverage:format_coverage \
+            --lcov --in=coverage --out=coverage/lcov.info \
+            --report-on=lib --check-ignore
+        working-directory: packages/batch_fetcher
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: packages/batch_fetcher/coverage/lcov.info
+          min_coverage: 85
+          # exclude: '**/*_observer.dart **/change.dart'
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/batch_fetcher/coverage/lcov.info
+          flags: batch_fetcher

@@ -12,3 +12,9 @@ flag_management:
     - name: unsaved_changes_forms
       paths:
         - packages/unsaved_changes_forms/**
+    - name: batch_fetcher
+      paths:
+        - packages/batch_fetcher/**
+    - name: batch_fetcher_flutter
+      paths:
+        - packages/batch_fetcher_flutter/**
