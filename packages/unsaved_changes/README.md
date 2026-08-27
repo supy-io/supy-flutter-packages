@@ -151,7 +151,86 @@ accept one detector's changes while leaving the rest reported.
 answer to "why does it say I have unsaved changes?". Wire a
 `ChangeTrackerObserver` to turn that into breadcrumbs.
 
+## Adding tracking to a surface
+
+Five steps, and only the first two are specific to your feature.
+
+**1. Declare the kinds.** Your own enum, so the `switch` that turns a change
+into a sentence stays exhaustive.
+
+```dart
+enum InvoiceChange { header, attachments, lines, notes }
+
+typedef InvoiceTracker  = ChangeTracker<InvoiceSources, InvoiceChange>;
+typedef InvoiceDetector = ChangeDetector<InvoiceSources, InvoiceChange>;
+```
+
+**2. Name the sources.** Whatever your detectors read from — a struct of
+providers, a bloc, a form. There is no base class to extend.
+
+```dart
+class InvoiceSources {
+  const InvoiceSources({required this.form, required this.lines});
+  final FormGroup form;
+  final LinesProvider lines;
+}
+```
+
+**3. Configure the detectors.** Reach for a hand-written
+`SnapshotChangeDetector` only when none of the ready-made ones fit.
+
+```dart
+List<InvoiceDetector> invoiceDetectors() => [
+  FieldGroupDetector(id: 'header', /* … */),
+  CollectionDetector(id: 'lines', /* … */),
+];
+```
+
+**4. Build the tracker** and register it where the surface can read it.
+
+```dart
+ChangeNotifierProvider<InvoiceTracker>(
+  lazy: false,
+  create: (_) => InvoiceTracker(
+    sources: sources,
+    detectors: invoiceDetectors(),
+    baseline: BaselineSource<Invoice>(read: () => provider.saved, signal: provider),
+  ),
+);
+```
+
+**5. Use it.** `hasChanges` guards leaving, `changeCount` drives a banner, and
+`captureBaseline()` runs after a successful save.
+
+### Choosing a revision key
+
+`BaselineSource.revisionOf` decides when the saved state has genuinely been
+replaced. Its result is compared with `==`, so **never return a collection**:
+Dart compares `Set`, `List` and `Map` by identity, and a rebuilt-but-equal one
+reads as a new revision. The tracker then re-baselines and silently reports
+nothing — the worst failure this package has, because it looks like "no unsaved
+changes" rather than an error.
+
+```dart
+// Wrong: a new Set instance every rebuild is a new revision.
+revisionOf: (state) => state.initialKeys,
+
+// Right: compare the contents.
+revisionOf: (state) => (state.initialKeys.toList()..sort()).join('\u0000'),
+```
+
+Return an id, a timestamp, a version number, or a string built from contents.
+Omit `revisionOf` entirely to fall back to object identity, which is correct
+when the saved state is replaced wholesale on every save.
+
 ## Testing
+
+`package:unsaved_changes/unsaved_changes_testing.dart` ships the doubles this
+package's own engine tests use, so adopters do not rewrite them:
+`ScriptedDetector` (scripted findings, counts `start`/`diff` calls, can be made
+to throw), `TestTicker` (a pokeable `Listenable` that can report whether
+anything subscribed), `RecordingObserver`, and `settle()`. It adds no
+dependencies and works under both `test` and `flutter_test`.
 
 Use `settle()` (`Future.delayed(Duration.zero)`) in plain `test()` bodies. Under
 `testWidgets`, the faked clock deadlocks against a real `Future.delayed` — use
