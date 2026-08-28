@@ -639,6 +639,66 @@ void main() {
       expect(h.fetcher.entryOf('bb'), const FetchIdle<int>());
     });
 
+    test('drops an id queued for retry instead of resurrecting it', () async {
+      final h = harness(
+        steps: [throwing(boom), resolveAll],
+        retry: const ExponentialBackoff(base: Duration(seconds: 5), jitter: 0),
+      );
+      addTearDown(h.fetcher.dispose);
+
+      unawaited(h.fetcher.fetch(BatchScope(key: BatchKey.none, ids: ['a'])));
+      await h.clock.advance(debounceWindow);
+      expect(h.fetcher.entryOf('a'), FetchFailed<int>(boom, willRetry: true));
+      expect(h.script.callCount, 1);
+
+      // 'a' is queued for a retry that has not come due yet.
+      h.fetcher.trim(<String>[]);
+      expect(h.fetcher.entryOf('a'), const FetchIdle<int>());
+
+      await h.clock.advance(const Duration(seconds: 10));
+
+      expect(
+        h.script.callCount,
+        1,
+        reason: 'a trimmed id must not come back through the retry queue',
+      );
+      expect(h.fetcher.entryOf('a'), const FetchIdle<int>());
+    });
+
+    test('drops an id queued but not yet requested', () async {
+      final h = harness();
+      addTearDown(h.fetcher.dispose);
+
+      unawaited(
+        h.fetcher.fetch(BatchScope(key: BatchKey.none, ids: ['a', 'bb'])),
+      );
+      h.fetcher.trim(const ['a']);
+      await h.clock.advance(debounceWindow);
+
+      expect(h.script.calls.single, ['a']);
+    });
+
+    test('completes a waiter left behind by the ids it dropped', () async {
+      final h = harness(
+        steps: [throwing(boom)],
+        retry: const ExponentialBackoff(base: Duration(seconds: 5), jitter: 0),
+      );
+      addTearDown(h.fetcher.dispose);
+
+      var done = false;
+      final future = h.fetcher
+          .fetch(BatchScope(key: BatchKey.none, ids: ['a']))
+          .then((_) => done = true);
+      await h.clock.advance(debounceWindow);
+      expect(done, isFalse, reason: 'still waiting on the scheduled retry');
+
+      h.fetcher.trim(<String>[]);
+      await h.clock.pumpMicrotasks();
+      await future;
+
+      expect(done, isTrue);
+    });
+
     test('keeps ids still in flight regardless', () async {
       final gate = Completer<BatchOutcome<String, int>>();
       final h = harness(steps: [gated(gate)]);

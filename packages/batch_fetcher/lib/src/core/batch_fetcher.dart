@@ -213,17 +213,36 @@ class BatchFetcher<TId, TValue, TKey> {
   /// state that was dropped underneath it.
   void trim(Iterable<TId> keep) {
     final retain = keep.toSet()..addAll(_inFlight);
-    final drop = _entries.keys.where((id) => !retain.contains(id)).toList();
+    // Queued ids count as known even before they have an entry: an id awaiting
+    // a retry, or awaiting its first drain, is exactly what this is meant to
+    // forget. Dropping the entry alone would leave it in the queue to be
+    // requested and re-created on the next drain.
+    final known = <TId>{
+      ..._entries.keys,
+      for (final scope in _scopes.values) ...scope.pending,
+    };
+    final drop = known.where((id) => !retain.contains(id)).toList();
+    if (drop.isEmpty) return;
+
+    final changed = <TId>{};
     for (final id in drop) {
-      _entries.remove(id);
+      if (_entries.remove(id) != null) changed.add(id);
       _fetchedAt.remove(id);
       _failureCount.remove(id);
       _settleCount.remove(id);
       _dueAt.remove(id);
       _generation.remove(id);
       _scopeOf.remove(id);
+      for (final scope in _scopes.values) {
+        scope.pending.remove(id);
+      }
     }
-    _emit(drop.toSet());
+
+    _emit(changed);
+    // A caller awaiting one of these ids would otherwise wait for a request
+    // that is never going to be sent.
+    _settleWaiters();
+    _pruneScopes();
   }
 
   /// Cancels every timer, stops emitting, and drops any response still in
