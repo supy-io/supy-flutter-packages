@@ -2,3 +2,7 @@
 pubspec_overrides.yaml
 *.iml
 /.idea/
+# Generated per-package, never committed.
+.dart_tool/
+build/
+coverage/

@@ -1,0 +1,20 @@
+name: batch_fetcher
+description: Coalesces per-item value lookups into batched requests, with debouncing, per-id caching, retry with backoff, and typed per-id state.
+version: 0.1.1
+repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/batch_fetcher
+issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
+homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/batch_fetcher
+topics: [batching, debounce, cache, retry, fetch]
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  collection: ^1.19.1
+  meta: ^1.15.0
+
+dev_dependencies:
+  test: ^1.25.15
+  very_good_analysis: ^9.0.0
+
+example: example/main.dart

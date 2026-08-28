@@ -1,0 +1,64 @@
+name: batch_fetcher_flutter
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/batch_fetcher_flutter/**'
+      - 'packages/batch_fetcher/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/batch_fetcher_flutter/**'
+      - 'packages/batch_fetcher/**'
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2.19.0
+
+      # batch_fetcher may not be published yet, and the adapter's tests should
+      # break when the core it sits on breaks.
+      - name: Resolve the core from source
+        run: |
+          printf 'dependency_overrides:\n  batch_fetcher:\n    path: ../batch_fetcher\n' \
+            > packages/batch_fetcher_flutter/pubspec_overrides.yaml
+
+      - name: Install Dependencies
+        run: flutter packages get
+        working-directory: packages/batch_fetcher_flutter
+
+      - name: Format
+        run: dart format --set-exit-if-changed .
+        working-directory: packages/batch_fetcher_flutter
+
+      - name: Analyze
+        run: flutter analyze lib test example
+        working-directory: packages/batch_fetcher_flutter
+
+      - name: Run tests
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+        working-directory: packages/batch_fetcher_flutter
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: packages/batch_fetcher_flutter/coverage/lcov.info
+          min_coverage: 85
+          # exclude: '**/*_observer.dart **/change.dart'
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/batch_fetcher_flutter/coverage/lcov.info
+          flags: batch_fetcher_flutter

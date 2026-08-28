@@ -1,0 +1,22 @@
+name: batch_fetcher_flutter
+description: Flutter bindings for batch_fetcher — a ChangeNotifier facade and a rebuild-on-one-id builder widget.
+version: 0.1.0
+repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/batch_fetcher_flutter
+issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
+homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/batch_fetcher_flutter
+topics: [batching, debounce, cache, retry, fetch]
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  batch_fetcher: ^0.1.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^9.0.0
+
+example: example/main.dart
