@@ -62,11 +62,15 @@ void main() {
       expect(const Money(-2.5, aed).rounded(0).amount, -3);
     });
 
-    test('rounds the binary value, not the typed decimal', () {
-      // 412.565 is stored as 412.56499…, so it rounds down. This is the
-      // behaviour intl already has; rounding here does not change it.
-      expect(const Money(412.565, aed).rounded().amount, 412.56);
-      expect(const Money(412.575, aed).rounded().amount, 412.57);
+    test('rounds the typed decimal, not the binary value', () {
+      // 412.565 is stored as 412.56499…, so rounding the double would give
+      // 412.56. Money rounds what the user typed.
+      expect(const Money(412.565, aed).rounded().amount, 412.57);
+      expect(const Money(412.575, aed).rounded().amount, 412.58);
+      expect(
+        const Money(412.565, aed).rounded(2, RoundingMode.halfUpBinary).amount,
+        412.56,
+      );
     });
 
     test('precision comes from the currency', () {

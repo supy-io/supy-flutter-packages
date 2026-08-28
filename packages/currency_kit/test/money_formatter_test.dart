@@ -118,10 +118,21 @@ void main() {
   });
 
   group('rounding happens once, here', () {
-    test('rounds the binary value the same way intl would', () {
-      expect(formatter.format(const Money(412.565, aed)), 'AED 412.56');
-      expect(formatter.format(const Money(412.575, aed)), 'AED 412.57');
+    test('rounds the typed decimal half away from zero', () {
+      expect(formatter.format(const Money(412.565, aed)), 'AED 412.57');
+      expect(formatter.format(const Money(412.575, aed)), 'AED 412.58');
       expect(formatter.format(const Money(0.125, aed)), 'AED 0.13');
+      expect(formatter.format(const Money(1.005, aed)), 'AED 1.01');
+    });
+
+    test('the binary rule is available for parity with other systems', () {
+      expect(
+        formatter.format(
+          const Money(412.565, aed),
+          const MoneyFormat(rounding: RoundingMode.halfUpBinary),
+        ),
+        'AED 412.56',
+      );
     });
   });
 
@@ -167,6 +178,10 @@ void main() {
       expect(base.copyWith(grouping: false).grouping, isFalse);
       expect(base.copyWith().affix, MoneyAffix.code);
       expect(base.copyWith(separator: '-').separator, '-');
+      expect(
+        base.copyWith(rounding: RoundingMode.halfUpBinary).rounding,
+        RoundingMode.halfUpBinary,
+      );
       expect(
         base.copyWith(affixPosition: MoneyAffixPosition.trailing).affixPosition,
         MoneyAffixPosition.trailing,

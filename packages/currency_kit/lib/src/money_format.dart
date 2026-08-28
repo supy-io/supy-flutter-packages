@@ -1,3 +1,5 @@
+import 'package:currency_kit/src/rounding.dart';
+
 /// What to show beside the number.
 enum MoneyAffix {
   /// The ISO code, e.g. `AED`.
@@ -43,6 +45,7 @@ class MoneyFormat {
     this.grouping = true,
     this.locale,
     this.separator = ' ',
+    this.rounding = RoundingMode.halfUpDecimal,
   });
 
   /// A bare number, with no currency affix.
@@ -75,6 +78,9 @@ class MoneyFormat {
   /// String placed between the affix and the number.
   final String separator;
 
+  /// How to resolve an amount sitting on a rounding boundary.
+  final RoundingMode rounding;
+
   /// A copy with any field replaced.
   ///
   /// Passing null for a field keeps the current value; to clear
@@ -88,6 +94,7 @@ class MoneyFormat {
     bool? grouping,
     String? locale,
     String? separator,
+    RoundingMode? rounding,
   }) =>
       MoneyFormat(
         affix: affix ?? this.affix,
@@ -98,5 +105,6 @@ class MoneyFormat {
         grouping: grouping ?? this.grouping,
         locale: locale ?? this.locale,
         separator: separator ?? this.separator,
+        rounding: rounding ?? this.rounding,
       );
 }

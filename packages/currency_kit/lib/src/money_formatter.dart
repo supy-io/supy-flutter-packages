@@ -39,7 +39,8 @@ class MoneyFormatter {
     final options = format ?? defaults;
     final digits =
         options.fractionDigits ?? registry.fractionDigitsOf(money.currency);
-    final rounded = roundToFractionDigits(money.amount, digits);
+    final rounded =
+        roundToFractionDigits(money.amount, digits, mode: options.rounding);
 
     final body = _number(rounded.abs(), digits, options);
     final sign = rounded < 0 ? '-' : '';

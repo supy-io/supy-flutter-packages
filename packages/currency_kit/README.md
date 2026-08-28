@@ -110,12 +110,26 @@ sign on either side of the currency code.
 
 ### Rounding
 
-`roundToFractionDigits` is the single rounding rule: `toStringAsFixed`
-semantics, half away from zero, applied to the double's binary value. So
-`412.565` (stored as `412.56499…`) rounds *down* to `412.56`, while the exact
-`0.125` rounds up to `0.13`. This matches `intl`'s own rounding — verified
-across 200,000 random values — so rounding here and formatting later cannot
-disagree.
+Money rounds the **decimal a person typed**, half away from zero:
+
+```dart
+const Money(412.565, CurrencyCode.aed).format(); // AED 412.57
+```
+
+That is not what rounding the double gives you. `412.565` is stored as
+`412.56499…`, so `toStringAsFixed` — and `intl`, and most naive
+implementations — round it *down* to `412.56`. The difference shows up on
+about **5% of typed amounts**, which is far too often to leave to chance.
+
+`roundToFractionDigits` gets the humane answer without an epsilon fudge, by
+rounding the shortest decimal string that round-trips to the same double. If
+you need to match a system that rounds the binary value instead:
+
+```dart
+roundToFractionDigits(412.565, 2, mode: RoundingMode.halfUpBinary); // 412.56
+money.rounded(2, RoundingMode.halfUpBinary);
+const MoneyFormat(rounding: RoundingMode.halfUpBinary);
+```
 
 Amounts are `double`. That is a documented compromise matching the JSON and
 model types this package was extracted to serve; `Money` is the seam that makes

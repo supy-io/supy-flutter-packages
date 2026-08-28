@@ -48,8 +48,16 @@ final class Money implements Comparable<Money> {
   /// This amount rounded to [fractionDigits], defaulting to the currency's.
   ///
   /// See [roundToFractionDigits] for the rule.
-  Money rounded([int? fractionDigits]) => Money(
-        roundToFractionDigits(amount, fractionDigits ?? this.fractionDigits),
+  Money rounded([
+    int? fractionDigits,
+    RoundingMode mode = RoundingMode.halfUpDecimal,
+  ]) =>
+      Money(
+        roundToFractionDigits(
+          amount,
+          fractionDigits ?? this.fractionDigits,
+          mode: mode,
+        ),
         currency,
       );
 
