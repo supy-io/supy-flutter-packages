@@ -12,3 +12,6 @@ flag_management:
     - name: unsaved_changes_forms
       paths:
         - packages/unsaved_changes_forms/**
+    - name: currency_kit
+      paths:
+        - packages/currency_kit/**

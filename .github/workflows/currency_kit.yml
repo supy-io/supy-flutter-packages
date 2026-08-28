@@ -1,0 +1,61 @@
+name: currency_kit
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/currency_kit/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/currency_kit/**'
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+
+      - name: Install Dependencies
+        run: dart pub get
+        working-directory: packages/currency_kit
+
+      - name: Format
+        run: dart format --set-exit-if-changed .
+        working-directory: packages/currency_kit
+
+      - name: Analyze
+        run: dart analyze lib test example
+        working-directory: packages/currency_kit
+
+      - name: Run tests
+        run: dart test --coverage=coverage --test-randomize-ordering-seed random
+        working-directory: packages/currency_kit
+
+      - name: Format coverage
+        run: |
+          dart run coverage:format_coverage \
+            --lcov --in=coverage --out=coverage/lcov.info \
+            --report-on=lib --check-ignore
+        working-directory: packages/currency_kit
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: packages/currency_kit/coverage/lcov.info
+          min_coverage: 85
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/currency_kit/coverage/lcov.info
+          flags: currency_kit

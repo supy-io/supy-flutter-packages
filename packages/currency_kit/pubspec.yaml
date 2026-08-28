@@ -1,0 +1,22 @@
+name: currency_kit
+description: Money, currency codes and exchange rates as value types — with display-only conversion, so switching the currency a user reads never changes the amount you store.
+version: 0.0.1
+repository: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/currency_kit
+issue_tracker: https://github.com/supy-io/supy-flutter-packages/issues
+homepage: https://github.com/supy-io/supy-flutter-packages/tree/main/packages/currency_kit
+topics: [money, currency, exchange-rate, formatting, iso4217]
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  collection: ^1.19.1
+  meta: ^1.15.0
+  intl: ">=0.19.0 <0.21.0"
+
+dev_dependencies:
+  coverage: ^1.15.1
+  test: ^1.25.15
+  very_good_analysis: ^9.0.0
+
+example: example/main.dart
