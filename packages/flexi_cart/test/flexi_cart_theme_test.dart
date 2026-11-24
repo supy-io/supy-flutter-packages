@@ -1,6 +1,6 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('CartInputStyle', () {
@@ -104,8 +104,9 @@ void main() {
   });
 
   group('FlexiCartTheme.of()', () {
-    testWidgets('returns default style when no extension is present',
-        (tester) async {
+    testWidgets('returns default style when no extension is present', (
+      tester,
+    ) async {
       late CartInputStyle style;
 
       await tester.pumpWidget(
@@ -122,8 +123,9 @@ void main() {
       expect(style, isA<CartInputStyle>());
     });
 
-    testWidgets('returns overridden style when extension is provided',
-        (tester) async {
+    testWidgets('returns overridden style when extension is provided', (
+      tester,
+    ) async {
       const customStyle = CartInputStyle(activeBackgroundColor: Colors.orange);
 
       await tester.pumpWidget(

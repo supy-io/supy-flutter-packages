@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flexi_cart/flexi_cart.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 // --- Validators ---
@@ -13,7 +13,7 @@ class MaxItemsValidator extends ICartValidator {
     if (cart.totalQuantity() > maxItems) {
       return {
         'max_items_exceeded':
-            'You can only add up to $maxItems items in the cart.'
+            'You can only add up to $maxItems items in the cart.',
       };
     }
     return null;
@@ -30,7 +30,7 @@ class MinTotalPriceValidator extends ICartValidator {
     if (cart.totalPrice() < minPrice) {
       return {
         'min_total_price':
-            'Minimum order amount is \$${minPrice.toStringAsFixed(2)}.'
+            'Minimum order amount is \$${minPrice.toStringAsFixed(2)}.',
       };
     }
     return null;
@@ -47,7 +47,7 @@ class MaxTotalPriceValidator extends ICartValidator {
     if (cart.totalPrice() > maxPrice) {
       return {
         'max_total_price':
-            'Maximum order amount is \$${maxPrice.toStringAsFixed(2)}.'
+            'Maximum order amount is \$${maxPrice.toStringAsFixed(2)}.',
       };
     }
     return null;
@@ -64,7 +64,7 @@ class MinQuantityValidator extends ICartValidator {
     for (var item in cart.itemsList) {
       if (item.notNullQty() < minQuantity) {
         return {
-          'min_quantity': 'Each item must have at least $minQuantity quantity.'
+          'min_quantity': 'Each item must have at least $minQuantity quantity.',
         };
       }
     }
@@ -95,10 +95,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fancy Flexi Cart',
-      theme: ThemeData(
-        colorSchemeSeed: Colors.tealAccent,
-        useMaterial3: true,
-      ),
+      theme: ThemeData(colorSchemeSeed: Colors.tealAccent, useMaterial3: true),
       home: ChangeNotifierProvider(
         create: (_) {
           final cart = FlexiCart<ProductItem>(
@@ -173,12 +170,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
   void _addItem(ProductItem product) {
     cart.add(
-        ProductItem(
-          id: product.id,
-          name: product.name,
-          price: product.price,
-        ),
-        increment: true);
+      ProductItem(id: product.id, name: product.name, price: product.price),
+      increment: true,
+    );
   }
 
   void _removeItem(ProductItem item) => cart.delete(item);
@@ -215,8 +209,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
     final discountPercent = (cart.promoCode?.toLowerCase() == 'flutter50')
         ? 0.5
         : (cart.promoCode?.toLowerCase() == 'save20')
-            ? 0.2
-            : 0.0;
+        ? 0.2
+        : 0.0;
 
     final totalPrice = cart.totalPrice();
     final discountedPrice = totalPrice * (1 - discountPercent);
@@ -252,29 +246,33 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: errors
-                                  .map((e) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2),
-                                        child: Text(
-                                          "- ${e.toString()}",
-                                          style: const TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
+                                  .map(
+                                    (e) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 2,
+                                      ),
+                                      child: Text(
+                                        "- ${e.toString()}",
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
                                         ),
-                                      ))
+                                      ),
+                                    ),
+                                  )
                                   .toList(),
                             ),
                           ),
-                        Text("Promo Code",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.teal.shade800)),
-                        SizedBox(
-                          height: 8,
+                        Text(
+                          "Promo Code",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal.shade800,
+                          ),
                         ),
+                        SizedBox(height: 8),
                         Row(
                           children: [
                             Expanded(
@@ -294,26 +292,31 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       if (promoValid)
-                                        const Icon(Icons.check_circle,
-                                            color: Colors.green),
+                                        const Icon(
+                                          Icons.check_circle,
+                                          color: Colors.green,
+                                        ),
                                     ],
                                   ),
                                 ),
                                 onSubmitted: (_) {
                                   FocusScope.of(context).unfocus();
                                   if (!promoValid) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content:
-                                          Text('Promo code error: $promoError'),
-                                      backgroundColor: Colors.red.shade400,
-                                    ));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Promo code error: $promoError',
+                                        ),
+                                        backgroundColor: Colors.red.shade400,
+                                      ),
+                                    );
                                   } else if (promoValid) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content: Text('Promo code applied!'),
-                                      backgroundColor: Colors.green,
-                                    ));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Promo code applied!'),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
                                   }
                                 },
                               ),
@@ -324,18 +327,27 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                   ? () {
                                       FocusScope.of(context).unfocus();
                                       if (promoError != null) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              'Promo code error: $promoError'),
-                                          backgroundColor: Colors.red.shade400,
-                                        ));
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Promo code error: $promoError',
+                                            ),
+                                            backgroundColor:
+                                                Colors.red.shade400,
+                                          ),
+                                        );
                                       } else if (promoValid) {
                                         ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content: Text('Promo code applied!'),
-                                          backgroundColor: Colors.green,
-                                        ));
+                                            .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Promo code applied!',
+                                                ),
+                                                backgroundColor: Colors.green,
+                                              ),
+                                            );
                                       }
                                     }
                                   : null,
@@ -344,24 +356,23 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        Divider(
-                          color: Colors.teal.shade300,
-                          thickness: .5,
+                        Divider(color: Colors.teal.shade300, thickness: .5),
+                        Text(
+                          "Available Validators",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal.shade800,
+                          ),
                         ),
-                        Text("Available Validators",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.teal.shade800)),
-                        SizedBox(
-                          height: 8,
-                        ),
+                        SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
                           runSpacing: 12,
                           children: availableValidators.map((validator) {
-                            final isActive =
-                                cart.validators.contains(validator);
+                            final isActive = cart.validators.contains(
+                              validator,
+                            );
                             return AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               decoration: BoxDecoration(
@@ -376,18 +387,18 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                   validator is MaxItemsValidator
                                       ? 'Max Items (${validator.maxItems})'
                                       : validator is MinTotalPriceValidator
-                                          ? 'Min Price \$${validator.minPrice}'
-                                          : validator is MaxTotalPriceValidator
-                                              ? 'Max Price \$${validator.maxPrice}'
-                                              : validator
-                                                      is MinQuantityValidator
-                                                  ? 'Min Qty ${validator.minQuantity}'
-                                                  : 'Validator',
+                                      ? 'Min Price \$${validator.minPrice}'
+                                      : validator is MaxTotalPriceValidator
+                                      ? 'Max Price \$${validator.maxPrice}'
+                                      : validator is MinQuantityValidator
+                                      ? 'Min Qty ${validator.minQuantity}'
+                                      : 'Validator',
                                   style: TextStyle(
-                                      color: isActive
-                                          ? Colors.teal.shade900
-                                          : Colors.black87,
-                                      fontWeight: FontWeight.w600),
+                                    color: isActive
+                                        ? Colors.teal.shade900
+                                        : Colors.black87,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 onSelected: (_) => _toggleValidator(validator),
                                 selectedColor: Colors.transparent,
@@ -398,15 +409,15 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                           }).toList(),
                         ),
                         const SizedBox(height: 16),
-                        Divider(
-                          color: Colors.teal.shade300,
-                          thickness: .5,
+                        Divider(color: Colors.teal.shade300, thickness: .5),
+                        Text(
+                          "Available Products",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal.shade800,
+                          ),
                         ),
-                        Text("Available Products",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.teal.shade800)),
                         const SizedBox(height: 6),
                         Wrap(
                           spacing: 12,
@@ -422,8 +433,10 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                           const Center(
                             child: Text(
                               'Your cart is empty',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.grey),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
                       ]),
@@ -431,53 +444,55 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   ),
                   if (items.isNotEmpty)
                     SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final item = items[index];
-                          return Card(
-                            elevation: 0,
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 6, horizontal: 16),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              title: Text(
-                                item.name,
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                  'Price: \$${item.price.toStringAsFixed(2)} × ${item.quantity} = \$${(item.price * item.notNullQty()).toStringAsFixed(2)}'),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    onPressed: () => _changeQuantity(item, -1),
-                                    icon:
-                                        const Icon(Icons.remove_circle_outline),
-                                  ),
-                                  Text(
-                                    '${item.quantity}',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  IconButton(
-                                    onPressed: () => _changeQuantity(item, 1),
-                                    icon: const Icon(Icons.add_circle_outline),
-                                  ),
-                                ],
-                              ),
-                              onLongPress: () => _removeItem(item),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final item = items[index];
+                        return Card(
+                          elevation: 0,
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
                             ),
-                          );
-                        },
-                        childCount: items.length,
-                      ),
+                            title: Text(
+                              item.name,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Price: \$${item.price.toStringAsFixed(2)} × ${item.quantity} = \$${(item.price * item.notNullQty()).toStringAsFixed(2)}',
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () => _changeQuantity(item, -1),
+                                  icon: const Icon(Icons.remove_circle_outline),
+                                ),
+                                Text(
+                                  '${item.quantity}',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                IconButton(
+                                  onPressed: () => _changeQuantity(item, 1),
+                                  icon: const Icon(Icons.add_circle_outline),
+                                ),
+                              ],
+                            ),
+                            onLongPress: () => _removeItem(item),
+                          ),
+                        );
+                      }, childCount: items.length),
                     ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 24),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 24)),
                 ],
               ),
             ),
@@ -491,9 +506,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                       children: [
                         const Text(
                           'Subtotal:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         Text('\$${totalPrice.toStringAsFixed(2)}'),
                       ],
@@ -522,7 +535,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         const Text(
                           'Total:',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                         Text(
                           '\$${discountedPrice.toStringAsFixed(2)}',

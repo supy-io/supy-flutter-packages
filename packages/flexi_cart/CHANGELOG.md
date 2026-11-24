@@ -1,3 +1,8 @@
+## 2.0.0
+- **Breaking:** widgets are built with `package:material_ui` instead of `package:flutter/material.dart`, so they find the `Material`, `Theme` and input theme of an app that has migrated to `material_ui`.
+- **Breaking:** `CartInput.inputDecoration` takes a `material_ui` `InputDecoration` and `CartTheme.fromTheme` a `material_ui` `ThemeData`.
+- Requires Dart 3.13 and Flutter 3.47 or newer.
+
 ## 1.0.3+2
 - feat: add shouldNotifyListeners option to restoreFromCache
 

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(const ShineShopApp());
@@ -42,27 +42,31 @@ class ShineHomePage extends StatelessWidget {
   const ShineHomePage({super.key});
 
   List<Product> get items => [
-        Product(
-            id: '1',
-            name: 'Glow Serum',
-            price: 29.99,
-            icon: LucideIcons.sunMedium),
-        Product(
-            id: '2',
-            name: 'Hydra Mask',
-            price: 19.99,
-            icon: LucideIcons.droplet),
-        Product(
-            id: '3',
-            name: 'Soft Cleanser',
-            price: 14.99,
-            icon: LucideIcons.cloudDrizzle),
-        Product(
-            id: '4',
-            name: 'Radiance Toner',
-            price: 21.99,
-            icon: LucideIcons.sparkles),
-      ];
+    Product(
+      id: '1',
+      name: 'Glow Serum',
+      price: 29.99,
+      icon: LucideIcons.sunMedium,
+    ),
+    Product(
+      id: '2',
+      name: 'Hydra Mask',
+      price: 19.99,
+      icon: LucideIcons.droplet,
+    ),
+    Product(
+      id: '3',
+      name: 'Soft Cleanser',
+      price: 14.99,
+      icon: LucideIcons.cloudDrizzle,
+    ),
+    Product(
+      id: '4',
+      name: 'Radiance Toner',
+      price: 21.99,
+      icon: LucideIcons.sparkles,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -108,25 +112,30 @@ class ShineHomePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Your Cart',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              'Your Cart',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 12),
             for (final item in cart.itemsList)
               ListTile(
                 leading: Icon(item.icon, size: 28),
                 title: Text(item.name),
                 subtitle: Text(
-                    'x${item.quantity} = \$${item.totalPrice().toStringAsFixed(2)}'),
+                  'x${item.quantity} = \$${item.totalPrice().toStringAsFixed(2)}',
+                ),
               ),
             const Divider(),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
                 'Total: \$${cart.totalPrice().toStringAsFixed(2)}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -164,8 +173,9 @@ class _ProductCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 activeBackgroundColor: theme.colorScheme.primary,
-                iconTheme: theme.iconTheme
-                    .copyWith(color: theme.colorScheme.onPrimary),
+                iconTheme: theme.iconTheme.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
               ),
             ),
           ],

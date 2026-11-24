@@ -109,18 +109,19 @@ void main() {
         quantity: 1,
       );
       final prices = <double>[];
-      final cart = FlexiCart<CartItem>(
-        options: CartOptions(
-          behaviorOptions: BehaviorOptions(
-            priceResolver: (item) {
-              prices.add(item.price);
-              return item.price + 50;
-            },
-          ),
-        ),
-      )
-        ..add(item, shouldNotifyListeners: false)
-        ..add(item..quantity = 3, shouldNotifyListeners: false);
+      final cart =
+          FlexiCart<CartItem>(
+              options: CartOptions(
+                behaviorOptions: BehaviorOptions(
+                  priceResolver: (item) {
+                    prices.add(item.price);
+                    return item.price + 50;
+                  },
+                ),
+              ),
+            )
+            ..add(item, shouldNotifyListeners: false)
+            ..add(item..quantity = 3, shouldNotifyListeners: false);
 
       expect(prices.length, equals(1));
 
@@ -129,41 +130,42 @@ void main() {
 
     test('combined behaviors: filter + priceResolver + logging', () {
       final logs = <String>[];
-      final cart = FlexiCart<CartItem>(
-        options: CartOptions(
-          behaviorOptions: BehaviorOptions(
-            itemFilter: (item) {
-              if (item.price < 90) {
-                return false;
-              }
-              return true;
-            },
-            priceResolver: (item) => item.price + 10.0,
-            enableLogging: true,
-            logger: logs.add,
-          ),
-        ),
-      )
-        ..add(
-          CartItem(
-            id: 'valid',
-            name: 'Valid Item',
-            price: 100,
-            currency: 'USD',
-            quantity: 1,
-          ),
-          shouldNotifyListeners: false,
-        )
-        ..add(
-          CartItem(
-            id: 'filtered',
-            name: 'Too Cheap',
-            price: 20,
-            currency: 'USD',
-            quantity: 1,
-          ),
-          shouldNotifyListeners: false,
-        );
+      final cart =
+          FlexiCart<CartItem>(
+              options: CartOptions(
+                behaviorOptions: BehaviorOptions(
+                  itemFilter: (item) {
+                    if (item.price < 90) {
+                      return false;
+                    }
+                    return true;
+                  },
+                  priceResolver: (item) => item.price + 10.0,
+                  enableLogging: true,
+                  logger: logs.add,
+                ),
+              ),
+            )
+            ..add(
+              CartItem(
+                id: 'valid',
+                name: 'Valid Item',
+                price: 100,
+                currency: 'USD',
+                quantity: 1,
+              ),
+              shouldNotifyListeners: false,
+            )
+            ..add(
+              CartItem(
+                id: 'filtered',
+                name: 'Too Cheap',
+                price: 20,
+                currency: 'USD',
+                quantity: 1,
+              ),
+              shouldNotifyListeners: false,
+            );
 
       expect(cart.items.containsKey('valid'), isTrue);
       expect(cart.items.containsKey('filtered'), isFalse);
@@ -177,8 +179,7 @@ void main() {
     });
   });
 
-  test(
-      'should delete item when quantity is null and'
+  test('should delete item when quantity is null and'
       ' retainNullQuantityItems=false', () {
     final cart = FlexiCart<CartItem>(
       options: CartOptions(
@@ -200,31 +201,31 @@ void main() {
   });
 
   test(
-      'should keep item when quantity is null and retainNullQuantityItems=true',
-      () {
-    final cart = FlexiCart<CartItem>(
-      options: CartOptions(
-        behaviorOptions: BehaviorOptions(
-          keepZeroOrNullQuantityItems: true,
+    'should keep item when quantity is null and retainNullQuantityItems=true',
+    () {
+      final cart = FlexiCart<CartItem>(
+        options: CartOptions(
+          behaviorOptions: BehaviorOptions(
+            keepZeroOrNullQuantityItems: true,
+          ),
         ),
-      ),
-    );
+      );
 
-    final item = CartItem(
-      id: 'nullQty',
-      name: 'Null Quantity',
-      price: 50,
-      currency: 'USD',
-      quantity: null,
-    );
+      final item = CartItem(
+        id: 'nullQty',
+        name: 'Null Quantity',
+        price: 50,
+        currency: 'USD',
+        quantity: null,
+      );
 
-    cart.add(item, shouldNotifyListeners: false);
+      cart.add(item, shouldNotifyListeners: false);
 
-    expect(cart.items.containsKey('nullQty'), isTrue);
-  });
+      expect(cart.items.containsKey('nullQty'), isTrue);
+    },
+  );
 
-  test(
-      'should delete item with zero quantity'
+  test('should delete item with zero quantity'
       ' when retainNullQuantityItems=false', () {
     final cart = FlexiCart<CartItem>(
       options: CartOptions(
@@ -244,25 +245,27 @@ void main() {
     expect(cart.items.containsKey('zeroQty'), isFalse);
   });
 
-  test('should keep item with zero quantity when retainNullQuantityItems=true',
-      () {
-    final cart = FlexiCart<CartItem>(
-      options: CartOptions(
-        behaviorOptions: BehaviorOptions(
-          keepZeroOrNullQuantityItems: true,
+  test(
+    'should keep item with zero quantity when retainNullQuantityItems=true',
+    () {
+      final cart = FlexiCart<CartItem>(
+        options: CartOptions(
+          behaviorOptions: BehaviorOptions(
+            keepZeroOrNullQuantityItems: true,
+          ),
         ),
-      ),
-    );
+      );
 
-    final item = CartItem(
-      id: 'zeroQty',
-      name: 'Zero Quantity',
-      price: 30,
-      currency: 'USD',
-    );
+      final item = CartItem(
+        id: 'zeroQty',
+        name: 'Zero Quantity',
+        price: 30,
+        currency: 'USD',
+      );
 
-    cart.add(item, shouldNotifyListeners: false);
+      cart.add(item, shouldNotifyListeners: false);
 
-    expect(cart.items.containsKey('zeroQty'), isTrue);
-  });
+      expect(cart.items.containsKey('zeroQty'), isTrue);
+    },
+  );
 }

@@ -1,6 +1,6 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -14,9 +14,11 @@ void main() {
       ),
       home: ChangeNotifierProvider(
         create: (_) => FlexiCart(),
-        child: Builder(builder: (context) {
-          return const FlexiCartProPage();
-        }),
+        child: Builder(
+          builder: (context) {
+            return const FlexiCartProPage();
+          },
+        ),
       ),
     ),
   );
@@ -80,9 +82,10 @@ class _FlexiCartProPageState extends State<FlexiCartProPage>
     cart.add(CartItem(id: '2', name: '📱 Smartphone', price: 749.49));
     cart.add(CartItem(id: '3', name: '🎧 Headphones', price: 199.99));
 
-    _currencyAnimController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1))
-          ..repeat(reverse: true);
+    _currencyAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
   }
 
   @override
@@ -117,8 +120,10 @@ class _FlexiCartProPageState extends State<FlexiCartProPage>
             const Text('FlexiCart Pro'),
             const SizedBox(width: 8),
             ScaleTransition(
-              scale:
-                  Tween(begin: 0.8, end: 1.2).animate(_currencyAnimController),
+              scale: Tween(
+                begin: 0.8,
+                end: 1.2,
+              ).animate(_currencyAnimController),
               child: Text(flag, style: const TextStyle(fontSize: 24)),
             ),
           ],
@@ -170,18 +175,20 @@ class CurrencyDropdown extends StatelessWidget {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
       items: currencies
-          .map((c) => DropdownMenuItem(
-                value: c,
-                child: Row(
-                  children: [
-                    Text(currencyFlags[c.code] ?? ''),
-                    const SizedBox(width: 8),
-                    Text('${c.code} — ${currencyNames[c.code] ?? ''}'),
-                    const Spacer(),
-                    Text(c.rate.toStringAsFixed(2)),
-                  ],
-                ),
-              ))
+          .map(
+            (c) => DropdownMenuItem(
+              value: c,
+              child: Row(
+                children: [
+                  Text(currencyFlags[c.code] ?? ''),
+                  const SizedBox(width: 8),
+                  Text('${c.code} — ${currencyNames[c.code] ?? ''}'),
+                  const Spacer(),
+                  Text(c.rate.toStringAsFixed(2)),
+                ],
+              ),
+            ),
+          )
           .toList(),
       onChanged: onChanged,
     );
@@ -211,8 +218,9 @@ class CartItemList extends StatelessWidget {
         itemBuilder: (_, i) {
           final item = cart.itemsList[i];
           return Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -223,11 +231,14 @@ class CartItemList extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item.name,
-                            style: Theme.of(context).textTheme.titleMedium),
+                        Text(
+                          item.name,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                         const SizedBox(height: 6),
                         Text(
-                            'Unit Price: ${formatCurrency(item.price, currency.code)}'),
+                          'Unit Price: ${formatCurrency(item.price, currency.code)}',
+                        ),
                       ],
                     ),
                   ),
@@ -237,8 +248,10 @@ class CartItemList extends StatelessWidget {
                         onPressed: () => onQuantityChange(item.id, -1),
                         icon: const Icon(Icons.remove_circle_outline),
                       ),
-                      Text('${item.quantity?.toInt() ?? 1}',
-                          style: const TextStyle(fontSize: 18)),
+                      Text(
+                        '${item.quantity?.toInt() ?? 1}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
                       IconButton(
                         onPressed: () => onQuantityChange(item.id, 1),
                         icon: const Icon(Icons.add_circle_outline),
@@ -248,9 +261,13 @@ class CartItemList extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     formatCurrency(
-                        (item.price * (item.quantity ?? 1)), currency.code),
+                      (item.price * (item.quantity ?? 1)),
+                      currency.code,
+                    ),
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
@@ -290,35 +307,51 @@ class CartSummary extends StatelessWidget {
             const SizedBox(height: 6),
             _buildRow('Tax (8%)', formatCurrency(tax, currency.code)),
             const Divider(height: 24, thickness: 1),
-            _buildRow('Total', formatCurrency(total, currency.code),
-                isBold: true, fontSize: 20),
+            _buildRow(
+              'Total',
+              formatCurrency(total, currency.code),
+              isBold: true,
+              fontSize: 20,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildRow(String label, String value,
-      {bool isBold = false, double fontSize = 16}) {
+  Widget _buildRow(
+    String label,
+    String value, {
+    bool isBold = false,
+    double fontSize = 16,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label,
-            style: TextStyle(
-                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                fontSize: fontSize)),
-        Text(value,
-            style: TextStyle(
-                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                fontSize: fontSize)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            fontSize: fontSize,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            fontSize: fontSize,
+          ),
+        ),
       ],
     );
   }
 }
 
 String formatCurrency(double amount, String code) {
-  return NumberFormat.currency(name: code, symbol: getCurrencySymbol(code))
-      .format(amount);
+  return NumberFormat.currency(
+    name: code,
+    symbol: getCurrencySymbol(code),
+  ).format(amount);
 }
 
 String getCurrencySymbol(String code) {

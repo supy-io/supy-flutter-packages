@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
 import 'package:flexi_cart/flexi_cart.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 class Product extends ICartItem {
   Product({
@@ -76,10 +76,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'FlexiCart Demo',
-      theme: ThemeData(
-        colorSchemeSeed: Colors.teal,
-        useMaterial3: true,
-      ),
+      theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
       home: const MultiCartPage(),
     );
   }
@@ -94,9 +91,13 @@ class MultiCartPage extends StatelessWidget {
     final supplierCart = context.watch<FlexiCart<SupplierItem>>();
 
     final productTotal = productCart.items.values.fold<double>(
-        0, (sum, item) => sum + item.price * (item.quantity ?? 0));
+      0,
+      (sum, item) => sum + item.price * (item.quantity ?? 0),
+    );
     final supplierTotal = supplierCart.items.values.fold<double>(
-        0, (sum, item) => sum + item.price * (item.quantity ?? 0));
+      0,
+      (sum, item) => sum + item.price * (item.quantity ?? 0),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -127,8 +128,10 @@ class MultiCartPage extends StatelessWidget {
                 item: item,
                 onUpdate: onUpdate,
                 onDelete: onDelete,
-                titleBuilder: (i) => Text("${i.name} x ${i.getQuantity()}",
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                titleBuilder: (i) => Text(
+                  "${i.name} x ${i.getQuantity()}",
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 subtitleBuilder: (i) =>
                     Text("Price: \$${i.price.toStringAsFixed(2)}"),
               ),
@@ -156,14 +159,16 @@ class MultiCartPage extends StatelessWidget {
               }),
               itemBuilder: (item, onUpdate, onDelete) =>
                   CartItemTile<SupplierItem>(
-                item: item,
-                onUpdate: onUpdate,
-                onDelete: onDelete,
-                titleBuilder: (i) => Text("${i.title} x ${i.getQuantity()}",
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
-                subtitleBuilder: (i) =>
-                    Text("Cost: \$${i.cost.toStringAsFixed(2)}"),
-              ),
+                    item: item,
+                    onUpdate: onUpdate,
+                    onDelete: onDelete,
+                    titleBuilder: (i) => Text(
+                      "${i.title} x ${i.getQuantity()}",
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitleBuilder: (i) =>
+                        Text("Cost: \$${i.cost.toStringAsFixed(2)}"),
+                  ),
             ),
           ],
         ),
@@ -203,7 +208,7 @@ class CartSection<T extends ICartItem> extends StatefulWidget {
   final Function(T) onDelete;
   final Function(T) onUpdate;
   final Widget Function(T item, Function(T) onUpdate, Function(T) onDelete)
-      itemBuilder;
+  itemBuilder;
 
   const CartSection({
     required this.title,
@@ -235,16 +240,17 @@ class _CartSectionState<T extends ICartItem> extends State<CartSection<T>> {
         tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         title: Text(
           widget.title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(context).textTheme.headlineSmall
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
         trailing: Icon(
           _expanded ? Icons.expand_less : Icons.expand_more,
           size: 28,
         ),
-        childrenPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        childrenPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 12,
+        ),
         children: [
           FilledButton.tonalIcon(
             onPressed: widget.onAdd,
@@ -264,20 +270,22 @@ class _CartSectionState<T extends ICartItem> extends State<CartSection<T>> {
                 ),
               ),
             ),
-          ...widget.cartItems.entries.map((entry) => widget.itemBuilder(
-                entry.value,
-                widget.onUpdate,
-                widget.onDelete,
-              )),
+          ...widget.cartItems.entries.map(
+            (entry) => widget.itemBuilder(
+              entry.value,
+              widget.onUpdate,
+              widget.onDelete,
+            ),
+          ),
           const Divider(height: 24, thickness: 1.2),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
               "Total: \$${widget.totalPrice.toStringAsFixed(2)}",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -315,10 +323,7 @@ class CartItemTile<T extends ICartItem> extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: CartInput<T>(
-                item: item,
-                onChanged: onUpdate,
-              ),
+              child: CartInput<T>(item: item, onChanged: onUpdate),
             ),
             IconButton(
               icon: Icon(Iconsax.trash, color: Colors.red.shade700),
