@@ -47,8 +47,12 @@ void main() {
 
     test('detects updated items', () {
       final item1Old = MockItem(id: '1', name: 'Test', price: 10);
-      final item1New =
-          MockItem(id: '1', name: 'Test', price: 10, quantityVal: 3);
+      final item1New = MockItem(
+        id: '1',
+        name: 'Test',
+        price: 10,
+        quantityVal: 3,
+      );
 
       final oldItems = {'1': item1Old};
       final newItems = {'1': item1New};
@@ -62,8 +66,12 @@ void main() {
 
     test('detects added, removed, and updated together', () {
       final itemOld = MockItem(id: '1', name: 'Old', price: 10);
-      final itemUpdated =
-          MockItem(id: '1', name: 'Old', price: 10, quantityVal: 2);
+      final itemUpdated = MockItem(
+        id: '1',
+        name: 'Old',
+        price: 10,
+        quantityVal: 2,
+      );
       final itemAdded = MockItem(id: '2', name: 'New', price: 20);
 
       final oldItems = {'1': itemOld};

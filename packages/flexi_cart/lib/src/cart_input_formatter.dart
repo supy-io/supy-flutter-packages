@@ -74,9 +74,11 @@ class CartInputNumberFormatter extends TextInputFormatter {
     final arabicNumbersRegx = RegExp('[٠-٩]');
     final dotOrCommaRegx = RegExp('[.,]');
 
-    var input = newValue.text.replaceAllMapped(arabicNumbersRegx, (match) {
-      return _arabicNumbersMap[match.group(0)!]!;
-    }).replaceAll(',', '.');
+    var input = newValue.text
+        .replaceAllMapped(arabicNumbersRegx, (match) {
+          return _arabicNumbersMap[match.group(0)!]!;
+        })
+        .replaceAll(',', '.');
 
     if (dotOrCommaRegx.allMatches(input).length > 1 ||
         input.contains(RegExp('[^0-9.]'))) {

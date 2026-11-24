@@ -17,8 +17,8 @@ class CartOptions {
   CartOptions({
     ValidatorOptions? validatorOptions,
     BehaviorOptions? behaviorOptions,
-  })  : validatorOptions = validatorOptions ?? ValidatorOptions(),
-        behaviorOptions = behaviorOptions ?? BehaviorOptions();
+  }) : validatorOptions = validatorOptions ?? ValidatorOptions(),
+       behaviorOptions = behaviorOptions ?? BehaviorOptions();
 
   /// Options for validating the cart during checkout, including promo codes.
   final ValidatorOptions validatorOptions;

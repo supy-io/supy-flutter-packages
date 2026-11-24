@@ -1,16 +1,12 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final cacheProvider = SharedPrefsProvider(prefs);
-  runApp(
-    MyApp(
-      cacheProvider: cacheProvider,
-    ),
-  );
+  runApp(MyApp(cacheProvider: cacheProvider));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,12 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FlexiCart Cache Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CartScreen(
-        cacheProvider: cacheProvider,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: CartScreen(cacheProvider: cacheProvider),
     );
   }
 }
@@ -110,8 +102,9 @@ class _CartScreenState extends State<CartScreen> {
                     .map(
                       (i) => ListTile(
                         title: Text(i.name),
-                        subtitle:
-                            Text('Price: \$${i.price}, Qty: ${i.quantity}'),
+                        subtitle: Text(
+                          'Price: \$${i.price}, Qty: ${i.quantity}',
+                        ),
                       ),
                     )
                     .toList(),
@@ -126,8 +119,9 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       FilledButton.tonal(
-                          onPressed: _addRandomItem,
-                          child: const Text('Add Item')),
+                        onPressed: _addRandomItem,
+                        child: const Text('Add Item'),
+                      ),
                       FilledButton(
                         onPressed: _saveCart,
                         child: const Text('Save Cart'),
@@ -137,7 +131,7 @@ class _CartScreenState extends State<CartScreen> {
                         child: const Text('Clear Cart'),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -160,29 +154,28 @@ class MyCartItem extends ICartItem {
   });
 
   factory MyCartItem.fromMap(Map<String, dynamic> m) => MyCartItem(
-        key: m['key'] as String,
-        group: m['group'] as String? ?? 'default',
-        groupName: m['groupName'] as String? ?? 'Default',
-        price: (m['price'] as num).toDouble(),
-        quantity:
-            m['quantity'] != null ? (m['quantity'] as num).toDouble() : null,
-        id: m['id'] as String? ?? '',
-        name: m['name'] as String? ?? '',
-      );
+    key: m['key'] as String,
+    group: m['group'] as String? ?? 'default',
+    groupName: m['groupName'] as String? ?? 'Default',
+    price: (m['price'] as num).toDouble(),
+    quantity: m['quantity'] != null ? (m['quantity'] as num).toDouble() : null,
+    id: m['id'] as String? ?? '',
+    name: m['name'] as String? ?? '',
+  );
 
   @override
   final String key;
 
   Map<String, dynamic> toMap() => {
-        'key': key,
-        'group': group,
-        'groupName': groupName,
-        'price': price,
-        'quantity': quantity,
-        'id': id,
-        'name': name,
-        'metadata': metadata,
-      };
+    'key': key,
+    'group': group,
+    'groupName': groupName,
+    'price': price,
+    'quantity': quantity,
+    'id': id,
+    'name': name,
+    'metadata': metadata,
+  };
 
   @override
   String toString() =>

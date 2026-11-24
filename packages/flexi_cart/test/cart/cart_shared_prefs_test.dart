@@ -15,20 +15,28 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     final provider = SharedPrefsProvider(prefs);
     final cart = FlexiCart<MyCartItem>()
-      ..add(MyCartItem(
-        key: 'i1',
-        id: 'id1',
-        name: 'n1',
-        price: 10,
-        quantity: 2,
-      ));
+      ..add(
+        MyCartItem(
+          key: 'i1',
+          id: 'id1',
+          name: 'n1',
+          price: 10,
+          quantity: 2,
+        ),
+      );
 
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
     cart.reset();
 
     final restored = await cart.restoreFromCache(
-        key: storageKey, itemFromJson: MyCartItem.fromMap, provider: provider);
+      key: storageKey,
+      itemFromJson: MyCartItem.fromMap,
+      provider: provider,
+    );
     expect(restored!.items.length, equals(1));
     expect(restored.items['i1']!.notNullQty(), equals(2));
   });
@@ -39,7 +47,10 @@ void main() {
     final cart = FlexiCart<MyCartItem>();
 
     final restored = await cart.restoreFromCache(
-        key: storageKey, itemFromJson: MyCartItem.fromMap, provider: provider);
+      key: storageKey,
+      itemFromJson: MyCartItem.fromMap,
+      provider: provider,
+    );
     expect(restored, isNull);
   });
 
@@ -49,7 +60,10 @@ void main() {
     final cart = FlexiCart<MyCartItem>()
       ..add(MyCartItem(key: 'i', id: 'id1', name: 'n', price: 1));
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
 
     await cart.deleteFromCache(key: storageKey, provider: provider);
     expect(prefs.getString(storageKey), isNull);
@@ -60,11 +74,17 @@ void main() {
     final provider = SharedPrefsProvider(prefs);
     final cart = FlexiCart<MyCartItem>()..setMetadataEntry('user', 'Alice');
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
     cart.reset();
 
     final restored = await cart.restoreFromCache(
-        key: storageKey, itemFromJson: MyCartItem.fromMap, provider: provider);
+      key: storageKey,
+      itemFromJson: MyCartItem.fromMap,
+      provider: provider,
+    );
     expect(restored!.metadata['user'], equals('Alice'));
   });
 
@@ -78,11 +98,17 @@ void main() {
       ]);
 
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
     cart.reset();
 
     final restored = await cart.restoreFromCache(
-        key: storageKey, itemFromJson: MyCartItem.fromMap, provider: provider);
+      key: storageKey,
+      itemFromJson: MyCartItem.fromMap,
+      provider: provider,
+    );
     expect(restored!.items.length, equals(2));
   });
 
@@ -98,11 +124,17 @@ void main() {
     final provider = SharedPrefsProvider(prefs);
     final cart = FlexiCart<MyCartItem>()..setNote('Hello');
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
     cart.reset();
 
     final restored = await cart.restoreFromCache(
-        key: storageKey, itemFromJson: MyCartItem.fromMap, provider: provider);
+      key: storageKey,
+      itemFromJson: MyCartItem.fromMap,
+      provider: provider,
+    );
     expect(restored!.note, equals('Hello'));
   });
 
@@ -112,11 +144,17 @@ void main() {
     final date = DateTime.utc(2024);
     final cart = FlexiCart<MyCartItem>()..setDeliveredAt(date);
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
     cart.reset();
 
     final restored = await cart.restoreFromCache(
-        key: storageKey, itemFromJson: MyCartItem.fromMap, provider: provider);
+      key: storageKey,
+      itemFromJson: MyCartItem.fromMap,
+      provider: provider,
+    );
     expect(restored!.deliveredAt, equals(date));
   });
 
@@ -142,7 +180,8 @@ void main() {
     final cart = FlexiCart<MyCartItem>()
       ..addZeroQuantity = false
       ..add(
-          MyCartItem(key: 'i1', id: 'id1', name: 'n1', price: 1, quantity: 0));
+        MyCartItem(key: 'i1', id: 'id1', name: 'n1', price: 1, quantity: 0),
+      );
     expect(cart.items, isEmpty);
   });
 
@@ -165,12 +204,13 @@ void main() {
   test('14. groups: add items and check group', () {
     final cart = FlexiCart<MyCartItem>();
     final item = MyCartItem(
-        key: 'i1',
-        group: 'g1',
-        groupName: 'G1',
-        id: 'id1',
-        name: 'n1',
-        price: 1);
+      key: 'i1',
+      group: 'g1',
+      groupName: 'G1',
+      id: 'id1',
+      name: 'n1',
+      price: 1,
+    );
     cart.add(item);
     expect(cart.groups.containsKey('g1'), isTrue);
     expect(cart.getItemsGroup('g1').length, equals(1));
@@ -223,13 +263,14 @@ void main() {
     final cart = FlexiCart<MyCartItem>();
 
     final item1 = MyCartItem(
-        key: 'i1',
-        group: 'g1',
-        groupName: 'G1',
-        price: 5,
-        quantity: 3,
-        id: 'id1',
-        name: 'name1');
+      key: 'i1',
+      group: 'g1',
+      groupName: 'G1',
+      price: 5,
+      quantity: 3,
+      id: 'id1',
+      name: 'name1',
+    );
     final item2 = MyCartItem(
       key: 'i2',
       group: 'g1',
@@ -288,7 +329,10 @@ void main() {
     final cart = FlexiCart<MyCartItem>()
       ..add(MyCartItem(key: 'x', price: 1, id: 'id3', name: 'name3'));
     await cart.saveToCache(
-        key: storageKey, itemToJson: (i) => i.toMap(), provider: provider);
+      key: storageKey,
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
 
     // ensure exists
     expect(prefs.getString(storageKey), isNotNull);
@@ -307,9 +351,15 @@ void main() {
       ..add(MyCartItem(key: 'b', id: 'id2', name: 'n2', price: 2));
 
     await cart1.saveToCache(
-        key: 'cart1', itemToJson: (i) => i.toMap(), provider: provider);
+      key: 'cart1',
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
     await cart2.saveToCache(
-        key: 'cart2', itemToJson: (i) => i.toMap(), provider: provider);
+      key: 'cart2',
+      itemToJson: (i) => i.toMap(),
+      provider: provider,
+    );
 
     await cart1.deleteFromCache(key: 'cart1', provider: provider);
 
@@ -439,28 +489,27 @@ class MyCartItem extends ICartItem {
   });
 
   factory MyCartItem.fromMap(Map<String, dynamic> m) => MyCartItem(
-        key: m['key'] as String,
-        group: m['group'] as String? ?? 'default',
-        groupName: m['groupName'] as String? ?? 'Default',
-        price: (m['price'] as num).toDouble(),
-        quantity:
-            m['quantity'] != null ? (m['quantity'] as num).toDouble() : null,
-        id: m['id'] as String? ?? '',
-        name: m['name'] as String? ?? '',
-      );
+    key: m['key'] as String,
+    group: m['group'] as String? ?? 'default',
+    groupName: m['groupName'] as String? ?? 'Default',
+    price: (m['price'] as num).toDouble(),
+    quantity: m['quantity'] != null ? (m['quantity'] as num).toDouble() : null,
+    id: m['id'] as String? ?? '',
+    name: m['name'] as String? ?? '',
+  );
   @override
   final String key;
 
   Map<String, dynamic> toMap() => {
-        'key': key,
-        'group': super.group,
-        'groupName': groupName,
-        'price': price,
-        'quantity': quantity,
-        'id': id,
-        'name': name,
-        'metadata': metadata,
-      };
+    'key': key,
+    'group': super.group,
+    'groupName': groupName,
+    'price': price,
+    'quantity': quantity,
+    'id': id,
+    'name': name,
+    'metadata': metadata,
+  };
 
   @override
   String toString() =>

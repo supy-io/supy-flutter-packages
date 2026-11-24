@@ -1,6 +1,7 @@
 import 'dart:math';
+
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:random_name_generator/random_name_generator.dart';
 import 'package:uuid/uuid.dart';
@@ -18,19 +19,11 @@ class CartItem extends ICartItem {
 void main() {
   runApp(
     MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.deepPurple,
-      ),
+      theme: ThemeData(useMaterial3: true, primarySwatch: Colors.deepPurple),
       home: ChangeNotifierProvider(
         create: (BuildContext context) => FlexiCart()
           ..registerPlugin(CartPrintPlugin())
-          ..add(CartItem(
-            id: '1',
-            name: 'Name',
-            price: 1,
-            quantity: 1.56789,
-          )),
+          ..add(CartItem(id: '1', name: 'Name', price: 1, quantity: 1.56789)),
         child: const Example(),
       ),
     ),
@@ -56,14 +49,8 @@ class _ExampleState extends State<Example> {
       appBar: AppBar(
         title: const Text('FlexiCart Example'),
         actions: [
-          IconButton(
-            onPressed: _add,
-            icon: const Icon(Icons.add),
-          ),
-          IconButton(
-            onPressed: deleteGroup,
-            icon: const Icon(Icons.delete),
-          ),
+          IconButton(onPressed: _add, icon: const Icon(Icons.add)),
+          IconButton(onPressed: deleteGroup, icon: const Icon(Icons.delete)),
         ],
       ),
       body: SingleChildScrollView(
@@ -76,14 +63,14 @@ class _ExampleState extends State<Example> {
             const SizedBox(height: 16),
             _buildLabeledInput(
               label: "1. Show Zero Quantity",
-              description:
-                  "Shows input even if quantity is zero using `showZeroQty: true`.",
+              description: "Shows input even if quantity is zero using `showZeroQty: true`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'zero-visible',
-                    name: 'ZeroVisible',
-                    price: 2.5,
-                    quantity: 0),
+                  id: 'zero-visible',
+                  name: 'ZeroVisible',
+                  price: 2.5,
+                  quantity: 0,
+                ),
                 showZeroQty: true,
                 onChanged: (item) => debugPrint("Zero shown: $item"),
               ),
@@ -95,10 +82,11 @@ class _ExampleState extends State<Example> {
                   "Input is read-only and disabled using `enabled: false`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'disabled',
-                    name: 'DisabledItem',
-                    price: 5.0,
-                    quantity: 2.5),
+                  id: 'disabled',
+                  name: 'DisabledItem',
+                  price: 5.0,
+                  quantity: 2.5,
+                ),
                 enabled: false,
                 onChanged: (item) => debugPrint("Shouldn’t change: $item"),
               ),
@@ -110,10 +98,11 @@ class _ExampleState extends State<Example> {
                   "No increment/decrement buttons using `hideButtons: true`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'no-buttons',
-                    name: 'NoButtons',
-                    price: 3.0,
-                    quantity: 1.0),
+                  id: 'no-buttons',
+                  name: 'NoButtons',
+                  price: 3.0,
+                  quantity: 1.0,
+                ),
                 hideButtons: true,
                 onChanged: (item) => debugPrint("No buttons: $item"),
               ),
@@ -121,14 +110,14 @@ class _ExampleState extends State<Example> {
 
             _buildLabeledInput(
               label: "4. High Precision (3 decimals)",
-              description:
-                  "Displays quantity with 3 decimal digits using `decimalDigits: 3`.",
+              description: "Displays quantity with 3 decimal digits using `decimalDigits: 3`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'high-precision',
-                    name: 'Precision',
-                    price: 9.99,
-                    quantity: 0.123456),
+                  id: 'high-precision',
+                  name: 'Precision',
+                  price: 9.99,
+                  quantity: 0.123456,
+                ),
                 decimalDigits: 3,
                 onChanged: (item) => debugPrint("3-decimal: $item"),
               ),
@@ -139,7 +128,10 @@ class _ExampleState extends State<Example> {
               description: "Sets the starting value using `initialValue: 4.5`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'initial-override', name: 'InitOverride', price: 10),
+                  id: 'initial-override',
+                  name: 'InitOverride',
+                  price: 10,
+                ),
                 initialValue: 4.5,
                 onChanged: (item) => debugPrint("Initial override: $item"),
               ),
@@ -150,10 +142,11 @@ class _ExampleState extends State<Example> {
               description: "Customized TextField using `inputDecoration`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'custom-decoration',
-                    name: 'Styled',
-                    price: 5,
-                    quantity: 1),
+                  id: 'custom-decoration',
+                  name: 'Styled',
+                  price: 5,
+                  quantity: 1,
+                ),
                 inputDecoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   isDense: true,
@@ -165,15 +158,15 @@ class _ExampleState extends State<Example> {
 
             _buildLabeledInput(
               label: "7. Grouped Item (group: aaa)",
-              description:
-                  "Belongs to group 'aaa' and will appear below in the dynamic list.",
+              description: "Belongs to group 'aaa' and will appear below in the dynamic list.",
               child: CartInput(
                 item: CartItem(
-                    id: 'grouped-item',
-                    name: 'Grouped',
-                    price: 6.0,
-                    quantity: 1,
-                    group: 'aaa'),
+                  id: 'grouped-item',
+                  name: 'Grouped',
+                  price: 6.0,
+                  quantity: 1,
+                  group: 'aaa',
+                ),
                 onChanged: (item) => debugPrint("Grouped item: $item"),
               ),
             ),
@@ -202,7 +195,11 @@ class _ExampleState extends State<Example> {
                   "Adds icons inside input field using `inputDecoration`.",
               child: CartInput(
                 item: CartItem(
-                    id: 'icons', name: 'Icons', price: 6.5, quantity: 1),
+                  id: 'icons',
+                  name: 'Icons',
+                  price: 6.5,
+                  quantity: 1,
+                ),
                 inputDecoration: const InputDecoration(
                   prefixIcon: Icon(Icons.shopping_cart),
                   suffixIcon: Icon(Icons.edit),
@@ -257,14 +254,14 @@ class _ExampleState extends State<Example> {
             // ),
             _buildLabeledInput(
               label: "14. Decimal Only, No Buttons",
-              description:
-                  "Starts with 2.75, allows only input via keyboard (no increment buttons).",
+              description: "Starts with 2.75, allows only input via keyboard (no increment buttons).",
               child: CartInput(
                 item: CartItem(
-                    id: 'decimal-nobutton',
-                    name: 'DecimalOnly',
-                    price: 8.0,
-                    quantity: 2.75),
+                  id: 'decimal-nobutton',
+                  name: 'DecimalOnly',
+                  price: 8.0,
+                  quantity: 2.75,
+                ),
                 decimalDigits: 2,
                 hideButtons: true,
                 onChanged: (item) =>
@@ -273,15 +270,15 @@ class _ExampleState extends State<Example> {
             ),
             _buildLabeledInput(
               label: "15. Vertical Button",
-              description:
-                  "Starts with 2.75, allows only input via keyboard (no increment buttons).",
+              description: "Starts with 2.75, allows only input via keyboard (no increment buttons).",
               child: CartInput(
                 size: 40,
                 item: CartItem(
-                    id: 'decimal-nobutton',
-                    name: 'DecimalOnly',
-                    price: 8.0,
-                    quantity: 2.75),
+                  id: 'decimal-nobutton',
+                  name: 'DecimalOnly',
+                  price: 8.0,
+                  quantity: 2.75,
+                ),
                 decimalDigits: 0,
                 axis: Axis.vertical,
                 style: CartInputStyle(border: Border.all(color: Colors.black)),
@@ -368,8 +365,10 @@ class _ExampleState extends State<Example> {
             //   ),
             // ),
             const Divider(height: 32),
-            const Text('Grouped Cart Items (group: aaa)',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Grouped Cart Items (group: aaa)',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
 
             ListView.builder(
               shrinkWrap: true,

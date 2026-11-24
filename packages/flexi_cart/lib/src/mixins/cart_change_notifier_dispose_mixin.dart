@@ -1,5 +1,5 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A mixin that adds a `disposed` flag to [ChangeNotifier], and ensures
 /// `notifyListeners()` only works when the object hasn't been disposed.
@@ -23,8 +23,9 @@ mixin CartChangeNotifierDisposeMixin on ChangeNotifier {
     bool throwIfDisposed = true,
   }) {
     if (disposed) {
-      final exception =
-          CartDisposedException('Cannot perform action after dispose');
+      final exception = CartDisposedException(
+        'Cannot perform action after dispose',
+      );
       beforeThrow(exception);
       if (throwIfDisposed) {
         throw exception;

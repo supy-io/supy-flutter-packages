@@ -38,13 +38,18 @@ void main() {
 
     // Validation errors copied
     expect(
-        newCart.validationErrors.keys, equals(original.validationErrors.keys));
+      newCart.validationErrors.keys,
+      equals(original.validationErrors.keys),
+    );
 
     // History should include restoration
     expect(
-        newCart.history.last,
-        contains('Restored cart from another instance'
-            ' - {notified: true} - {notified: false}'));
+      newCart.history.last,
+      contains(
+        'Restored cart from another instance'
+        ' - {notified: true} - {notified: false}',
+      ),
+    );
   });
 }
 

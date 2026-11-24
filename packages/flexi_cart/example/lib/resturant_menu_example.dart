@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flexi_cart/flexi_cart.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 class MenuItem extends ICartItem {
   MenuItem({
@@ -24,10 +24,7 @@ class MenuItem extends ICartItem {
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => FlexiCart(),
-      child: const MyApp(),
-    ),
+    ChangeNotifierProvider(create: (_) => FlexiCart(), child: const MyApp()),
   );
 }
 
@@ -120,11 +117,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           IconButton(
             icon: Badge(
-                isLabelVisible: cart.totalQuantity() > 0,
-                label: Text(
-                  '${cart.itemsList.length}',
-                ),
-                child: const Icon(LucideIcons.shoppingCart)),
+              isLabelVisible: cart.totalQuantity() > 0,
+              label: Text('${cart.itemsList.length}'),
+              child: const Icon(LucideIcons.shoppingCart),
+            ),
             onPressed: () => _showCart(context),
           ),
         ],
@@ -154,34 +150,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(item.name, style: theme.textTheme.titleMedium),
-                          Text(item.description ?? '',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant)),
+                          Text(
+                            item.description ?? '',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
                           Wrap(
                             spacing: 4,
                             children: item.tags
-                                .map((tag) => Chip(
-                                      label: Text(tag),
-                                      visualDensity: VisualDensity.compact,
-                                    ))
+                                .map(
+                                  (tag) => Chip(
+                                    label: Text(tag),
+                                    visualDensity: VisualDensity.compact,
+                                  ),
+                                )
                                 .toList(),
                           ),
-                          Text('\$${item.price.toStringAsFixed(2)}',
-                              style: theme.textTheme.labelLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold)),
+                          Text(
+                            '\$${item.price.toStringAsFixed(2)}',
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     if ((cart.items[item.id]?.quantity ?? 0) > 0)
                       IconButton(
-                          onPressed: () {
-                            cart.delete(item);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Item removed from cart!')),
-                            );
-                          },
-                          icon: Icon(Icons.delete)),
+                        onPressed: () {
+                          cart.delete(item);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Item removed from cart!'),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
                     CartInput(
                       item: item,
                       size: 14,
@@ -189,10 +195,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       axis: Axis.vertical,
                       style: CartInputStyle(
                         activeBackgroundColor: theme.colorScheme.primary,
-                        textStyle:
-                            TextStyle(color: theme.colorScheme.onPrimary),
-                        iconTheme:
-                            IconThemeData(color: theme.colorScheme.onPrimary),
+                        textStyle: TextStyle(
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                        iconTheme: IconThemeData(
+                          color: theme.colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   ],
@@ -220,29 +228,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Your Order',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const Text(
+              'Your Order',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 12),
             ...cart.itemsList.map(
               (item) => ListTile(
                 title: Text(item.name),
                 subtitle: Text(
-                    '${item.quantity} × \$${item.price.toStringAsFixed(2)}'),
+                  '${item.quantity} × \$${item.price.toStringAsFixed(2)}',
+                ),
                 trailing: Text('\$${item.totalPrice().toStringAsFixed(2)}'),
               ),
             ),
             const Divider(),
             Align(
               alignment: Alignment.centerRight,
-              child: Text('Total: \$${cart.totalPrice().toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text(
+                'Total: \$${cart.totalPrice().toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('Checkout'),
-            )
+            ),
           ],
         ),
       ),

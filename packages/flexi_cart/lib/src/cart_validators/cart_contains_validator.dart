@@ -10,8 +10,9 @@ class CartContainsValidator extends ICartValidator {
 
   @override
   Map<String, dynamic>? validate(FlexiCart cart) {
-    final containsItem =
-        cart.itemsList.any((item) => item.id == requiredItemId);
+    final containsItem = cart.itemsList.any(
+      (item) => item.id == requiredItemId,
+    );
     if (!containsItem) {
       return {
         CartValidatorKeys.contains: 'Cart must contain item $requiredItemId',

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A reactive and extensible shopping cart that supports item grouping,
 /// custom metadata, locking, expiration, and plugin extensions.
@@ -25,9 +25,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     Map<String, CartItemsGroup<T>>? groups,
     this.hooks,
     CartOptions? options,
-  })  : _options = options ?? CartOptions(),
-        _items = items ?? {},
-        groups = groups ?? {} {
+  }) : _options = options ?? CartOptions(),
+       _items = items ?? {},
+       groups = groups ?? {} {
     final validatorOptions = _options.validatorOptions;
 
     if (validatorOptions.autoValidate) {
@@ -93,16 +93,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void setPromoCode(
     String? code, {
     bool shouldNotifyListeners = true,
-  }) =>
-      _updateOptions(
-        _options = _options.copyWith(
-          validatorOptions: _options.validatorOptions.copyWith(
-            promoCode: code,
-          ),
-        ),
-        'Set promo code: $code',
-        shouldNotifyListeners,
-      );
+  }) => _updateOptions(
+    _options = _options.copyWith(
+      validatorOptions: _options.validatorOptions.copyWith(
+        promoCode: code,
+      ),
+    ),
+    'Set promo code: $code',
+    shouldNotifyListeners,
+  );
 
   /// Returns the current promo code.
   String? get promoCode => _options.validatorOptions.promoCode;
@@ -111,16 +110,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   void setPromoCodeValidator(
     String? Function(String code)? promoCodeValidator, {
     bool shouldNotifyListeners = false,
-  }) =>
-      _updateOptions(
-        _options = _options.copyWith(
-          validatorOptions: _options.validatorOptions.copyWith(
-            promoCodeValidator: promoCodeValidator,
-          ),
-        ),
-        'Set promo code validator',
-        shouldNotifyListeners,
-      );
+  }) => _updateOptions(
+    _options = _options.copyWith(
+      validatorOptions: _options.validatorOptions.copyWith(
+        promoCodeValidator: promoCodeValidator,
+      ),
+    ),
+    'Set promo code validator',
+    shouldNotifyListeners,
+  );
 
   /// [ValidatorOptions] is used to validate the cart state
 
@@ -456,9 +454,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     _checkDisposed();
 
     return FlexiCart<T>(
-      items: Map<String, T>.from(_items),
-      groups: Map<String, CartItemsGroup<T>>.from(groups),
-    )
+        items: Map<String, T>.from(_items),
+        groups: Map<String, CartItemsGroup<T>>.from(groups),
+      )
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
       ..addMetadataEntries(metadata)
@@ -469,9 +467,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   /// Casts the cart to a different item type [G].
   FlexiCart<G> cast<G extends ICartItem>() {
     return FlexiCart<G>(
-      items: _items.cast<String, G>(),
-      groups: groups.map((k, v) => MapEntry(k, v.cast<G>())),
-    )
+        items: _items.cast<String, G>(),
+        groups: groups.map((k, v) => MapEntry(k, v.cast<G>())),
+      )
       ..addZeroQuantity = addZeroQuantity
       .._note = _note
       ..addMetadataEntries(metadata)
@@ -504,7 +502,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
           }
         });
       },
-      logMessage: 'Applied exchange rate for ${cartCurrency.code}:'
+      logMessage:
+          'Applied exchange rate for ${cartCurrency.code}:'
           ' ${cartCurrency.rate}',
       shouldNotifyListeners: shouldNotifyListeners,
     );
@@ -752,15 +751,15 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
       }
     });
 
-    final cart = FlexiCart<T>(
-      items: items,
-      groups: groups,
-      options: options,
-    )
-
-      // hydrate other fields
-      ..addZeroQuantity = map['addZeroQuantity'] as bool? ?? false
-      ..setNote(map['note'] as String?);
+    final cart =
+        FlexiCart<T>(
+            items: items,
+            groups: groups,
+            options: options,
+          )
+          // hydrate other fields
+          ..addZeroQuantity = map['addZeroQuantity'] as bool? ?? false
+          ..setNote(map['note'] as String?);
     if (map['deliveredAt'] != null) {
       try {
         cart.setDeliveredAt(DateTime.parse(map['deliveredAt'] as String));
@@ -771,8 +770,12 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     if (map['cartCurrency'] is Map<String, dynamic>) {
       final cc = map['cartCurrency'] as Map<String, dynamic>;
       try {
-        cart.applyExchangeRate(CartCurrency(
-            code: cc['code'] as String, rate: (cc['rate'] as num).toDouble()));
+        cart.applyExchangeRate(
+          CartCurrency(
+            code: cc['code'] as String,
+            rate: (cc['rate'] as num).toDouble(),
+          ),
+        );
       } on Exception catch (_) {}
     }
 
@@ -780,7 +783,8 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
     if (map['metadata'] is Map<String, dynamic>) {
       try {
         cart.addMetadataEntries(
-            (map['metadata'] as Map).cast<String, dynamic>());
+          (map['metadata'] as Map).cast<String, dynamic>(),
+        );
       } on Exception catch (_) {}
     }
     if (overrideThis) {
@@ -794,8 +798,10 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
   }
 
   /// Restores the cart state from another [FlexiCart] instance.
-  void restoreFrom(FlexiCart<T> otherCart,
-      {bool shouldNotifyListeners = true}) {
+  void restoreFrom(
+    FlexiCart<T> otherCart, {
+    bool shouldNotifyListeners = true,
+  }) {
     _performCartOperation(
       operation: () {
         groups = Map<String, CartItemsGroup<T>>.from(otherCart.groups);
@@ -811,8 +817,9 @@ class FlexiCart<T extends ICartItem> extends ChangeNotifier
         _cartCurrency = otherCart._cartCurrency;
         clearAllMetadata();
         addMetadataEntries(otherCart.metadata);
-        validationErrors =
-            Map<String, dynamic>.from(otherCart.validationErrors);
+        validationErrors = Map<String, dynamic>.from(
+          otherCart.validationErrors,
+        );
         _options = otherCart._options;
         resetLock();
         clearHistory();

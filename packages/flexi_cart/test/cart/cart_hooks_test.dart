@@ -42,10 +42,10 @@ void main() {
     test('handleItemDeleted should call onItemDeleted', () {
       var itemDeletedCalled = false;
       FlexiCart(
-        hooks: CartHooks(
-          onItemDeleted: (_) => itemDeletedCalled = true,
-        ),
-      )
+          hooks: CartHooks(
+            onItemDeleted: (_) => itemDeletedCalled = true,
+          ),
+        )
         ..add(testItem1)
         ..delete(testItem1);
 
@@ -55,10 +55,10 @@ void main() {
     test('handleDisposed should call onDisposed', () {
       var disposedCalled = false;
       FlexiCart(
-        hooks: CartHooks(
-          onDisposed: () => disposedCalled = true,
-        ),
-      )
+          hooks: CartHooks(
+            onDisposed: () => disposedCalled = true,
+          ),
+        )
         ..add(testItem1)
         ..delete(testItem1)
         ..dispose();
@@ -70,10 +70,10 @@ void main() {
     test('onItemAdded should be called for each item added', () {
       var callCount = 0;
       FlexiCart(
-        hooks: CartHooks(
-          onItemAdded: (_) => callCount++,
-        ),
-      )
+          hooks: CartHooks(
+            onItemAdded: (_) => callCount++,
+          ),
+        )
         ..add(testItem1)
         ..add(testItem2);
 
@@ -83,10 +83,10 @@ void main() {
     test('onItemDeleted should be called for each item deleted', () {
       var callCount = 0;
       FlexiCart(
-        hooks: CartHooks(
-          onItemDeleted: (_) => callCount++,
-        ),
-      )
+          hooks: CartHooks(
+            onItemDeleted: (_) => callCount++,
+          ),
+        )
         ..add(testItem1)
         ..add(testItem2)
         ..delete(testItem1)
@@ -95,48 +95,49 @@ void main() {
       expect(callCount, equals(2));
     });
 
-    test(
-        'onDisposed should not be called twice '
+    test('onDisposed should not be called twice '
         'if dispose is called multiple times', () {
       var callCount = 0;
       FlexiCart(
-        hooks: CartHooks(
-          onDisposed: () => callCount++,
-        ),
-      )
+          hooks: CartHooks(
+            onDisposed: () => callCount++,
+          ),
+        )
         ..dispose()
         ..dispose();
 
       expect(callCount, equals(1));
     });
 
-    test('onItemAdded and onItemDeleted callbacks should be called in order',
-        () {
-      final callLog = <String>[];
+    test(
+      'onItemAdded and onItemDeleted callbacks should be called in order',
+      () {
+        final callLog = <String>[];
 
-      FlexiCart(
-        hooks: CartHooks(
-          onItemAdded: (item) => callLog.add('added:${item.id}'),
-          onItemDeleted: (item) => callLog.add('deleted:${item.id}'),
-        ),
-      )
-        ..add(testItem1)
-        ..add(testItem2)
-        ..delete(testItem1)
-        ..delete(testItem2);
+        FlexiCart(
+            hooks: CartHooks(
+              onItemAdded: (item) => callLog.add('added:${item.id}'),
+              onItemDeleted: (item) => callLog.add('deleted:${item.id}'),
+            ),
+          )
+          ..add(testItem1)
+          ..add(testItem2)
+          ..delete(testItem1)
+          ..delete(testItem2);
 
-      expect(
-        callLog,
-        equals(
-          [
-            'added:item1',
-            'added:item2',
-            'deleted:item1',
-            'deleted:item2',
-          ],
-        ),
-      );
-    });
+        expect(
+          callLog,
+          equals(
+            [
+              'added:item1',
+              'added:item2',
+              'deleted:item1',
+              'deleted:item2',
+            ],
+          ),
+        );
+      },
+    );
 
     test('no-op CartHooks should not throw on operations', () {
       final cart = FlexiCart(hooks: CartHooks());

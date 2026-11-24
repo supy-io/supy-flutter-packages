@@ -1,6 +1,6 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 /// A highly customizable and reusable quantity input widget for cart items.
@@ -301,7 +301,7 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
   Widget _quantityNotifierBuilder(Widget child) {
     return ValueListenableBuilder<double?>(
       valueListenable: _quantityNotifier,
-      builder: (_, __, ___) => child,
+      builder: (_, _, _) => child,
     );
   }
 
@@ -310,7 +310,8 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
     final theme = Theme.of(context);
     final style = widget.style ?? CartInputTheme.of(context);
 
-    final decoration = widget.inputDecoration ??
+    final decoration =
+        widget.inputDecoration ??
         (isVertical
             ? const InputDecoration(border: InputBorder.none)
             : const InputDecoration(
@@ -334,7 +335,8 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
         enabled: widget.enabled,
         cursorColor: style.activeForegroundColor,
         textInputAction: widget.textInputAction,
-        keyboardType: widget.keyboardType ??
+        keyboardType:
+            widget.keyboardType ??
             TextInputType.numberWithOptions(decimal: widget.decimalDigits > 0),
         inputFormatters: [
           FilteringTextInputFormatter.deny(RegExp(r'\s|-')),
@@ -346,10 +348,12 @@ class _CartInputState<T extends ICartItem> extends State<CartInput<T>> {
         ],
         onChanged: _onTextChanged,
         onSubmitted: widget.onSubmitted,
-        style: style.textStyle ??
+        style:
+            style.textStyle ??
             (_quantity != null && _quantity! > 0
-                ? theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.primaryColor)
+                ? theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.primaryColor,
+                  )
                 : theme.textTheme.bodyMedium),
         textAlign: widget.textAlign,
         decoration: decoration,

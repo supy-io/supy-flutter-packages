@@ -53,18 +53,19 @@ void main() {
         quantity: 2,
         currency: 'USD',
       );
-      final cart = FlexiCart(
-        options: CartOptions(
-          validatorOptions: ValidatorOptions(
-            validators: [CartValidators.cartMaxTotal(50)],
-            promoCode: 'BADCODE',
-            promoCodeValidator: (code) =>
-                code == 'GOODCODE' ? null : 'Promo code error',
-          ),
-        ),
-      )
-        ..add(item1)
-        ..add(item2);
+      final cart =
+          FlexiCart(
+              options: CartOptions(
+                validatorOptions: ValidatorOptions(
+                  validators: [CartValidators.cartMaxTotal(50)],
+                  promoCode: 'BADCODE',
+                  promoCodeValidator: (code) =>
+                      code == 'GOODCODE' ? null : 'Promo code error',
+                ),
+              ),
+            )
+            ..add(item1)
+            ..add(item2);
 
       final errors = cart.options.validatorOptions.validate(cart);
       expect(

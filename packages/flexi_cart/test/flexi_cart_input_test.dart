@@ -1,7 +1,7 @@
 import 'package:flexi_cart/flexi_cart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 @visibleForTesting
@@ -71,8 +71,9 @@ void main() {
   });
 
   testWidgets('hides buttons when hideButtons is true', (tester) async {
-    await tester
-        .pumpWidget(createWidget(CartInput(item: item, hideButtons: true)));
+    await tester.pumpWidget(
+      createWidget(CartInput(item: item, hideButtons: true)),
+    );
     expect(find.byIcon(Icons.add_circle_outline_outlined), findsNothing);
     expect(find.byIcon(Icons.remove_circle_outline_outlined), findsNothing);
   });
@@ -85,8 +86,9 @@ void main() {
   });
 
   testWidgets('respects maxQuantity', (tester) async {
-    await tester
-        .pumpWidget(createWidget(CartInput(item: item, maxQuantity: 2)));
+    await tester.pumpWidget(
+      createWidget(CartInput(item: item, maxQuantity: 2)),
+    );
     await tester.enterText(find.byType(TextField), '9999');
     await tester.pump();
     expect(
@@ -109,8 +111,9 @@ void main() {
     expect(find.text('0.00'), findsOneWidget);
   });
 
-  testWidgets('clears input when quantity is zero and showZeroQty is false',
-      (tester) async {
+  testWidgets('clears input when quantity is zero and showZeroQty is false', (
+    tester,
+  ) async {
     item.quantity = 0;
     await tester.pumpWidget(createWidget(CartInput(item: item)));
     expect(
@@ -119,11 +122,13 @@ void main() {
     );
   });
 
-  testWidgets('disables input and buttons when enabled is false',
-      (tester) async {
+  testWidgets('disables input and buttons when enabled is false', (
+    tester,
+  ) async {
     mockCart.add(item);
-    await tester
-        .pumpWidget(createWidget(CartInput(item: item, enabled: false)));
+    await tester.pumpWidget(
+      createWidget(CartInput(item: item, enabled: false)),
+    );
 
     expect(tester.widget<TextField>(find.byType(TextField)).enabled, false);
 
@@ -155,8 +160,9 @@ void main() {
   testWidgets('respects initialValue override', (tester) async {
     item.quantity = 1;
     mockCart.add(item);
-    await tester
-        .pumpWidget(createWidget(CartInput(item: item, initialValue: 5)));
+    await tester.pumpWidget(
+      createWidget(CartInput(item: item, initialValue: 5)),
+    );
     await tester.pumpAndSettle();
     expect(find.text('5.00'), findsOneWidget);
   });
@@ -198,8 +204,9 @@ void main() {
     (tester) async {
       mockCart.add(item);
 
-      await tester
-          .pumpWidget(createWidget(CartInput(item: item, decimalDigits: 3)));
+      await tester.pumpWidget(
+        createWidget(CartInput(item: item, decimalDigits: 3)),
+      );
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), '1.56789');
@@ -260,38 +267,40 @@ void main() {
   });
 
   testWidgets(
-      'CartInput renders in vertical layout with correct children order',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: ChangeNotifierProvider(
-            create: (_) => FlexiCart(),
-            child: Builder(
-              builder: (context) {
-                return CartInput<TestItem>(
-                  item: item,
-                  axis: Axis.vertical,
-                );
-              },
+    'CartInput renders in vertical layout with correct children order',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ChangeNotifierProvider(
+              create: (_) => FlexiCart(),
+              child: Builder(
+                builder: (context) {
+                  return CartInput<TestItem>(
+                    item: item,
+                    axis: Axis.vertical,
+                  );
+                },
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-    final columnFinder = find.byType(Column);
-    expect(columnFinder, findsOneWidget);
+      final columnFinder = find.byType(Column);
+      expect(columnFinder, findsOneWidget);
 
-    // Optional: check if "+" and "−" icons exist in correct order
-    final addIcon = find.byIcon(Icons.add_circle_outline_outlined);
-    final removeIcon = find.byIcon(Icons.remove_circle_outline_outlined);
-    expect(addIcon, findsOneWidget);
-    expect(removeIcon, findsOneWidget);
-  });
+      // Optional: check if "+" and "−" icons exist in correct order
+      final addIcon = find.byIcon(Icons.add_circle_outline_outlined);
+      final removeIcon = find.byIcon(Icons.remove_circle_outline_outlined);
+      expect(addIcon, findsOneWidget);
+      expect(removeIcon, findsOneWidget);
+    },
+  );
 
-  testWidgets('CartInput renders with custom border decoration',
-      (WidgetTester tester) async {
+  testWidgets('CartInput renders with custom border decoration', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: ChangeNotifierProvider(

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:flexi_cart/flexi_cart.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingCartItem extends ICartItem {
   ShoppingCartItem({
@@ -82,7 +82,7 @@ class _ShopPageState extends State<ShopPage> {
                 }
               });
             },
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -119,7 +119,8 @@ class _ShopPageState extends State<ShopPage> {
                           Text(
                             '\$${item.price.toStringAsFixed(2)}',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant),
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ],
                       ),
@@ -131,15 +132,16 @@ class _ShopPageState extends State<ShopPage> {
                         axis: axis,
                         item: item,
                         style: CartInputStyle(
-                          activeBackgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                          activeBackgroundColor: Theme.of(context)
+                              .colorScheme
+                              .primary,
                           textStyle: TextStyle(
                             color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.w500,
                           ),
                           iconTheme: Theme.of(context).iconTheme.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
                         ),
                       ),
                     ),
@@ -175,7 +177,8 @@ class _ShopPageState extends State<ShopPage> {
                             useSafeArea: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(24)),
+                                top: Radius.circular(24),
+                              ),
                             ),
                             builder: (_) => _buildCartSummary(cart),
                           );
